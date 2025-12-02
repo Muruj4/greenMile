@@ -1,0 +1,69 @@
+.map-screen {
+  padding: 30px;
+  background: #f5f7f4;
+  min-height: 100vh;
+  font-family: "Poppins", sans-serif;
+}
+
+.title {
+  color: #27ae60;
+  margin-bottom: 20px;
+}
+
+.no-routes {
+  text-align: center;
+  color: #999;
+}
+
+.map-container {
+  width: 100%;
+  height: 550px;
+  border-radius: 14px;
+  overflow: hidden;
+  background: #e9efe9;
+}
+
+.routes-list {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.route-card {
+  background: white;
+  padding: 14px 18px;
+  border-radius: 12px;
+  border: 1px solid #dcdcdc;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.route-card.selected {
+  border: 2px solid #27ae60;
+  background: #f3fff4;
+}
+
+.route-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.route-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+
+.route-summary {
+  font-weight: 600;
+}
+
+.route-details {
+  margin-top: 6px;
+  color: #666;
+  font-size: 0.9rem;
+  display: flex;
+  gap: 16px;
+}

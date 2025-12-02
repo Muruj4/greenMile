@@ -1,0 +1,79 @@
+.trip-screen {
+  max-width: 600px;
+  margin: 40px auto;
+  padding: 40px;
+  background: #f5f7f4;
+  border-radius: 12px;
+  font-family: "Poppins", sans-serif;
+}
+
+h2 {
+  font-size: 28px;
+  margin-bottom: 25px;
+  color: #1a2e1a;
+}
+
+.highlight {
+  color: #2e8b57;
+  font-weight: 600;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.form-row {
+  display: flex;
+  gap: 10px;
+}
+
+select, input {
+  padding: 12px;
+  border-radius: 8px;
+  border: none;
+  background: #dfe5df;
+  font-size: 15px;
+  width: 100%;
+}
+
+.fuel-toggle {
+  display: flex;
+  gap: 10px;
+}
+
+.fuel-toggle button {
+  flex: 1;
+  padding: 12px;
+  background: #dfe5df;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.fuel-toggle button.active {
+  background: #1e4620;
+  color: white;
+}
+
+button[type="submit"] {
+  background: #1e4620;
+  color: white;
+  padding: 14px;
+  border: none;
+  border-radius: 8px;
+  margin-top: 10px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.error-message {
+  color: #b71c1c;
+  padding: 10px;
+  background: #ffdada;
+  border-radius: 6px;
+  margin-top: 10px;
+}

@@ -1,0 +1,3718 @@
+{
+ "fuel_consumption": {
+    "Passenger Cars": 0.07,
+    "Light-Duty Trucks": 0.11,
+    "Medium- and Heavy-Duty Vehicles (Trucks)": 0.30,
+    "Motorcycles": 0.03
+},
+
+  "units": {
+    "ch4_factor": "g CH4 / vehicle-km",
+    "n2o_factor": "g N2O / vehicle-km",
+    "co2_factor": "g CO2 / liter"
+  },
+  "factors": [
+      {
+            "vehicle_type": "Passenger Cars",
+            "fuel_type": "Diesel",
+            "model_year_range": "1960",
+            "ch4_factor": 0.00037,
+            "n2o_factor": 0.00075,
+            "co2_factor": 2700.0
+        },
+        {
+            "vehicle_type": "Passenger Cars",
+            "fuel_type": "Diesel",
+            "model_year_range": "1961",
+            "ch4_factor": 0.00037,
+            "n2o_factor": 0.00075,
+            "co2_factor": 2700.0
+        },
+        {
+            "vehicle_type": "Passenger Cars",
+            "fuel_type": "Diesel",
+            "model_year_range": "1962",
+            "ch4_factor": 0.00037,
+            "n2o_factor": 0.00075,
+            "co2_factor": 2700.0
+        },
+        {
+            "vehicle_type": "Passenger Cars",
+            "fuel_type": "Diesel",
+            "model_year_range": "1963",
+            "ch4_factor": 0.00037,
+            "n2o_factor": 0.00075,
+            "co2_factor": 2700.0
+        },
+        {
+            "vehicle_type": "Passenger Cars",
+            "fuel_type": "Diesel",
+            "model_year_range": "1964",
+            "ch4_factor": 0.00037,
+            "n2o_factor": 0.00075,
+            "co2_factor": 2700.0
+        },
+        {
+            "vehicle_type": "Passenger Cars",
+            "fuel_type": "Diesel",
+            "model_year_range": "1965",
+            "ch4_factor": 0.00037,
+            "n2o_factor": 0.00075,
+            "co2_factor": 2700.0
+        },
+        {
+            "vehicle_type": "Passenger Cars",
+            "fuel_type": "Diesel",
+            "model_year_range": "1966",
+            "ch4_factor": 0.00037,
+            "n2o_factor": 0.00075,
+            "co2_factor": 2700.0
+        },
+        {
+            "vehicle_type": "Passenger Cars",
+            "fuel_type": "Diesel",
+            "model_year_range": "1967",
+            "ch4_factor": 0.00037,
+            "n2o_factor": 0.00075,
+            "co2_factor": 2700.0
+        },
+        {
+            "vehicle_type": "Passenger Cars",
+            "fuel_type": "Diesel",
+            "model_year_range": "1968",
+            "ch4_factor": 0.00037,
+            "n2o_factor": 0.00075,
+            "co2_factor": 2700.0
+        },
+        {
+            "vehicle_type": "Passenger Cars",
+            "fuel_type": "Diesel",
+            "model_year_range": "1969",
+            "ch4_factor": 0.00037,
+            "n2o_factor": 0.00075,
+            "co2_factor": 2700.0
+        },
+        {
+            "vehicle_type": "Passenger Cars",
+            "fuel_type": "Diesel",
+            "model_year_range": "1970",
+            "ch4_factor": 0.00037,
+            "n2o_factor": 0.00075,
+            "co2_factor": 2700.0
+        },
+        {
+            "vehicle_type": "Passenger Cars",
+            "fuel_type": "Diesel",
+            "model_year_range": "1971",
+            "ch4_factor": 0.00037,
+            "n2o_factor": 0.00075,
+            "co2_factor": 2700.0
+        },
+        {
+            "vehicle_type": "Passenger Cars",
+            "fuel_type": "Diesel",
+            "model_year_range": "1972",
+            "ch4_factor": 0.00037,
+            "n2o_factor": 0.00075,
+            "co2_factor": 2700.0
+        },
+        {
+            "vehicle_type": "Passenger Cars",
+            "fuel_type": "Diesel",
+            "model_year_range": "1973",
+            "ch4_factor": 0.00037,
+            "n2o_factor": 0.00075,
+            "co2_factor": 2700.0
+        },
+        {
+            "vehicle_type": "Passenger Cars",
+            "fuel_type": "Diesel",
+            "model_year_range": "1974",
+            "ch4_factor": 0.00037,
+            "n2o_factor": 0.00075,
+            "co2_factor": 2700.0
+        },
+        {
+            "vehicle_type": "Passenger Cars",
+            "fuel_type": "Diesel",
+            "model_year_range": "1975",
+            "ch4_factor": 0.00037,
+            "n2o_factor": 0.00075,
+            "co2_factor": 2700.0
+        },
+        {
+            "vehicle_type": "Passenger Cars",
+            "fuel_type": "Diesel",
+            "model_year_range": "1976",
+            "ch4_factor": 0.00037,
+            "n2o_factor": 0.00075,
+            "co2_factor": 2700.0
+        },
+        {
+            "vehicle_type": "Passenger Cars",
+            "fuel_type": "Diesel",
+            "model_year_range": "1977",
+            "ch4_factor": 0.00037,
+            "n2o_factor": 0.00075,
+            "co2_factor": 2700.0
+        },
+        {
+            "vehicle_type": "Passenger Cars",
+            "fuel_type": "Diesel",
+            "model_year_range": "1978",
+            "ch4_factor": 0.00037,
+            "n2o_factor": 0.00075,
+            "co2_factor": 2700.0
+        },
+        {
+            "vehicle_type": "Passenger Cars",
+            "fuel_type": "Diesel",
+            "model_year_range": "1979",
+            "ch4_factor": 0.00037,
+            "n2o_factor": 0.00075,
+            "co2_factor": 2700.0
+        },
+        {
+            "vehicle_type": "Passenger Cars",
+            "fuel_type": "Diesel",
+            "model_year_range": "1980",
+            "ch4_factor": 0.00037,
+            "n2o_factor": 0.00075,
+            "co2_factor": 2700.0
+        },
+        {
+            "vehicle_type": "Passenger Cars",
+            "fuel_type": "Diesel",
+            "model_year_range": "1981",
+            "ch4_factor": 0.00037,
+            "n2o_factor": 0.00075,
+            "co2_factor": 2700.0
+        },
+        {
+            "vehicle_type": "Passenger Cars",
+            "fuel_type": "Diesel",
+            "model_year_range": "1982",
+            "ch4_factor": 0.00037,
+            "n2o_factor": 0.00075,
+            "co2_factor": 2700.0
+        },
+    
+    {
+      "vehicle_type": "Passenger Cars",
+      "fuel_type": "Diesel",
+      "model_year_range": "1983",
+      "ch4_factor": 0.00031,
+      "n2o_factor": 0.00062,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Passenger Cars",
+      "fuel_type": "Diesel",
+      "model_year_range": "1984",
+      "ch4_factor": 0.00031,
+      "n2o_factor": 0.00062,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Passenger Cars",
+      "fuel_type": "Diesel",
+      "model_year_range": "1985",
+      "ch4_factor": 0.00031,
+      "n2o_factor": 0.00062,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Passenger Cars",
+      "fuel_type": "Diesel",
+      "model_year_range": "1986",
+      "ch4_factor": 0.00031,
+      "n2o_factor": 0.00062,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Passenger Cars",
+      "fuel_type": "Diesel",
+      "model_year_range": "1987",
+      "ch4_factor": 0.00031,
+      "n2o_factor": 0.00062,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Passenger Cars",
+      "fuel_type": "Diesel",
+      "model_year_range": "1988",
+      "ch4_factor": 0.00031,
+      "n2o_factor": 0.00062,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Passenger Cars",
+      "fuel_type": "Diesel",
+      "model_year_range": "1989",
+      "ch4_factor": 0.00031,
+      "n2o_factor": 0.00062,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Passenger Cars",
+      "fuel_type": "Diesel",
+      "model_year_range": "1990",
+      "ch4_factor": 0.00031,
+      "n2o_factor": 0.00062,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Passenger Cars",
+      "fuel_type": "Diesel",
+      "model_year_range": "1991",
+      "ch4_factor": 0.00031,
+      "n2o_factor": 0.00062,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Passenger Cars",
+      "fuel_type": "Diesel",
+      "model_year_range": "1992",
+      "ch4_factor": 0.00031,
+      "n2o_factor": 0.00062,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Passenger Cars",
+      "fuel_type": "Diesel",
+      "model_year_range": "1993",
+      "ch4_factor": 0.00031,
+      "n2o_factor": 0.00062,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Passenger Cars",
+      "fuel_type": "Diesel",
+      "model_year_range": "1994",
+      "ch4_factor": 0.00031,
+      "n2o_factor": 0.00062,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Passenger Cars",
+      "fuel_type": "Diesel",
+      "model_year_range": "1995",
+      "ch4_factor": 0.00031,
+      "n2o_factor": 0.00062,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Passenger Cars",
+      "fuel_type": "Diesel",
+      "model_year_range": "1996",
+      "ch4_factor": 0.00031,
+      "n2o_factor": 0.00062,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Passenger Cars",
+      "fuel_type": "Diesel",
+      "model_year_range": "1997",
+      "ch4_factor": 0.00031,
+      "n2o_factor": 0.00062,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Passenger Cars",
+      "fuel_type": "Diesel",
+      "model_year_range": "1998",
+      "ch4_factor": 0.00031,
+      "n2o_factor": 0.00062,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Passenger Cars",
+      "fuel_type": "Diesel",
+      "model_year_range": "1999",
+      "ch4_factor": 0.00031,
+      "n2o_factor": 0.00062,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Passenger Cars",
+      "fuel_type": "Diesel",
+      "model_year_range": "2000",
+      "ch4_factor": 0.00031,
+      "n2o_factor": 0.00062,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Passenger Cars",
+      "fuel_type": "Diesel",
+      "model_year_range": "2001",
+      "ch4_factor": 0.00031,
+      "n2o_factor": 0.00062,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Passenger Cars",
+      "fuel_type": "Diesel",
+      "model_year_range": "2002",
+      "ch4_factor": 0.00031,
+      "n2o_factor": 0.00062,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Passenger Cars",
+      "fuel_type": "Diesel",
+      "model_year_range": "2003",
+      "ch4_factor": 0.00031,
+      "n2o_factor": 0.00062,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Passenger Cars",
+      "fuel_type": "Diesel",
+      "model_year_range": "2004",
+      "ch4_factor": 0.00031,
+      "n2o_factor": 0.00062,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Passenger Cars",
+      "fuel_type": "Diesel",
+      "model_year_range": "2005",
+      "ch4_factor": 0.00031,
+      "n2o_factor": 0.00062,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Passenger Cars",
+      "fuel_type": "Diesel",
+      "model_year_range": "2006",
+      "ch4_factor": 0.00031,
+      "n2o_factor": 0.00062,
+      "co2_factor": 2700.0
+    },
+     {
+      "vehicle_type": "Passenger Cars",
+      "fuel_type": "Diesel",
+      "model_year_range": "2007",
+      "ch4_factor": 0.01877,
+      "n2o_factor": 0.01193,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Passenger Cars",
+      "fuel_type": "Diesel",
+      "model_year_range": "2008",
+      "ch4_factor": 0.01877,
+      "n2o_factor": 0.01193,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Passenger Cars",
+      "fuel_type": "Diesel",
+      "model_year_range": "2009",
+      "ch4_factor": 0.01877,
+      "n2o_factor": 0.01193,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Passenger Cars",
+      "fuel_type": "Diesel",
+      "model_year_range": "2010",
+      "ch4_factor": 0.01877,
+      "n2o_factor": 0.01193,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Passenger Cars",
+      "fuel_type": "Diesel",
+      "model_year_range": "2011",
+      "ch4_factor": 0.01877,
+      "n2o_factor": 0.01193,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Passenger Cars",
+      "fuel_type": "Diesel",
+      "model_year_range": "2012",
+      "ch4_factor": 0.01877,
+      "n2o_factor": 0.01193,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Passenger Cars",
+      "fuel_type": "Diesel",
+      "model_year_range": "2013",
+      "ch4_factor": 0.01877,
+      "n2o_factor": 0.01193,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Passenger Cars",
+      "fuel_type": "Diesel",
+      "model_year_range": "2014",
+      "ch4_factor": 0.01877,
+      "n2o_factor": 0.01193,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Passenger Cars",
+      "fuel_type": "Diesel",
+      "model_year_range": "2015",
+      "ch4_factor": 0.01877,
+      "n2o_factor": 0.01193,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Passenger Cars",
+      "fuel_type": "Diesel",
+      "model_year_range": "2016",
+      "ch4_factor": 0.01877,
+      "n2o_factor": 0.01193,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Passenger Cars",
+      "fuel_type": "Diesel",
+      "model_year_range": "2017",
+      "ch4_factor": 0.01877,
+      "n2o_factor": 0.01193,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Passenger Cars",
+      "fuel_type": "Diesel",
+      "model_year_range": "2018",
+      "ch4_factor": 0.01877,
+      "n2o_factor": 0.01193,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Passenger Cars",
+      "fuel_type": "Diesel",
+      "model_year_range": "2019",
+      "ch4_factor": 0.01877,
+      "n2o_factor": 0.01193,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Passenger Cars",
+      "fuel_type": "Diesel",
+      "model_year_range": "2020",
+      "ch4_factor": 0.01877,
+      "n2o_factor": 0.01193,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Passenger Cars",
+      "fuel_type": "Diesel",
+      "model_year_range": "2021",
+      "ch4_factor": 0.01877,
+      "n2o_factor": 0.01193,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Passenger Cars",
+      "fuel_type": "Diesel",
+      "model_year_range": "2022",
+      "ch4_factor": 0.01877,
+      "n2o_factor": 0.01193,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Passenger Cars",
+      "fuel_type": "Diesel",
+      "model_year_range": "2023",
+      "ch4_factor": 0.01877,
+      "n2o_factor": 0.01193,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Passenger Cars",
+      "fuel_type": "Diesel",
+      "model_year_range": "2024",
+      "ch4_factor": 0.01877,
+      "n2o_factor": 0.01193,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Passenger Cars",
+      "fuel_type": "Diesel",
+      "model_year_range": "2025",
+      "ch4_factor": 0.01877,
+      "n2o_factor": 0.01193,
+      "co2_factor": 2700.0
+    },
+ {
+      "vehicle_type": "Passenger Cars",
+      "fuel_type": "Petrol",
+      "model_year_range": "1960",
+      "ch4_factor": 0.10538,
+      "n2o_factor": 0.01224,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Passenger Cars",
+      "fuel_type": "Petrol",
+      "model_year_range": "1961",
+      "ch4_factor": 0.10538,
+      "n2o_factor": 0.01224,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Passenger Cars",
+      "fuel_type": "Petrol",
+      "model_year_range": "1962",
+      "ch4_factor": 0.10538,
+      "n2o_factor": 0.01224,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Passenger Cars",
+      "fuel_type": "Petrol",
+      "model_year_range": "1963",
+      "ch4_factor": 0.10538,
+      "n2o_factor": 0.01224,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Passenger Cars",
+      "fuel_type": "Petrol",
+      "model_year_range": "1964",
+      "ch4_factor": 0.10538,
+      "n2o_factor": 0.01224,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Passenger Cars",
+      "fuel_type": "Petrol",
+      "model_year_range": "1965",
+      "ch4_factor": 0.10538,
+      "n2o_factor": 0.01224,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Passenger Cars",
+      "fuel_type": "Petrol",
+      "model_year_range": "1966",
+      "ch4_factor": 0.10538,
+      "n2o_factor": 0.01224,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Passenger Cars",
+      "fuel_type": "Petrol",
+      "model_year_range": "1967",
+      "ch4_factor": 0.10538,
+      "n2o_factor": 0.01224,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Passenger Cars",
+      "fuel_type": "Petrol",
+      "model_year_range": "1968",
+      "ch4_factor": 0.10538,
+      "n2o_factor": 0.01224,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Passenger Cars",
+      "fuel_type": "Petrol",
+      "model_year_range": "1969",
+      "ch4_factor": 0.10538,
+      "n2o_factor": 0.01224,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Passenger Cars",
+      "fuel_type": "Petrol",
+      "model_year_range": "1970",
+      "ch4_factor": 0.10538,
+      "n2o_factor": 0.01224,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Passenger Cars",
+      "fuel_type": "Petrol",
+      "model_year_range": "1971",
+      "ch4_factor": 0.10538,
+      "n2o_factor": 0.01224,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Passenger Cars",
+      "fuel_type": "Petrol",
+      "model_year_range": "1972",
+      "ch4_factor": 0.10538,
+      "n2o_factor": 0.01224,
+      "co2_factor": 2320.0
+    },
+     {
+      "vehicle_type": "Passenger Cars",
+      "fuel_type": "Petrol",
+      "model_year_range": "1973",
+      "ch4_factor": 0.10538,
+      "n2o_factor": 0.01224,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Passenger Cars",
+      "fuel_type": "Petrol",
+      "model_year_range": "1974",
+      "ch4_factor": 0.10538,
+      "n2o_factor": 0.01224,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Passenger Cars",
+      "fuel_type": "Petrol",
+      "model_year_range": "1975",
+      "ch4_factor": 0.08842,
+      "n2o_factor": 0.02753,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Passenger Cars",
+      "fuel_type": "Petrol",
+      "model_year_range": "1976",
+      "ch4_factor": 0.08737,
+      "n2o_factor": 0.02846,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Passenger Cars",
+      "fuel_type": "Petrol",
+      "model_year_range": "1977",
+      "ch4_factor": 0.08737,
+      "n2o_factor": 0.02846,
+      "co2_factor": 2320.0
+    },
+        {
+      "vehicle_type": "Passenger Cars",
+      "fuel_type": "Petrol",
+      "model_year_range": "1978",
+      "ch4_factor": 0.08631,
+      "n2o_factor": 0.02939,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Passenger Cars",
+      "fuel_type": "Petrol",
+      "model_year_range": "1979",
+      "ch4_factor": 0.08631,
+      "n2o_factor": 0.02939,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Passenger Cars",
+      "fuel_type": "Petrol",
+      "model_year_range": "1980",
+      "ch4_factor": 0.08239,
+      "n2o_factor": 0.03101,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Passenger Cars",
+      "fuel_type": "Petrol",
+      "model_year_range": "1981",
+      "ch4_factor": 0.04983,
+      "n2o_factor": 0.0389,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Passenger Cars",
+      "fuel_type": "Petrol",
+      "model_year_range": "1982",
+      "ch4_factor": 0.0494,
+      "n2o_factor": 0.03896,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Passenger Cars",
+      "fuel_type": "Petrol",
+      "model_year_range": "1983",
+      "ch4_factor": 0.04859,
+      "n2o_factor": 0.03915,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Passenger Cars",
+      "fuel_type": "Petrol",
+      "model_year_range": "1984",
+      "ch4_factor": 0.04374,
+      "n2o_factor": 0.0402,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Passenger Cars",
+      "fuel_type": "Petrol",
+      "model_year_range": "1985",
+      "ch4_factor": 0.04374,
+      "n2o_factor": 0.0402,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Passenger Cars",
+      "fuel_type": "Petrol",
+      "model_year_range": "1986",
+      "ch4_factor": 0.04374,
+      "n2o_factor": 0.0402,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Passenger Cars",
+      "fuel_type": "Petrol",
+      "model_year_range": "1987",
+      "ch4_factor": 0.04374,
+      "n2o_factor": 0.0402,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Passenger Cars",
+      "fuel_type": "Petrol",
+      "model_year_range": "1988",
+      "ch4_factor": 0.04374,
+      "n2o_factor": 0.0402,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Passenger Cars",
+      "fuel_type": "Petrol",
+      "model_year_range": "1989",
+      "ch4_factor": 0.04374,
+      "n2o_factor": 0.0402,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Passenger Cars",
+      "fuel_type": "Petrol",
+      "model_year_range": "1990",
+      "ch4_factor": 0.04374,
+      "n2o_factor": 0.0402,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Passenger Cars",
+      "fuel_type": "Petrol",
+      "model_year_range": "1991",
+      "ch4_factor": 0.04374,
+      "n2o_factor": 0.0402,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Passenger Cars",
+      "fuel_type": "Petrol",
+      "model_year_range": "1992",
+      "ch4_factor": 0.04374,
+      "n2o_factor": 0.0402,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Passenger Cars",
+      "fuel_type": "Petrol",
+      "model_year_range": "1993",
+      "ch4_factor": 0.04374,
+      "n2o_factor": 0.0402,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Passenger Cars",
+      "fuel_type": "Petrol",
+      "model_year_range": "1994",
+      "ch4_factor": 0.03834,
+      "n2o_factor": 0.03747,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Passenger Cars",
+      "fuel_type": "Petrol",
+      "model_year_range": "1995",
+      "ch4_factor": 0.03299,
+      "n2o_factor": 0.0348,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Passenger Cars",
+      "fuel_type": "Petrol",
+      "model_year_range": "1996",
+      "ch4_factor": 0.02697,
+      "n2o_factor": 0.03126,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Passenger Cars",
+      "fuel_type": "Petrol",
+      "model_year_range": "1997",
+      "ch4_factor": 0.02094,
+      "n2o_factor": 0.02771,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Passenger Cars",
+      "fuel_type": "Petrol",
+      "model_year_range": "1998",
+      "ch4_factor": 0.01491,
+      "n2o_factor": 0.02417,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Passenger Cars",
+      "fuel_type": "Petrol",
+      "model_year_range": "1999",
+      "ch4_factor": 0.01336,
+      "n2o_factor": 0.02206,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Passenger Cars",
+      "fuel_type": "Petrol",
+      "model_year_range": "2000",
+      "ch4_factor": 0.01087,
+      "n2o_factor": 0.01889,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Passenger Cars",
+      "fuel_type": "Petrol",
+      "model_year_range": "2001",
+      "ch4_factor": 0.00652,
+      "n2o_factor": 0.01317,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Passenger Cars",
+      "fuel_type": "Petrol",
+      "model_year_range": "2002",
+      "ch4_factor": 0.00634,
+      "n2o_factor": 0.01286,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Passenger Cars",
+      "fuel_type": "Petrol",
+      "model_year_range": "2003",
+      "ch4_factor": 0.0059,
+      "n2o_factor": 0.01125,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Passenger Cars",
+      "fuel_type": "Petrol",
+      "model_year_range": "2004",
+      "ch4_factor": 0.00485,
+      "n2o_factor": 0.00528,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Passenger Cars",
+      "fuel_type": "Petrol",
+      "model_year_range": "2005",
+      "ch4_factor": 0.00466,
+      "n2o_factor": 0.00416,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Passenger Cars",
+      "fuel_type": "Petrol",
+      "model_year_range": "2006",
+      "ch4_factor": 0.00472,
+      "n2o_factor": 0.00466,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Passenger Cars",
+      "fuel_type": "Petrol",
+      "model_year_range": "2007",
+      "ch4_factor": 0.00447,
+      "n2o_factor": 0.00323,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Passenger Cars",
+      "fuel_type": "Petrol",
+      "model_year_range": "2008",
+      "ch4_factor": 0.00447,
+      "n2o_factor": 0.00304,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Passenger Cars",
+      "fuel_type": "Petrol",
+      "model_year_range": "2009",
+      "ch4_factor": 0.00441,
+      "n2o_factor": 0.00286,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Passenger Cars",
+      "fuel_type": "Petrol",
+      "model_year_range": "2010",
+      "ch4_factor": 0.00441,
+      "n2o_factor": 0.00286,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Passenger Cars",
+      "fuel_type": "Petrol",
+      "model_year_range": "2011",
+      "ch4_factor": 0.00441,
+      "n2o_factor": 0.00286,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Passenger Cars",
+      "fuel_type": "Petrol",
+      "model_year_range": "2012",
+      "ch4_factor": 0.00441,
+      "n2o_factor": 0.00286,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Passenger Cars",
+      "fuel_type": "Petrol",
+      "model_year_range": "2013",
+      "ch4_factor": 0.00441,
+      "n2o_factor": 0.00286,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Passenger Cars",
+      "fuel_type": "Petrol",
+      "model_year_range": "2014",
+      "ch4_factor": 0.00441,
+      "n2o_factor": 0.00286,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Passenger Cars",
+      "fuel_type": "Petrol",
+      "model_year_range": "2015",
+      "ch4_factor": 0.00423,
+      "n2o_factor": 0.00261,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Passenger Cars",
+      "fuel_type": "Petrol",
+      "model_year_range": "2016",
+      "ch4_factor": 0.00404,
+      "n2o_factor": 0.00236,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Passenger Cars",
+      "fuel_type": "Petrol",
+      "model_year_range": "2017",
+      "ch4_factor": 0.00336,
+      "n2o_factor": 0.00112,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Passenger Cars",
+      "fuel_type": "Petrol",
+      "model_year_range": "2018",
+      "ch4_factor": 0.00323,
+      "n2o_factor": 0.00099,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Passenger Cars",
+      "fuel_type": "Petrol",
+      "model_year_range": "2019",
+      "ch4_factor": 0.00317,
+      "n2o_factor": 0.00093,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Passenger Cars",
+      "fuel_type": "Petrol",
+      "model_year_range": "2020",
+      "ch4_factor": 0.00311,
+      "n2o_factor": 0.00087,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Passenger Cars",
+      "fuel_type": "Petrol",
+      "model_year_range": "2021",
+      "ch4_factor": 0.00317,
+      "n2o_factor": 0.00087,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Passenger Cars",
+      "fuel_type": "Petrol",
+      "model_year_range": "2022",
+      "ch4_factor": 0.00311,
+      "n2o_factor": 0.00087,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Passenger Cars",
+      "fuel_type": "Petrol",
+      "model_year_range": "2023",
+      "ch4_factor": 0.00311,
+      "n2o_factor": 0.00087,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Passenger Cars",
+      "fuel_type": "Petrol",
+      "model_year_range": "2024",
+      "ch4_factor": 0.00311,
+      "n2o_factor": 0.00087,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Passenger Cars",
+      "fuel_type": "Petrol",
+      "model_year_range": "2025",
+      "ch4_factor": 0.00311,
+      "n2o_factor": 0.00087,
+      "co2_factor": 2320.0
+    },
+
+    {
+      "vehicle_type": "Light-Duty Trucks",
+      "fuel_type": "Diesel",
+      "model_year_range": "1960",
+      "ch4_factor": 0.00068,
+      "n2o_factor": 0.00106,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Light-Duty Trucks",
+      "fuel_type": "Diesel",
+      "model_year_range": "1961",
+      "ch4_factor": 0.00068,
+      "n2o_factor": 0.00106,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Light-Duty Trucks",
+      "fuel_type": "Diesel",
+      "model_year_range": "1962",
+      "ch4_factor": 0.00068,
+      "n2o_factor": 0.00106,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Light-Duty Trucks",
+      "fuel_type": "Diesel",
+      "model_year_range": "1963",
+      "ch4_factor": 0.00068,
+      "n2o_factor": 0.00106,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Light-Duty Trucks",
+      "fuel_type": "Diesel",
+      "model_year_range": "1964",
+      "ch4_factor": 0.00068,
+      "n2o_factor": 0.00106,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Light-Duty Trucks",
+      "fuel_type": "Diesel",
+      "model_year_range": "1965",
+      "ch4_factor": 0.00068,
+      "n2o_factor": 0.00106,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Light-Duty Trucks",
+      "fuel_type": "Diesel",
+      "model_year_range": "1966",
+      "ch4_factor": 0.00068,
+      "n2o_factor": 0.00106,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Light-Duty Trucks",
+      "fuel_type": "Diesel",
+      "model_year_range": "1967",
+      "ch4_factor": 0.00068,
+      "n2o_factor": 0.00106,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Light-Duty Trucks",
+      "fuel_type": "Diesel",
+      "model_year_range": "1968",
+      "ch4_factor": 0.00068,
+      "n2o_factor": 0.00106,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Light-Duty Trucks",
+      "fuel_type": "Diesel",
+      "model_year_range": "1969",
+      "ch4_factor": 0.00068,
+      "n2o_factor": 0.00106,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Light-Duty Trucks",
+      "fuel_type": "Diesel",
+      "model_year_range": "1970",
+      "ch4_factor": 0.00068,
+      "n2o_factor": 0.00106,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Light-Duty Trucks",
+      "fuel_type": "Diesel",
+      "model_year_range": "1971",
+      "ch4_factor": 0.00068,
+      "n2o_factor": 0.00106,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Light-Duty Trucks",
+      "fuel_type": "Diesel",
+      "model_year_range": "1972",
+      "ch4_factor": 0.00068,
+      "n2o_factor": 0.00106,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Light-Duty Trucks",
+      "fuel_type": "Diesel",
+      "model_year_range": "1973",
+      "ch4_factor": 0.00068,
+      "n2o_factor": 0.00106,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Light-Duty Trucks",
+      "fuel_type": "Diesel",
+      "model_year_range": "1974",
+      "ch4_factor": 0.00068,
+      "n2o_factor": 0.00106,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Light-Duty Trucks",
+      "fuel_type": "Diesel",
+      "model_year_range": "1975",
+      "ch4_factor": 0.00068,
+      "n2o_factor": 0.00106,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Light-Duty Trucks",
+      "fuel_type": "Diesel",
+      "model_year_range": "1976",
+      "ch4_factor": 0.00068,
+      "n2o_factor": 0.00106,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Light-Duty Trucks",
+      "fuel_type": "Diesel",
+      "model_year_range": "1977",
+      "ch4_factor": 0.00068,
+      "n2o_factor": 0.00106,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Light-Duty Trucks",
+      "fuel_type": "Diesel",
+      "model_year_range": "1978",
+      "ch4_factor": 0.00068,
+      "n2o_factor": 0.00106,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Light-Duty Trucks",
+      "fuel_type": "Diesel",
+      "model_year_range": "1979",
+      "ch4_factor": 0.00068,
+      "n2o_factor": 0.00106,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Light-Duty Trucks",
+      "fuel_type": "Diesel",
+      "model_year_range": "1980",
+      "ch4_factor": 0.00068,
+      "n2o_factor": 0.00106,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Light-Duty Trucks",
+      "fuel_type": "Diesel",
+      "model_year_range": "1981",
+      "ch4_factor": 0.00068,
+      "n2o_factor": 0.00106,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Light-Duty Trucks",
+      "fuel_type": "Diesel",
+      "model_year_range": "1982",
+      "ch4_factor": 0.00068,
+      "n2o_factor": 0.00106,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Light-Duty Trucks",
+      "fuel_type": "Diesel",
+      "model_year_range": "1983",
+      "ch4_factor": 0.00056,
+      "n2o_factor": 0.00087,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Light-Duty Trucks",
+      "fuel_type": "Diesel",
+      "model_year_range": "1984",
+      "ch4_factor": 0.00056,
+      "n2o_factor": 0.00087,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Light-Duty Trucks",
+      "fuel_type": "Diesel",
+      "model_year_range": "1985",
+      "ch4_factor": 0.00056,
+      "n2o_factor": 0.00087,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Light-Duty Trucks",
+      "fuel_type": "Diesel",
+      "model_year_range": "1986",
+      "ch4_factor": 0.00056,
+      "n2o_factor": 0.00087,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Light-Duty Trucks",
+      "fuel_type": "Diesel",
+      "model_year_range": "1987",
+      "ch4_factor": 0.00056,
+      "n2o_factor": 0.00087,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Light-Duty Trucks",
+      "fuel_type": "Diesel",
+      "model_year_range": "1988",
+      "ch4_factor": 0.00056,
+      "n2o_factor": 0.00087,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Light-Duty Trucks",
+      "fuel_type": "Diesel",
+      "model_year_range": "1989",
+      "ch4_factor": 0.00056,
+      "n2o_factor": 0.00087,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Light-Duty Trucks",
+      "fuel_type": "Diesel",
+      "model_year_range": "1990",
+      "ch4_factor": 0.00056,
+      "n2o_factor": 0.00087,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Light-Duty Trucks",
+      "fuel_type": "Diesel",
+      "model_year_range": "1991",
+      "ch4_factor": 0.00056,
+      "n2o_factor": 0.00087,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Light-Duty Trucks",
+      "fuel_type": "Diesel",
+      "model_year_range": "1992",
+      "ch4_factor": 0.00056,
+      "n2o_factor": 0.00087,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Light-Duty Trucks",
+      "fuel_type": "Diesel",
+      "model_year_range": "1993",
+      "ch4_factor": 0.00056,
+      "n2o_factor": 0.00087,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Light-Duty Trucks",
+      "fuel_type": "Diesel",
+      "model_year_range": "1994",
+      "ch4_factor": 0.00056,
+      "n2o_factor": 0.00087,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Light-Duty Trucks",
+      "fuel_type": "Diesel",
+      "model_year_range": "1995",
+      "ch4_factor": 0.00056,
+      "n2o_factor": 0.00087,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Light-Duty Trucks",
+      "fuel_type": "Diesel",
+      "model_year_range": "1996",
+      "ch4_factor": 0.00056,
+      "n2o_factor": 0.00087,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Light-Duty Trucks",
+      "fuel_type": "Diesel",
+      "model_year_range": "1997",
+      "ch4_factor": 0.00056,
+      "n2o_factor": 0.00087,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Light-Duty Trucks",
+      "fuel_type": "Diesel",
+      "model_year_range": "1998",
+      "ch4_factor": 0.00056,
+      "n2o_factor": 0.00087,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Light-Duty Trucks",
+      "fuel_type": "Diesel",
+      "model_year_range": "1999",
+      "ch4_factor": 0.00056,
+      "n2o_factor": 0.00087,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Light-Duty Trucks",
+      "fuel_type": "Diesel",
+      "model_year_range": "2000",
+      "ch4_factor": 0.00056,
+      "n2o_factor": 0.00087,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Light-Duty Trucks",
+      "fuel_type": "Diesel",
+      "model_year_range": "2001",
+      "ch4_factor": 0.00056,
+      "n2o_factor": 0.00087,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Light-Duty Trucks",
+      "fuel_type": "Diesel",
+      "model_year_range": "2002",
+      "ch4_factor": 0.00056,
+      "n2o_factor": 0.00087,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Light-Duty Trucks",
+      "fuel_type": "Diesel",
+      "model_year_range": "2003",
+      "ch4_factor": 0.00056,
+      "n2o_factor": 0.00087,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Light-Duty Trucks",
+      "fuel_type": "Diesel",
+      "model_year_range": "2004",
+      "ch4_factor": 0.00056,
+      "n2o_factor": 0.00087,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Light-Duty Trucks",
+      "fuel_type": "Diesel",
+      "model_year_range": "2005",
+      "ch4_factor": 0.00056,
+      "n2o_factor": 0.00087,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Light-Duty Trucks",
+      "fuel_type": "Diesel",
+      "model_year_range": "2006",
+      "ch4_factor": 0.00056,
+      "n2o_factor": 0.00087,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Light-Duty Trucks",
+      "fuel_type": "Diesel",
+      "model_year_range": "2007",
+      "ch4_factor": 0.01802,
+      "n2o_factor": 0.0133,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Light-Duty Trucks",
+      "fuel_type": "Diesel",
+      "model_year_range": "2008",
+      "ch4_factor": 0.01802,
+      "n2o_factor": 0.0133,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Light-Duty Trucks",
+      "fuel_type": "Diesel",
+      "model_year_range": "2009",
+      "ch4_factor": 0.01802,
+      "n2o_factor": 0.0133,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Light-Duty Trucks",
+      "fuel_type": "Diesel",
+      "model_year_range": "2010",
+      "ch4_factor": 0.01802,
+      "n2o_factor": 0.0133,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Light-Duty Trucks",
+      "fuel_type": "Diesel",
+      "model_year_range": "2011",
+      "ch4_factor": 0.01802,
+      "n2o_factor": 0.0133,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Light-Duty Trucks",
+      "fuel_type": "Diesel",
+      "model_year_range": "2012",
+      "ch4_factor": 0.01802,
+      "n2o_factor": 0.0133,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Light-Duty Trucks",
+      "fuel_type": "Diesel",
+      "model_year_range": "2013",
+      "ch4_factor": 0.01802,
+      "n2o_factor": 0.0133,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Light-Duty Trucks",
+      "fuel_type": "Diesel",
+      "model_year_range": "2014",
+      "ch4_factor": 0.01802,
+      "n2o_factor": 0.0133,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Light-Duty Trucks",
+      "fuel_type": "Diesel",
+      "model_year_range": "2015",
+      "ch4_factor": 0.01802,
+      "n2o_factor": 0.0133,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Light-Duty Trucks",
+      "fuel_type": "Diesel",
+      "model_year_range": "2016",
+      "ch4_factor": 0.01802,
+      "n2o_factor": 0.0133,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Light-Duty Trucks",
+      "fuel_type": "Diesel",
+      "model_year_range": "2017",
+      "ch4_factor": 0.01802,
+      "n2o_factor": 0.0133,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Light-Duty Trucks",
+      "fuel_type": "Diesel",
+      "model_year_range": "2018",
+      "ch4_factor": 0.01802,
+      "n2o_factor": 0.0133,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Light-Duty Trucks",
+      "fuel_type": "Diesel",
+      "model_year_range": "2019",
+      "ch4_factor": 0.01802,
+      "n2o_factor": 0.0133,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Light-Duty Trucks",
+      "fuel_type": "Diesel",
+      "model_year_range": "2020",
+      "ch4_factor": 0.01802,
+      "n2o_factor": 0.0133,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Light-Duty Trucks",
+      "fuel_type": "Diesel",
+      "model_year_range": "2021",
+      "ch4_factor": 0.01802,
+      "n2o_factor": 0.0133,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Light-Duty Trucks",
+      "fuel_type": "Diesel",
+      "model_year_range": "2022",
+      "ch4_factor": 0.01802,
+      "n2o_factor": 0.0133,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Light-Duty Trucks",
+      "fuel_type": "Diesel",
+      "model_year_range": "2023",
+      "ch4_factor": 0.01802,
+      "n2o_factor": 0.0133,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Light-Duty Trucks",
+      "fuel_type": "Diesel",
+      "model_year_range": "2024",
+      "ch4_factor": 0.01802,
+      "n2o_factor": 0.0133,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Light-Duty Trucks",
+      "fuel_type": "Diesel",
+      "model_year_range": "2025",
+      "ch4_factor": 0.01802,
+      "n2o_factor": 0.0133,
+      "co2_factor": 2700.0
+    },
+
+    {
+      "vehicle_type": "Light-Duty Trucks",
+      "fuel_type": "Petrol",
+      "model_year_range": "1960",
+      "ch4_factor": 0.11856,
+      "n2o_factor": 0.01355,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Light-Duty Trucks",
+      "fuel_type": "Petrol",
+      "model_year_range": "1961",
+      "ch4_factor": 0.11856,
+      "n2o_factor": 0.01355,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Light-Duty Trucks",
+      "fuel_type": "Petrol",
+      "model_year_range": "1962",
+      "ch4_factor": 0.11856,
+      "n2o_factor": 0.01355,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Light-Duty Trucks",
+      "fuel_type": "Petrol",
+      "model_year_range": "1963",
+      "ch4_factor": 0.11856,
+      "n2o_factor": 0.01355,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Light-Duty Trucks",
+      "fuel_type": "Petrol",
+      "model_year_range": "1964",
+      "ch4_factor": 0.11856,
+      "n2o_factor": 0.01355,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Light-Duty Trucks",
+      "fuel_type": "Petrol",
+      "model_year_range": "1965",
+      "ch4_factor": 0.11856,
+      "n2o_factor": 0.01355,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Light-Duty Trucks",
+      "fuel_type": "Petrol",
+      "model_year_range": "1966",
+      "ch4_factor": 0.11856,
+      "n2o_factor": 0.01355,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Light-Duty Trucks",
+      "fuel_type": "Petrol",
+      "model_year_range": "1967",
+      "ch4_factor": 0.11856,
+      "n2o_factor": 0.01355,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Light-Duty Trucks",
+      "fuel_type": "Petrol",
+      "model_year_range": "1968",
+      "ch4_factor": 0.11856,
+      "n2o_factor": 0.01355,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Light-Duty Trucks",
+      "fuel_type": "Petrol",
+      "model_year_range": "1969",
+      "ch4_factor": 0.11856,
+      "n2o_factor": 0.01355,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Light-Duty Trucks",
+      "fuel_type": "Petrol",
+      "model_year_range": "1970",
+      "ch4_factor": 0.11856,
+      "n2o_factor": 0.01355,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Light-Duty Trucks",
+      "fuel_type": "Petrol",
+      "model_year_range": "1971",
+      "ch4_factor": 0.11856,
+      "n2o_factor": 0.01355,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Light-Duty Trucks",
+      "fuel_type": "Petrol",
+      "model_year_range": "1972",
+      "ch4_factor": 0.11856,
+      "n2o_factor": 0.01355,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Light-Duty Trucks",
+      "fuel_type": "Petrol",
+      "model_year_range": "1973",
+      "ch4_factor": 0.11856,
+      "n2o_factor": 0.01355,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Light-Duty Trucks",
+      "fuel_type": "Petrol",
+      "model_year_range": "1974",
+      "ch4_factor": 0.11856,
+      "n2o_factor": 0.01355,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Light-Duty Trucks ",
+      "fuel_type": "Petrol",
+      "model_year_range": "1975",
+      "ch4_factor": 0.10153,
+      "n2o_factor": 0.03188,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Light-Duty Trucks ",
+      "fuel_type": "Petrol",
+      "model_year_range": "1976",
+      "ch4_factor": 0.09905,
+      "n2o_factor": 0.03449,
+      "co2_factor": 2320.0
+    },
+     {
+      "vehicle_type": "Light-Duty Trucks",
+      "fuel_type": "Petrol",
+      "model_year_range": "1977",
+      "ch4_factor": 0.10029,
+      "n2o_factor": 0.03318,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Light-Duty Trucks",
+      "fuel_type": "Petrol",
+      "model_year_range": "1978",
+      "ch4_factor": 0.10029,
+      "n2o_factor": 0.03318,
+      "co2_factor": 2320.0
+    },
+   {
+      "vehicle_type": "Light-Duty Trucks",
+      "fuel_type": "Petrol",
+      "model_year_range": "1979",
+      "ch4_factor": 0.09905,
+      "n2o_factor": 0.03449,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Light-Duty Trucks",
+      "fuel_type": "Petrol",
+      "model_year_range": "1980",
+      "ch4_factor": 0.09905,
+      "n2o_factor": 0.03449,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Light-Duty Trucks ",
+      "fuel_type": "Petrol",
+      "model_year_range": "1981",
+      "ch4_factor": 0.0919,
+      "n2o_factor": 0.04101,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Light-Duty Trucks ",
+      "fuel_type": "Petrol",
+      "model_year_range": "1982",
+      "ch4_factor": 0.0896,
+      "n2o_factor": 0.04232,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Light-Duty Trucks ",
+      "fuel_type": "Petrol",
+      "model_year_range": "1983",
+      "ch4_factor": 0.085,
+      "n2o_factor": 0.04486,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Light-Duty Trucks ",
+      "fuel_type": "Petrol",
+      "model_year_range": "1984",
+      "ch4_factor": 0.08041,
+      "n2o_factor": 0.04747,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Light-Duty Trucks ",
+      "fuel_type": "Petrol",
+      "model_year_range": "1985",
+      "ch4_factor": 0.07581,
+      "n2o_factor": 0.05008,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Light-Duty Trucks ",
+      "fuel_type": "Petrol",
+      "model_year_range": "1986",
+      "ch4_factor": 0.07121,
+      "n2o_factor": 0.05269,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Light-Duty Trucks",
+      "fuel_type": "Petrol",
+      "model_year_range": "1987",
+      "ch4_factor": 0.05052,
+      "n2o_factor": 0.06431,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Light-Duty Trucks",
+      "fuel_type": "Petrol",
+      "model_year_range": "1988",
+      "ch4_factor": 0.05052,
+      "n2o_factor": 0.06431,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Light-Duty Trucks",
+      "fuel_type": "Petrol",
+      "model_year_range": "1989",
+      "ch4_factor": 0.05052,
+      "n2o_factor": 0.06431,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Light-Duty Trucks",
+      "fuel_type": "Petrol",
+      "model_year_range": "1990",
+      "ch4_factor": 0.05052,
+      "n2o_factor": 0.06431,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Light-Duty Trucks",
+      "fuel_type": "Petrol",
+      "model_year_range": "1991",
+      "ch4_factor": 0.05052,
+      "n2o_factor": 0.06431,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Light-Duty Trucks",
+      "fuel_type": "Petrol",
+      "model_year_range": "1992",
+      "ch4_factor": 0.05052,
+      "n2o_factor": 0.06431,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Light-Duty Trucks",
+      "fuel_type": "Petrol",
+      "model_year_range": "1993",
+      "ch4_factor": 0.05052,
+      "n2o_factor": 0.06431,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Light-Duty Trucks ",
+      "fuel_type": "Petrol",
+      "model_year_range": "1994",
+      "ch4_factor": 0.04014,
+      "n2o_factor": 0.06102,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Light-Duty Trucks ",
+      "fuel_type": "Petrol",
+      "model_year_range": "1995",
+      "ch4_factor": 0.03212,
+      "n2o_factor": 0.05642,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Light-Duty Trucks ",
+      "fuel_type": "Petrol",
+      "model_year_range": "1996",
+      "ch4_factor": 0.02809,
+      "n2o_factor": 0.05412,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Light-Duty Trucks ",
+      "fuel_type": "Petrol",
+      "model_year_range": "1997",
+      "ch4_factor": 0.02809,
+      "n2o_factor": 0.05412,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Light-Duty Trucks ",
+      "fuel_type": "Petrol",
+      "model_year_range": "1998",
+      "ch4_factor": 0.0256,
+      "n2o_factor": 0.0489,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Light-Duty Trucks ",
+      "fuel_type": "Petrol",
+      "model_year_range": "1999",
+      "ch4_factor": 0.02069,
+      "n2o_factor": 0.0384,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Light-Duty Trucks ",
+      "fuel_type": "Petrol",
+      "model_year_range": "2000",
+      "ch4_factor": 0.02113,
+      "n2o_factor": 0.03921,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Light-Duty Trucks ",
+      "fuel_type": "Petrol",
+      "model_year_range": "2001",
+      "ch4_factor": 0.01373,
+      "n2o_factor": 0.02355,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Light-Duty Trucks ",
+      "fuel_type": "Petrol",
+      "model_year_range": "2002",
+      "ch4_factor": 0.01504,
+      "n2o_factor": 0.02635,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Light-Duty Trucks ",
+      "fuel_type": "Petrol",
+      "model_year_range": "2003",
+      "ch4_factor": 0.01373,
+      "n2o_factor": 0.02318,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Light-Duty Trucks ",
+      "fuel_type": "Petrol",
+      "model_year_range": "2004",
+      "ch4_factor": 0.00715,
+      "n2o_factor": 0.00547,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Light-Duty Trucks ",
+      "fuel_type": "Petrol",
+      "model_year_range": "2005",
+      "ch4_factor": 0.00652,
+      "n2o_factor": 0.00398,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Light-Duty Trucks ",
+      "fuel_type": "Petrol",
+      "model_year_range": "2006",
+      "ch4_factor": 0.00671,
+      "n2o_factor": 0.00497,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Light-Duty Trucks ",
+      "fuel_type": "Petrol",
+      "model_year_range": "2007",
+      "ch4_factor": 0.0064,
+      "n2o_factor": 0.00379,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Light-Duty Trucks ",
+      "fuel_type": "Petrol",
+      "model_year_range": "2008",
+      "ch4_factor": 0.0059,
+      "n2o_factor": 0.00224,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Light-Duty Trucks ",
+      "fuel_type": "Petrol",
+      "model_year_range": "2009",
+      "ch4_factor": 0.0059,
+      "n2o_factor": 0.00224,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Light-Duty Trucks ",
+      "fuel_type": "Petrol",
+      "model_year_range": "2010",
+      "ch4_factor": 0.0059,
+      "n2o_factor": 0.00217,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Light-Duty Trucks ",
+      "fuel_type": "Petrol",
+      "model_year_range": "2011",
+      "ch4_factor": 0.00597,
+      "n2o_factor": 0.00211,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Light-Duty Trucks ",
+      "fuel_type": "Petrol",
+      "model_year_range": "2012",
+      "ch4_factor": 0.00597,
+      "n2o_factor": 0.00205,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Light-Duty Trucks ",
+      "fuel_type": "Petrol",
+      "model_year_range": "2013",
+      "ch4_factor": 0.0059,
+      "n2o_factor": 0.00217,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Light-Duty Trucks ",
+      "fuel_type": "Petrol",
+      "model_year_range": "2014",
+      "ch4_factor": 0.0059,
+      "n2o_factor": 0.00205,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Light-Duty Trucks ",
+      "fuel_type": "Petrol",
+      "model_year_range": "2015",
+      "ch4_factor": 0.00584,
+      "n2o_factor": 0.00193,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Light-Duty Trucks ",
+      "fuel_type": "Petrol",
+      "model_year_range": "2016",
+      "ch4_factor": 0.00565,
+      "n2o_factor": 0.0018,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Light-Duty Trucks ",
+      "fuel_type": "Petrol",
+      "model_year_range": "2017",
+      "ch4_factor": 0.00522,
+      "n2o_factor": 0.00112,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Light-Duty Trucks ",
+      "fuel_type": "Petrol",
+      "model_year_range": "2018",
+      "ch4_factor": 0.00503,
+      "n2o_factor": 0.00093,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Light-Duty Trucks ",
+      "fuel_type": "Petrol",
+      "model_year_range": "2019",
+      "ch4_factor": 0.00497,
+      "n2o_factor": 0.00081,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Light-Duty Trucks ",
+      "fuel_type": "Petrol",
+      "model_year_range": "2020",
+      "ch4_factor": 0.00491,
+      "n2o_factor": 0.00075,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Light-Duty Trucks ",
+      "fuel_type": "Petrol",
+      "model_year_range": "2021",
+      "ch4_factor": 0.00491,
+      "n2o_factor": 0.00075,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Light-Duty Trucks",
+      "fuel_type": "Petrol",
+      "model_year_range": "2022",
+      "ch4_factor": 0.00491,
+      "n2o_factor": 0.00075,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Light-Duty Trucks",
+      "fuel_type": "Petrol",
+      "model_year_range": "2023",
+      "ch4_factor": 0.00491,
+      "n2o_factor": 0.00075,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Light-Duty Trucks",
+      "fuel_type": "Petrol",
+      "model_year_range": "2024",
+      "ch4_factor": 0.00491,
+      "n2o_factor": 0.00075,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Light-Duty Trucks",
+      "fuel_type": "Petrol",
+      "model_year_range": "2025",
+      "ch4_factor": 0.00491,
+      "n2o_factor": 0.00075,
+      "co2_factor": 2320.0
+    },
+
+     {
+      "vehicle_type": "Medium- and Heavy-Duty Vehicles (Trucks)",
+      "fuel_type": "Diesel",
+      "model_year_range": "1960",
+      "ch4_factor": 0.00317,
+      "n2o_factor": 0.00298,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Medium- and Heavy-Duty Vehicles (Trucks)",
+      "fuel_type": "Diesel",
+      "model_year_range": "1961",
+      "ch4_factor": 0.00317,
+      "n2o_factor": 0.00298,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Medium- and Heavy-Duty Vehicles (Trucks)",
+      "fuel_type": "Diesel",
+      "model_year_range": "1962",
+      "ch4_factor": 0.00317,
+      "n2o_factor": 0.00298,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Medium- and Heavy-Duty Vehicles (Trucks)",
+      "fuel_type": "Diesel",
+      "model_year_range": "1963",
+      "ch4_factor": 0.00317,
+      "n2o_factor": 0.00298,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Medium- and Heavy-Duty Vehicles (Trucks)",
+      "fuel_type": "Diesel",
+      "model_year_range": "1964",
+      "ch4_factor": 0.00317,
+      "n2o_factor": 0.00298,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Medium- and Heavy-Duty Vehicles (Trucks)",
+      "fuel_type": "Diesel",
+      "model_year_range": "1965",
+      "ch4_factor": 0.00317,
+      "n2o_factor": 0.00298,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Medium- and Heavy-Duty Vehicles (Trucks)",
+      "fuel_type": "Diesel",
+      "model_year_range": "1966",
+      "ch4_factor": 0.00317,
+      "n2o_factor": 0.00298,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Medium- and Heavy-Duty Vehicles (Trucks)",
+      "fuel_type": "Diesel",
+      "model_year_range": "1967",
+      "ch4_factor": 0.00317,
+      "n2o_factor": 0.00298,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Medium- and Heavy-Duty Vehicles (Trucks)",
+      "fuel_type": "Diesel",
+      "model_year_range": "1968",
+      "ch4_factor": 0.00317,
+      "n2o_factor": 0.00298,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Medium- and Heavy-Duty Vehicles (Trucks)",
+      "fuel_type": "Diesel",
+      "model_year_range": "1969",
+      "ch4_factor": 0.00317,
+      "n2o_factor": 0.00298,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Medium- and Heavy-Duty Vehicles (Trucks)",
+      "fuel_type": "Diesel",
+      "model_year_range": "1970",
+      "ch4_factor": 0.00317,
+      "n2o_factor": 0.00298,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Medium- and Heavy-Duty Vehicles (Trucks)",
+      "fuel_type": "Diesel",
+      "model_year_range": "1971",
+      "ch4_factor": 0.00317,
+      "n2o_factor": 0.00298,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Medium- and Heavy-Duty Vehicles (Trucks)",
+      "fuel_type": "Diesel",
+      "model_year_range": "1972",
+      "ch4_factor": 0.00317,
+      "n2o_factor": 0.00298,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Medium- and Heavy-Duty Vehicles (Trucks)",
+      "fuel_type": "Diesel",
+      "model_year_range": "1973",
+      "ch4_factor": 0.00317,
+      "n2o_factor": 0.00298,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Medium- and Heavy-Duty Vehicles (Trucks)",
+      "fuel_type": "Diesel",
+      "model_year_range": "1974",
+      "ch4_factor": 0.00317,
+      "n2o_factor": 0.00298,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Medium- and Heavy-Duty Vehicles (Trucks)",
+      "fuel_type": "Diesel",
+      "model_year_range": "1975",
+      "ch4_factor": 0.00317,
+      "n2o_factor": 0.00298,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Medium- and Heavy-Duty Vehicles (Trucks)",
+      "fuel_type": "Diesel",
+      "model_year_range": "1976",
+      "ch4_factor": 0.00317,
+      "n2o_factor": 0.00298,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Medium- and Heavy-Duty Vehicles (Trucks)",
+      "fuel_type": "Diesel",
+      "model_year_range": "1977",
+      "ch4_factor": 0.00317,
+      "n2o_factor": 0.00298,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Medium- and Heavy-Duty Vehicles (Trucks)",
+      "fuel_type": "Diesel",
+      "model_year_range": "1978",
+      "ch4_factor": 0.00317,
+      "n2o_factor": 0.00298,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Medium- and Heavy-Duty Vehicles (Trucks)",
+      "fuel_type": "Diesel",
+      "model_year_range": "1979",
+      "ch4_factor": 0.00317,
+      "n2o_factor": 0.00298,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Medium- and Heavy-Duty Vehicles (Trucks)",
+      "fuel_type": "Diesel",
+      "model_year_range": "1980",
+      "ch4_factor": 0.00317,
+      "n2o_factor": 0.00298,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Medium- and Heavy-Duty Vehicles (Trucks)",
+      "fuel_type": "Diesel",
+      "model_year_range": "1981",
+      "ch4_factor": 0.00317,
+      "n2o_factor": 0.00298,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Medium- and Heavy-Duty Vehicles (Trucks)",
+      "fuel_type": "Diesel",
+      "model_year_range": "1982",
+      "ch4_factor": 0.00317,
+      "n2o_factor": 0.00298,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Medium- and Heavy-Duty Vehicles (Trucks)",
+      "fuel_type": "Diesel",
+      "model_year_range": "1983",
+      "ch4_factor": 0.00317,
+      "n2o_factor": 0.00298,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Medium- and Heavy-Duty Vehicles (Trucks)",
+      "fuel_type": "Diesel",
+      "model_year_range": "1984",
+      "ch4_factor": 0.00317,
+      "n2o_factor": 0.00298,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Medium- and Heavy-Duty Vehicles (Trucks)",
+      "fuel_type": "Diesel",
+      "model_year_range": "1985",
+      "ch4_factor": 0.00317,
+      "n2o_factor": 0.00298,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Medium- and Heavy-Duty Vehicles (Trucks)",
+      "fuel_type": "Diesel",
+      "model_year_range": "1986",
+      "ch4_factor": 0.00317,
+      "n2o_factor": 0.00298,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Medium- and Heavy-Duty Vehicles (Trucks)",
+      "fuel_type": "Diesel",
+      "model_year_range": "1987",
+      "ch4_factor": 0.00317,
+      "n2o_factor": 0.00298,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Medium- and Heavy-Duty Vehicles (Trucks)",
+      "fuel_type": "Diesel",
+      "model_year_range": "1988",
+      "ch4_factor": 0.00317,
+      "n2o_factor": 0.00298,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Medium- and Heavy-Duty Vehicles (Trucks)",
+      "fuel_type": "Diesel",
+      "model_year_range": "1989",
+      "ch4_factor": 0.00317,
+      "n2o_factor": 0.00298,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Medium- and Heavy-Duty Vehicles (Trucks)",
+      "fuel_type": "Diesel",
+      "model_year_range": "1990",
+      "ch4_factor": 0.00317,
+      "n2o_factor": 0.00298,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Medium- and Heavy-Duty Vehicles (Trucks)",
+      "fuel_type": "Diesel",
+      "model_year_range": "1991",
+      "ch4_factor": 0.00317,
+      "n2o_factor": 0.00298,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Medium- and Heavy-Duty Vehicles (Trucks)",
+      "fuel_type": "Diesel",
+      "model_year_range": "1992",
+      "ch4_factor": 0.00317,
+      "n2o_factor": 0.00298,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Medium- and Heavy-Duty Vehicles (Trucks)",
+      "fuel_type": "Diesel",
+      "model_year_range": "1993",
+      "ch4_factor": 0.00317,
+      "n2o_factor": 0.00298,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Medium- and Heavy-Duty Vehicles (Trucks)",
+      "fuel_type": "Diesel",
+      "model_year_range": "1994",
+      "ch4_factor": 0.00317,
+      "n2o_factor": 0.00298,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Medium- and Heavy-Duty Vehicles (Trucks)",
+      "fuel_type": "Diesel",
+      "model_year_range": "1995",
+      "ch4_factor": 0.00317,
+      "n2o_factor": 0.00298,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Medium- and Heavy-Duty Vehicles (Trucks)",
+      "fuel_type": "Diesel",
+      "model_year_range": "1996",
+      "ch4_factor": 0.00317,
+      "n2o_factor": 0.00298,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Medium- and Heavy-Duty Vehicles (Trucks)",
+      "fuel_type": "Diesel",
+      "model_year_range": "1997",
+      "ch4_factor": 0.00317,
+      "n2o_factor": 0.00298,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Medium- and Heavy-Duty Vehicles (Trucks)",
+      "fuel_type": "Diesel",
+      "model_year_range": "1998",
+      "ch4_factor": 0.00317,
+      "n2o_factor": 0.00298,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Medium- and Heavy-Duty Vehicles (Trucks)",
+      "fuel_type": "Diesel",
+      "model_year_range": "1999",
+      "ch4_factor": 0.00317,
+      "n2o_factor": 0.00298,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Medium- and Heavy-Duty Vehicles (Trucks)",
+      "fuel_type": "Diesel",
+      "model_year_range": "2000",
+      "ch4_factor": 0.00317,
+      "n2o_factor": 0.00298,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Medium- and Heavy-Duty Vehicles (Trucks)",
+      "fuel_type": "Diesel",
+      "model_year_range": "2001",
+      "ch4_factor": 0.00317,
+      "n2o_factor": 0.00298,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Medium- and Heavy-Duty Vehicles (Trucks)",
+      "fuel_type": "Diesel",
+      "model_year_range": "2002",
+      "ch4_factor": 0.00317,
+      "n2o_factor": 0.00298,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Medium- and Heavy-Duty Vehicles (Trucks)",
+      "fuel_type": "Diesel",
+      "model_year_range": "2003",
+      "ch4_factor": 0.00317,
+      "n2o_factor": 0.00298,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Medium- and Heavy-Duty Vehicles (Trucks)",
+      "fuel_type": "Diesel",
+      "model_year_range": "2004",
+      "ch4_factor": 0.00317,
+      "n2o_factor": 0.00298,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Medium- and Heavy-Duty Vehicles (Trucks)",
+      "fuel_type": "Diesel",
+      "model_year_range": "2005",
+      "ch4_factor": 0.00317,
+      "n2o_factor": 0.00298,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Medium- and Heavy-Duty Vehicles (Trucks)",
+      "fuel_type": "Diesel",
+      "model_year_range": "2006",
+      "ch4_factor": 0.00317,
+      "n2o_factor": 0.00298,
+      "co2_factor": 2700.0
+    },
+     {
+      "vehicle_type": "Medium- and Heavy-Duty Vehicles (Trucks)",
+      "fuel_type": "Diesel",
+      "model_year_range": "2007",
+      "ch4_factor": 0.0059,
+      "n2o_factor": 0.02678,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Medium- and Heavy-Duty Vehicles (Trucks)",
+      "fuel_type": "Diesel",
+      "model_year_range": "2008",
+      "ch4_factor": 0.0059,
+      "n2o_factor": 0.02678,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Medium- and Heavy-Duty Vehicles (Trucks)",
+      "fuel_type": "Diesel",
+      "model_year_range": "2009",
+      "ch4_factor": 0.0059,
+      "n2o_factor": 0.02678,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Medium- and Heavy-Duty Vehicles (Trucks)",
+      "fuel_type": "Diesel",
+      "model_year_range": "2010",
+      "ch4_factor": 0.0059,
+      "n2o_factor": 0.02678,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Medium- and Heavy-Duty Vehicles (Trucks)",
+      "fuel_type": "Diesel",
+      "model_year_range": "2011",
+      "ch4_factor": 0.0059,
+      "n2o_factor": 0.02678,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Medium- and Heavy-Duty Vehicles (Trucks)",
+      "fuel_type": "Diesel",
+      "model_year_range": "2012",
+      "ch4_factor": 0.0059,
+      "n2o_factor": 0.02678,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Medium- and Heavy-Duty Vehicles (Trucks)",
+      "fuel_type": "Diesel",
+      "model_year_range": "2013",
+      "ch4_factor": 0.0059,
+      "n2o_factor": 0.02678,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Medium- and Heavy-Duty Vehicles (Trucks)",
+      "fuel_type": "Diesel",
+      "model_year_range": "2014",
+      "ch4_factor": 0.0059,
+      "n2o_factor": 0.02678,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Medium- and Heavy-Duty Vehicles (Trucks)",
+      "fuel_type": "Diesel",
+      "model_year_range": "2015",
+      "ch4_factor": 0.0059,
+      "n2o_factor": 0.02678,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Medium- and Heavy-Duty Vehicles (Trucks)",
+      "fuel_type": "Diesel",
+      "model_year_range": "2016",
+      "ch4_factor": 0.0059,
+      "n2o_factor": 0.02678,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Medium- and Heavy-Duty Vehicles (Trucks)",
+      "fuel_type": "Diesel",
+      "model_year_range": "2017",
+      "ch4_factor": 0.0059,
+      "n2o_factor": 0.02678,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Medium- and Heavy-Duty Vehicles (Trucks)",
+      "fuel_type": "Diesel",
+      "model_year_range": "2018",
+      "ch4_factor": 0.0059,
+      "n2o_factor": 0.02678,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Medium- and Heavy-Duty Vehicles (Trucks)",
+      "fuel_type": "Diesel",
+      "model_year_range": "2019",
+      "ch4_factor": 0.0059,
+      "n2o_factor": 0.02678,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Medium- and Heavy-Duty Vehicles (Trucks)",
+      "fuel_type": "Diesel",
+      "model_year_range": "2020",
+      "ch4_factor": 0.0059,
+      "n2o_factor": 0.02678,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Medium- and Heavy-Duty Vehicles (Trucks)",
+      "fuel_type": "Diesel",
+      "model_year_range": "2021",
+      "ch4_factor": 0.0059,
+      "n2o_factor": 0.02678,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Medium- and Heavy-Duty Vehicles (Trucks)",
+      "fuel_type": "Diesel",
+      "model_year_range": "2022",
+      "ch4_factor": 0.0059,
+      "n2o_factor": 0.02678,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Medium- and Heavy-Duty Vehicles (Trucks)",
+      "fuel_type": "Diesel",
+      "model_year_range": "2023",
+      "ch4_factor": 0.0059,
+      "n2o_factor": 0.02678,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Medium- and Heavy-Duty Vehicles (Trucks)",
+      "fuel_type": "Diesel",
+      "model_year_range": "2024",
+      "ch4_factor": 0.0059,
+      "n2o_factor": 0.02678,
+      "co2_factor": 2700.0
+    },
+    {
+      "vehicle_type": "Medium- and Heavy-Duty Vehicles (Trucks)",
+      "fuel_type": "Diesel",
+      "model_year_range": "2025",
+      "ch4_factor": 0.0059,
+      "n2o_factor": 0.02678,
+      "co2_factor": 2700.0
+    },
+
+    {
+      "vehicle_type": "Medium- and Heavy-Duty Vehicles (Trucks)",
+      "fuel_type": "Petrol",
+      "model_year_range": "1960",
+      "ch4_factor": 0.28608,
+      "n2o_factor": 0.03088,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Medium- and Heavy-Duty Vehicles (Trucks)",
+      "fuel_type": "Petrol",
+      "model_year_range": "1961",
+      "ch4_factor": 0.28608,
+      "n2o_factor": 0.03088,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Medium- and Heavy-Duty Vehicles (Trucks)",
+      "fuel_type": "Petrol",
+      "model_year_range": "1962",
+      "ch4_factor": 0.28608,
+      "n2o_factor": 0.03088,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Medium- and Heavy-Duty Vehicles (Trucks)",
+      "fuel_type": "Petrol",
+      "model_year_range": "1963",
+      "ch4_factor": 0.28608,
+      "n2o_factor": 0.03088,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Medium- and Heavy-Duty Vehicles (Trucks)",
+      "fuel_type": "Petrol",
+      "model_year_range": "1964",
+      "ch4_factor": 0.28608,
+      "n2o_factor": 0.03088,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Medium- and Heavy-Duty Vehicles (Trucks)",
+      "fuel_type": "Petrol",
+      "model_year_range": "1965",
+      "ch4_factor": 0.28608,
+      "n2o_factor": 0.03088,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Medium- and Heavy-Duty Vehicles (Trucks)",
+      "fuel_type": "Petrol",
+      "model_year_range": "1966",
+      "ch4_factor": 0.28608,
+      "n2o_factor": 0.03088,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Medium- and Heavy-Duty Vehicles (Trucks)",
+      "fuel_type": "Petrol",
+      "model_year_range": "1967",
+      "ch4_factor": 0.28608,
+      "n2o_factor": 0.03088,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Medium- and Heavy-Duty Vehicles (Trucks)",
+      "fuel_type": "Petrol",
+      "model_year_range": "1968",
+      "ch4_factor": 0.28608,
+      "n2o_factor": 0.03088,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Medium- and Heavy-Duty Vehicles (Trucks)",
+      "fuel_type": "Petrol",
+      "model_year_range": "1969",
+      "ch4_factor": 0.28608,
+      "n2o_factor": 0.03088,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Medium- and Heavy-Duty Vehicles (Trucks)",
+      "fuel_type": "Petrol",
+      "model_year_range": "1970",
+      "ch4_factor": 0.28608,
+      "n2o_factor": 0.03088,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Medium- and Heavy-Duty Vehicles (Trucks)",
+      "fuel_type": "Petrol",
+      "model_year_range": "1971",
+      "ch4_factor": 0.28608,
+      "n2o_factor": 0.03088,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Medium- and Heavy-Duty Vehicles (Trucks)",
+      "fuel_type": "Petrol",
+      "model_year_range": "1972",
+      "ch4_factor": 0.28608,
+      "n2o_factor": 0.03088,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Medium- and Heavy-Duty Vehicles (Trucks)",
+      "fuel_type": "Petrol",
+      "model_year_range": "1973",
+      "ch4_factor": 0.28608,
+      "n2o_factor": 0.03088,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Medium- and Heavy-Duty Vehicles (Trucks)",
+      "fuel_type": "Petrol",
+      "model_year_range": "1974",
+      "ch4_factor": 0.28608,
+      "n2o_factor": 0.03088,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Medium- and Heavy-Duty Vehicles (Trucks)",
+      "fuel_type": "Petrol",
+      "model_year_range": "1975",
+      "ch4_factor": 0.28608,
+      "n2o_factor": 0.03088,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Medium- and Heavy-Duty Vehicles (Trucks)",
+      "fuel_type": "Petrol",
+      "model_year_range": "1976",
+      "ch4_factor": 0.28608,
+      "n2o_factor": 0.03088,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Medium- and Heavy-Duty Vehicles (Trucks)",
+      "fuel_type": "Petrol",
+      "model_year_range": "1977",
+      "ch4_factor": 0.28608,
+      "n2o_factor": 0.03088,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Medium- and Heavy-Duty Vehicles (Trucks)",
+      "fuel_type": "Petrol",
+      "model_year_range": "1978",
+      "ch4_factor": 0.28608,
+      "n2o_factor": 0.03088,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Medium- and Heavy-Duty Vehicles (Trucks)",
+      "fuel_type": "Petrol",
+      "model_year_range": "1979",
+      "ch4_factor": 0.28608,
+      "n2o_factor": 0.03088,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Medium- and Heavy-Duty Vehicles (Trucks)",
+      "fuel_type": "Petrol",
+      "model_year_range": "1980",
+      "ch4_factor": 0.28608,
+      "n2o_factor": 0.03088,
+      "co2_factor": 2320.0
+    },
+   {
+      "vehicle_type": "Medium- and Heavy-Duty Vehicles (Trucks)",
+      "fuel_type": "Petrol",
+      "model_year_range": "1981",
+      "ch4_factor": 0.27912,
+      "n2o_factor": 0.03343,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Medium- and Heavy-Duty Vehicles (Trucks)",
+      "fuel_type": "Petrol",
+      "model_year_range": "1982",
+      "ch4_factor": 0.27912,
+      "n2o_factor": 0.03343,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Medium- and Heavy-Duty Vehicles (Trucks)",
+      "fuel_type": "Petrol",
+      "model_year_range": "1983",
+      "ch4_factor": 0.27912,
+      "n2o_factor": 0.03343,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Medium- and Heavy-Duty Vehicles (Trucks)",
+      "fuel_type": "Petrol",
+      "model_year_range": "1984",
+      "ch4_factor": 0.27912,
+      "n2o_factor": 0.03343,
+      "co2_factor": 2320.0
+    },
+     {
+      "vehicle_type": "Medium- and Heavy-Duty Vehicles (Trucks)",
+      "fuel_type": "Petrol",
+      "model_year_range": "1985",
+      "ch4_factor": 0.25414,
+      "n2o_factor": 0.032,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Medium- and Heavy-Duty Vehicles (Trucks)",
+      "fuel_type": "Petrol",
+      "model_year_range": "1986",
+      "ch4_factor": 0.25414,
+      "n2o_factor": 0.032,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Medium- and Heavy-Duty Vehicles (Trucks)",
+      "fuel_type": "Petrol",
+      "model_year_range": "1987",
+      "ch4_factor": 0.22835,
+      "n2o_factor": 0.05275,
+      "co2_factor": 2320.0
+    },
+     {
+      "vehicle_type": "Medium- and Heavy-Duty Vehicles (Trucks)",
+      "fuel_type": "Petrol",
+      "model_year_range": "1988",
+      "ch4_factor": 0.21698,
+      "n2o_factor": 0.05797,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Medium- and Heavy-Duty Vehicles (Trucks)",
+      "fuel_type": "Petrol",
+      "model_year_range": "1989",
+      "ch4_factor": 0.21698,
+      "n2o_factor": 0.05797,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Medium- and Heavy-Duty Vehicles (Trucks)",
+      "fuel_type": "Petrol",
+      "model_year_range": "1990",
+      "ch4_factor": 0.2017,
+      "n2o_factor": 0.07096,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Medium- and Heavy-Duty Vehicles (Trucks)",
+      "fuel_type": "Petrol",
+      "model_year_range": "1991",
+      "ch4_factor": 0.2017,
+      "n2o_factor": 0.07096,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Medium- and Heavy-Duty Vehicles (Trucks)",
+      "fuel_type": "Petrol",
+      "model_year_range": "1992",
+      "ch4_factor": 0.2017,
+      "n2o_factor": 0.07096,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Medium- and Heavy-Duty Vehicles (Trucks)",
+      "fuel_type": "Petrol",
+      "model_year_range": "1993",
+      "ch4_factor": 0.2017,
+      "n2o_factor": 0.07096,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Medium- and Heavy-Duty Vehicles (Trucks)",
+      "fuel_type": "Petrol",
+      "model_year_range": "1994",
+      "ch4_factor": 0.2017,
+      "n2o_factor": 0.07096,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Medium- and Heavy-Duty Vehicles (Trucks)",
+      "fuel_type": "Petrol",
+      "model_year_range": "1995",
+      "ch4_factor": 0.2017,
+      "n2o_factor": 0.07096,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Medium- and Heavy-Duty Vehicles (Trucks)",
+      "fuel_type": "Petrol",
+      "model_year_range": "1996",
+      "ch4_factor": 0.07941,
+      "n2o_factor": 0.10439,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Medium- and Heavy-Duty Vehicles (Trucks)",
+      "fuel_type": "Petrol",
+      "model_year_range": "1997",
+      "ch4_factor": 0.05741,
+      "n2o_factor": 0.10725,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Medium- and Heavy-Duty Vehicles (Trucks)",
+      "fuel_type": "Petrol",
+      "model_year_range": "1998",
+      "ch4_factor": 0.0407,
+      "n2o_factor": 0.10874,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Medium- and Heavy-Duty Vehicles (Trucks)",
+      "fuel_type": "Petrol",
+      "model_year_range": "1999",
+      "ch4_factor": 0.04026,
+      "n2o_factor": 0.10712,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Medium- and Heavy-Duty Vehicles (Trucks)",
+      "fuel_type": "Petrol",
+      "model_year_range": "2000",
+      "ch4_factor": 0.03915,
+      "n2o_factor": 0.10315,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Medium- and Heavy-Duty Vehicles (Trucks)",
+      "fuel_type": "Petrol",
+      "model_year_range": "2001",
+      "ch4_factor": 0.03585,
+      "n2o_factor": 0.09122,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Medium- and Heavy-Duty Vehicles (Trucks)",
+      "fuel_type": "Petrol",
+      "model_year_range": "2002",
+      "ch4_factor": 0.0394,
+      "n2o_factor": 0.10396,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Medium- and Heavy-Duty Vehicles (Trucks)",
+      "fuel_type": "Petrol",
+      "model_year_range": "2003",
+      "ch4_factor": 0.03741,
+      "n2o_factor": 0.0965,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Medium- and Heavy-Duty Vehicles (Trucks)",
+      "fuel_type": "Petrol",
+      "model_year_range": "2004",
+      "ch4_factor": 0.01852,
+      "n2o_factor": 0.01019,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Medium- and Heavy-Duty Vehicles (Trucks)",
+      "fuel_type": "Petrol",
+      "model_year_range": "2005",
+      "ch4_factor": 0.01845,
+      "n2o_factor": 0.00516,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Medium- and Heavy-Duty Vehicles (Trucks)",
+      "fuel_type": "Petrol",
+      "model_year_range": "2006",
+      "ch4_factor": 0.01858,
+      "n2o_factor": 0.01498,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Medium- and Heavy-Duty Vehicles (Trucks)",
+      "fuel_type": "Petrol",
+      "model_year_range": "2007",
+      "ch4_factor": 0.02001,
+      "n2o_factor": 0.00093,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Medium- and Heavy-Duty Vehicles (Trucks)",
+      "fuel_type": "Petrol",
+      "model_year_range": "2008",
+      "ch4_factor": 0.02113,
+      "n2o_factor": 0.00093,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Medium- and Heavy-Duty Vehicles (Trucks)",
+      "fuel_type": "Petrol",
+      "model_year_range": "2009",
+      "ch4_factor": 0.02106,
+      "n2o_factor": 0.00093,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Medium- and Heavy-Duty Vehicles (Trucks)",
+      "fuel_type": "Petrol",
+      "model_year_range": "2010",
+      "ch4_factor": 0.01988,
+      "n2o_factor": 0.00093,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Medium- and Heavy-Duty Vehicles (Trucks)",
+      "fuel_type": "Petrol",
+      "model_year_range": "2011",
+      "ch4_factor": 0.01889,
+      "n2o_factor": 0.00093,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Medium- and Heavy-Duty Vehicles (Trucks)",
+      "fuel_type": "Petrol",
+      "model_year_range": "2012",
+      "ch4_factor": 0.01945,
+      "n2o_factor": 0.00093,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Medium- and Heavy-Duty Vehicles (Trucks)",
+      "fuel_type": "Petrol",
+      "model_year_range": "2013",
+      "ch4_factor": 0.01945,
+      "n2o_factor": 0.00093,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Medium- and Heavy-Duty Vehicles (Trucks)",
+      "fuel_type": "Petrol",
+      "model_year_range": "2014",
+      "ch4_factor": 0.01957,
+      "n2o_factor": 0.00093,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Medium- and Heavy-Duty Vehicles (Trucks)",
+      "fuel_type": "Petrol",
+      "model_year_range": "2015",
+      "ch4_factor": 0.02063,
+      "n2o_factor": 0.0013,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Medium- and Heavy-Duty Vehicles (Trucks)",
+      "fuel_type": "Petrol",
+      "model_year_range": "2016",
+      "ch4_factor": 0.01995,
+      "n2o_factor": 0.00379,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Medium- and Heavy-Duty Vehicles (Trucks)",
+      "fuel_type": "Petrol",
+      "model_year_range": "2017",
+      "ch4_factor": 0.02044,
+      "n2o_factor": 0.00522,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Medium- and Heavy-Duty Vehicles (Trucks)",
+      "fuel_type": "Petrol",
+      "model_year_range": "2018",
+      "ch4_factor": 0.02026,
+      "n2o_factor": 0.0051,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Medium- and Heavy-Duty Vehicles (Trucks)",
+      "fuel_type": "Petrol",
+      "model_year_range": "2019",
+      "ch4_factor": 0.02051,
+      "n2o_factor": 0.00565,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Medium- and Heavy-Duty Vehicles (Trucks)",
+      "fuel_type": "Petrol",
+      "model_year_range": "2020",
+      "ch4_factor": 0.02063,
+      "n2o_factor": 0.00621,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Medium- and Heavy-Duty Vehicles (Trucks)",
+      "fuel_type": "Petrol",
+      "model_year_range": "2021",
+      "ch4_factor": 0.02063,
+      "n2o_factor": 0.00621,
+      "co2_factor": 2320.0
+    },
+     {
+      "vehicle_type": "Medium- and Heavy-Duty Vehicles (Trucks)",
+      "fuel_type": "Petrol",
+      "model_year_range": "2022",
+      "ch4_factor": 0.02063,
+      "n2o_factor": 0.00621,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Medium- and Heavy-Duty Vehicles (Trucks)",
+      "fuel_type": "Petrol",
+      "model_year_range": "2023",
+      "ch4_factor": 0.02063,
+      "n2o_factor": 0.00621,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Medium- and Heavy-Duty Vehicles (Trucks)",
+      "fuel_type": "Petrol",
+      "model_year_range": "2024",
+      "ch4_factor": 0.02063,
+      "n2o_factor": 0.00621,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Medium- and Heavy-Duty Vehicles (Trucks)",
+      "fuel_type": "Petrol",
+      "model_year_range": "2025",
+      "ch4_factor": 0.02063,
+      "n2o_factor": 0.00621,
+      "co2_factor": 2320.0
+    },
+
+   {
+      "vehicle_type": "Motorcycles",
+      "fuel_type": "Petrol",
+      "model_year_range": "1960",
+      "ch4_factor": 0.00559,
+      "n2o_factor": 0.05592,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Motorcycles",
+      "fuel_type": "Petrol",
+      "model_year_range": "1961",
+      "ch4_factor": 0.00559,
+      "n2o_factor": 0.05592,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Motorcycles",
+      "fuel_type": "Petrol",
+      "model_year_range": "1962",
+      "ch4_factor": 0.00559,
+      "n2o_factor": 0.05592,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Motorcycles",
+      "fuel_type": "Petrol",
+      "model_year_range": "1963",
+      "ch4_factor": 0.00559,
+      "n2o_factor": 0.05592,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Motorcycles",
+      "fuel_type": "Petrol",
+      "model_year_range": "1964",
+      "ch4_factor": 0.00559,
+      "n2o_factor": 0.05592,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Motorcycles",
+      "fuel_type": "Petrol",
+      "model_year_range": "1965",
+      "ch4_factor": 0.00559,
+      "n2o_factor": 0.05592,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Motorcycles",
+      "fuel_type": "Petrol",
+      "model_year_range": "1966",
+      "ch4_factor": 0.00559,
+      "n2o_factor": 0.05592,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Motorcycles",
+      "fuel_type": "Petrol",
+      "model_year_range": "1967",
+      "ch4_factor": 0.00559,
+      "n2o_factor": 0.05592,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Motorcycles",
+      "fuel_type": "Petrol",
+      "model_year_range": "1968",
+      "ch4_factor": 0.00559,
+      "n2o_factor": 0.05592,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Motorcycles",
+      "fuel_type": "Petrol",
+      "model_year_range": "1969",
+      "ch4_factor": 0.00559,
+      "n2o_factor": 0.05592,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Motorcycles",
+      "fuel_type": "Petrol",
+      "model_year_range": "1970",
+      "ch4_factor": 0.00559,
+      "n2o_factor": 0.05592,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Motorcycles",
+      "fuel_type": "Petrol",
+      "model_year_range": "1971",
+      "ch4_factor": 0.00559,
+      "n2o_factor": 0.05592,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Motorcycles",
+      "fuel_type": "Petrol",
+      "model_year_range": "1972",
+      "ch4_factor": 0.00559,
+      "n2o_factor": 0.05592,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Motorcycles",
+      "fuel_type": "Petrol",
+      "model_year_range": "1973",
+      "ch4_factor": 0.00559,
+      "n2o_factor": 0.05592,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Motorcycles",
+      "fuel_type": "Petrol",
+      "model_year_range": "1974",
+      "ch4_factor": 0.00559,
+      "n2o_factor": 0.05592,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Motorcycles",
+      "fuel_type": "Petrol",
+      "model_year_range": "1975",
+      "ch4_factor": 0.00559,
+      "n2o_factor": 0.05592,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Motorcycles",
+      "fuel_type": "Petrol",
+      "model_year_range": "1976",
+      "ch4_factor": 0.00559,
+      "n2o_factor": 0.05592,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Motorcycles",
+      "fuel_type": "Petrol",
+      "model_year_range": "1977",
+      "ch4_factor": 0.00559,
+      "n2o_factor": 0.05592,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Motorcycles",
+      "fuel_type": "Petrol",
+      "model_year_range": "1978",
+      "ch4_factor": 0.00559,
+      "n2o_factor": 0.05592,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Motorcycles",
+      "fuel_type": "Petrol",
+      "model_year_range": "1979",
+      "ch4_factor": 0.00559,
+      "n2o_factor": 0.05592,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Motorcycles",
+      "fuel_type": "Petrol",
+      "model_year_range": "1980",
+      "ch4_factor": 0.00559,
+      "n2o_factor": 0.05592,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Motorcycles",
+      "fuel_type": "Petrol",
+      "model_year_range": "1981",
+      "ch4_factor": 0.00559,
+      "n2o_factor": 0.05592,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Motorcycles",
+      "fuel_type": "Petrol",
+      "model_year_range": "1982",
+      "ch4_factor": 0.00559,
+      "n2o_factor": 0.05592,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Motorcycles",
+      "fuel_type": "Petrol",
+      "model_year_range": "1983",
+      "ch4_factor": 0.00559,
+      "n2o_factor": 0.05592,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Motorcycles",
+      "fuel_type": "Petrol",
+      "model_year_range": "1984",
+      "ch4_factor": 0.00559,
+      "n2o_factor": 0.05592,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Motorcycles",
+      "fuel_type": "Petrol",
+      "model_year_range": "1985",
+      "ch4_factor": 0.00559,
+      "n2o_factor": 0.05592,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Motorcycles",
+      "fuel_type": "Petrol",
+      "model_year_range": "1986",
+      "ch4_factor": 0.00559,
+      "n2o_factor": 0.05592,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Motorcycles",
+      "fuel_type": "Petrol",
+      "model_year_range": "1987",
+      "ch4_factor": 0.00559,
+      "n2o_factor": 0.05592,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Motorcycles",
+      "fuel_type": "Petrol",
+      "model_year_range": "1988",
+      "ch4_factor": 0.00559,
+      "n2o_factor": 0.05592,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Motorcycles",
+      "fuel_type": "Petrol",
+      "model_year_range": "1989",
+      "ch4_factor": 0.00559,
+      "n2o_factor": 0.05592,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Motorcycles",
+      "fuel_type": "Petrol",
+      "model_year_range": "1990",
+      "ch4_factor": 0.00559,
+      "n2o_factor": 0.05592,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Motorcycles",
+      "fuel_type": "Petrol",
+      "model_year_range": "1991",
+      "ch4_factor": 0.00559,
+      "n2o_factor": 0.05592,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Motorcycles",
+      "fuel_type": "Petrol",
+      "model_year_range": "1992",
+      "ch4_factor": 0.00559,
+      "n2o_factor": 0.05592,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Motorcycles",
+      "fuel_type": "Petrol",
+      "model_year_range": "1993",
+      "ch4_factor": 0.00559,
+      "n2o_factor": 0.05592,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Motorcycles",
+      "fuel_type": "Petrol",
+      "model_year_range": "1994",
+      "ch4_factor": 0.00559,
+      "n2o_factor": 0.05592,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Motorcycles",
+      "fuel_type": "Petrol",
+      "model_year_range": "1995",
+      "ch4_factor": 0.00559,
+      "n2o_factor": 0.05592,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Motorcycles",
+      "fuel_type": "Petrol",
+      "model_year_range": "1996",
+      "ch4_factor": 0.00435,
+      "n2o_factor": 0.04163,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Motorcycles",
+      "fuel_type": "Petrol",
+      "model_year_range": "1997",
+      "ch4_factor": 0.00435,
+      "n2o_factor": 0.04163,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Motorcycles",
+      "fuel_type": "Petrol",
+      "model_year_range": "1998",
+      "ch4_factor": 0.00435,
+      "n2o_factor": 0.04163,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Motorcycles",
+      "fuel_type": "Petrol",
+      "model_year_range": "1999",
+      "ch4_factor": 0.00435,
+      "n2o_factor": 0.04163,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Motorcycles",
+      "fuel_type": "Petrol",
+      "model_year_range": "2000",
+      "ch4_factor": 0.00435,
+      "n2o_factor": 0.04163,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Motorcycles",
+      "fuel_type": "Petrol",
+      "model_year_range": "2001",
+      "ch4_factor": 0.00435,
+      "n2o_factor": 0.04163,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Motorcycles",
+      "fuel_type": "Petrol",
+      "model_year_range": "2002",
+      "ch4_factor": 0.00435,
+      "n2o_factor": 0.04163,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Motorcycles",
+      "fuel_type": "Petrol",
+      "model_year_range": "2003",
+      "ch4_factor": 0.00435,
+      "n2o_factor": 0.04163,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Motorcycles",
+      "fuel_type": "Petrol",
+      "model_year_range": "2004",
+      "ch4_factor": 0.00435,
+      "n2o_factor": 0.04163,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Motorcycles",
+      "fuel_type": "Petrol",
+      "model_year_range": "2005",
+      "ch4_factor": 0.00435,
+      "n2o_factor": 0.04163,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Motorcycles",
+      "fuel_type": "Petrol",
+      "model_year_range": "2006",
+      "ch4_factor": 0.01118,
+      "n2o_factor": 0.04101,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Motorcycles",
+      "fuel_type": "Petrol",
+      "model_year_range": "2007",
+      "ch4_factor": 0.01118,
+      "n2o_factor": 0.04101,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Motorcycles",
+      "fuel_type": "Petrol",
+      "model_year_range": "2008",
+      "ch4_factor": 0.01118,
+      "n2o_factor": 0.04101,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Motorcycles",
+      "fuel_type": "Petrol",
+      "model_year_range": "2009",
+      "ch4_factor": 0.01118,
+      "n2o_factor": 0.04101,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Motorcycles",
+      "fuel_type": "Petrol",
+      "model_year_range": "2010",
+      "ch4_factor": 0.01118,
+      "n2o_factor": 0.04101,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Motorcycles",
+      "fuel_type": "Petrol",
+      "model_year_range": "2011",
+      "ch4_factor": 0.01118,
+      "n2o_factor": 0.04101,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Motorcycles",
+      "fuel_type": "Petrol",
+      "model_year_range": "2012",
+      "ch4_factor": 0.01118,
+      "n2o_factor": 0.04101,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Motorcycles",
+      "fuel_type": "Petrol",
+      "model_year_range": "2013",
+      "ch4_factor": 0.01118,
+      "n2o_factor": 0.04101,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Motorcycles",
+      "fuel_type": "Petrol",
+      "model_year_range": "2014",
+      "ch4_factor": 0.01118,
+      "n2o_factor": 0.04101,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Motorcycles",
+      "fuel_type": "Petrol",
+      "model_year_range": "2015",
+      "ch4_factor": 0.01118,
+      "n2o_factor": 0.04101,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Motorcycles",
+      "fuel_type": "Petrol",
+      "model_year_range": "2016",
+      "ch4_factor": 0.01118,
+      "n2o_factor": 0.04101,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Motorcycles",
+      "fuel_type": "Petrol",
+      "model_year_range": "2017",
+      "ch4_factor": 0.01118,
+      "n2o_factor": 0.04101,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Motorcycles",
+      "fuel_type": "Petrol",
+      "model_year_range": "2018",
+      "ch4_factor": 0.01118,
+      "n2o_factor": 0.04101,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Motorcycles",
+      "fuel_type": "Petrol",
+      "model_year_range": "2019",
+      "ch4_factor": 0.01118,
+      "n2o_factor": 0.04101,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Motorcycles",
+      "fuel_type": "Petrol",
+      "model_year_range": "2020",
+      "ch4_factor": 0.01118,
+      "n2o_factor": 0.04101,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Motorcycles",
+      "fuel_type": "Petrol",
+      "model_year_range": "2021",
+      "ch4_factor": 0.01118,
+      "n2o_factor": 0.04101,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Motorcycles",
+      "fuel_type": "Petrol",
+      "model_year_range": "2022",
+      "ch4_factor": 0.01118,
+      "n2o_factor": 0.04101,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Motorcycles",
+      "fuel_type": "Petrol",
+      "model_year_range": "2023",
+      "ch4_factor": 0.01118,
+      "n2o_factor": 0.04101,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Motorcycles",
+      "fuel_type": "Petrol",
+      "model_year_range": "2024",
+      "ch4_factor": 0.01118,
+      "n2o_factor": 0.04101,
+      "co2_factor": 2320.0
+    },
+    {
+      "vehicle_type": "Motorcycles",
+      "fuel_type": "Petrol",
+      "model_year_range": "2025",
+      "ch4_factor": 0.01118,
+      "n2o_factor": 0.04101,
+      "co2_factor": 2320.0
+    }
+  ]
+}
