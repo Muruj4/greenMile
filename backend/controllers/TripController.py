@@ -6,14 +6,21 @@ class TripController:
         self.ghg_data = ghg_data
 
     def process_trip(self, origin, destination, city, vehicleType, fuelType, modelYear):
-        trip = Trip(
-            origin,
-            destination,
-            city,
-            vehicleType,
-            fuelType,
-            modelYear,
-            self.ghg_data,
-            self.api_key,
-        )
-        return trip.get_routes()
+        try:
+            trip = Trip(
+                origin,
+                destination,
+                city,
+                vehicleType,
+                fuelType,
+                modelYear,
+                self.ghg_data,
+                self.api_key,
+            )
+            return trip.get_routes()
+
+        except Exception as e:
+            return {
+                "error": "Trip processing failed",
+                "details": str(e)
+            }

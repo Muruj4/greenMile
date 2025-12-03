@@ -145,9 +145,9 @@ export default function TripScreen() {
         <button type="submit" disabled={loading}>
           {loading ? "Fetching routes..." : "Create Trip"}
         </button>
-
         {error && <p className="error-message">⚠️ {error}</p>}
       </form>
     </div>
   );
 }
+            

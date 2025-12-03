@@ -15,7 +15,7 @@ with open(GHG_DATA_PATH, "r", encoding="utf-8") as file:
     GHG_DATA = json.load(file)
 
 # Initialize FastAPI
-app = FastAPI()
+app = FastAPI(debug=True)
 
 # Allow frontend access 
 app.add_middleware(
@@ -32,19 +32,23 @@ trip_controller = TripController(API_KEY, GHG_DATA)
 
 @app.post("/process_trip")
 def process_trip(payload: dict):
+    try:
+        origin = payload.get("origin")
+        destination = payload.get("destination")
+        city = payload.get("city")
+        vehicleType = payload.get("vehicleType")
+        fuelType = payload.get("fuelType")
+        modelYear = payload.get("modelYear")
 
-    origin = payload.get("origin")
-    destination = payload.get("destination")
-    city = payload.get("city")
-    vehicleType = payload.get("vehicleType")
-    fuelType = payload.get("fuelType")
-    modelYear = payload.get("modelYear")
+        return trip_controller.process_trip(
+            origin=origin,
+            destination=destination,
+            city=city,
+            vehicleType=vehicleType,
+            fuelType=fuelType,
+            modelYear=modelYear
+        )
 
-    return trip_controller.process_trip(
-        origin=origin,
-        destination=destination,
-        city=city,
-        vehicleType=vehicleType,
-        fuelType=fuelType,
-        modelYear=modelYear
-    )
+    except Exception as e:
+        return {"error": "Server error", "details": str(e)}
+

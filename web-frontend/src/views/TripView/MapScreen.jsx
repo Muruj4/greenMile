@@ -9,115 +9,130 @@ const colorMap = {
 };
 
 export default function MapScreen() {
+  console.log("MapScreen mounted");
+  console.log("window.H =", window.H);
   const { state } = useLocation();
   const routes = useMemo(() => state?.routes ?? [], [state]);
 
   const mapRef = useRef(null);
   const [selectedIndex, setSelectedIndex] = useState(0);
+  const [mapError, setMapError] = useState(null);
 
   // INITIALIZE MAP
   
   useEffect(() => {
-    if (!routes.length) return;
-    if (!window.H) return;
-    if (mapRef.current) return; 
+    try {
+      if (!routes.length) return;
+      if (!window.H) return;
+      if (mapRef.current) return; 
 
-    const platform = new window.H.service.Platform({
-      apikey: process.env.REACT_APP_HERE_API_KEY,
-    });
+      const platform = new window.H.service.Platform({
+        apikey: process.env.REACT_APP_HERE_API_KEY,
+      });
 
-    const layers = platform.createDefaultLayers();
+      const layers = platform.createDefaultLayers();
 
-    mapRef.current = new window.H.Map(
-      document.getElementById("here-map-container"),
-      layers.vector.normal.map,
-      { center: { lat: 21.543333, lng: 39.172779 }, zoom: 12 }
-    );
+      mapRef.current = new window.H.Map(
+        document.getElementById("here-map-container"),
+        layers.vector.normal.map,
+        { center: { lat: 21.543333, lng: 39.172779 }, zoom: 12 }
+      );
 
-    const mapEvents = new window.H.mapevents.MapEvents(mapRef.current);
-    new window.H.mapevents.Behavior(mapEvents);
-    window.H.ui.UI.createDefault(mapRef.current, layers);
+      const mapEvents = new window.H.mapevents.MapEvents(mapRef.current);
+      new window.H.mapevents.Behavior(mapEvents);
+      window.H.ui.UI.createDefault(mapRef.current, layers);
+    } catch (error) {
+      console.error("Error initializing HERE map:", error);
+      setMapError("There was a problem loading the map. Please try again.");
+    }
   }, [routes]);
 
 
   useEffect(() => {
-    if (!mapRef.current || !routes.length || !window.H) return;
+    try {
+      if (!mapRef.current || !routes.length || !window.H) return;
 
-    const map = mapRef.current;
-    map.removeObjects(map.getObjects());
-    const group = new window.H.map.Group();
+      const map = mapRef.current;
+      map.removeObjects(map.getObjects());
+      const group = new window.H.map.Group();
 
-    // --- START MARKER ICON ---
-    const startIcon = new window.H.map.Icon(
-      "data:image/svg+xml;utf-8," +
-        encodeURIComponent(`
+      // --- START MARKER ICON ---
+      const startIcon = new window.H.map.Icon(
+        "data:image/svg+xml;utf-8," +
+          encodeURIComponent(`
           <svg width="32" height="32" viewBox="0 0 24 24" fill="#0E7AFE" xmlns="http://www.w3.org/2000/svg">
             <path d="M12 2C8.134 2 5 5.134 5 9c0 5.25 7 13 7 13s7-7.75 7-13z"/>
           </svg>
         `)
-    );
+      );
 
-    // --- END MARKER ICON ---
-    const endIcon = new window.H.map.Icon(
-      "data:image/svg+xml;utf-8," +
-        encodeURIComponent(`
+      // --- END MARKER ICON ---
+      const endIcon = new window.H.map.Icon(
+        "data:image/svg+xml;utf-8," +
+          encodeURIComponent(`
           <svg width="32" height="32" viewBox="0 0 24 24" fill="#E53935" xmlns="http://www.w3.org/2000/svg">
             <path d="M12 2C8.134 2 5 5.134 5 9c0 5.25 7 13 7 13s7-7.75 7-13z"/>
           </svg>
         `)
-    );
+      );
 
-    // ---- DRAW EACH ROUTE ----
-    routes.forEach((route, index) => {
-      if (!route.coordinates?.length) return;
+      // ---- DRAW EACH ROUTE ----
+      routes.forEach((route, index) => {
+        if (!route.coordinates?.length) return;
 
-      const line = new window.H.geo.LineString();
+        const line = new window.H.geo.LineString();
 
-      
-      route.coordinates.forEach(([lng, lat]) => {
-        line.pushLatLngAlt(lat, lng);
+        
+        route.coordinates.forEach(([lng, lat]) => {
+          line.pushLatLngAlt(lat, lng);
+        });
+
+        const polyline = new window.H.map.Polyline(line, {
+          style: {
+            strokeColor: colorMap[route.color],
+            lineWidth: index === selectedIndex ? 10 : 6,
+            opacity: index === selectedIndex ? 1 : 0.45,
+          },
+        });
+
+        polyline.addEventListener("tap", () => setSelectedIndex(index));
+        group.addObject(polyline);
       });
 
-      const polyline = new window.H.map.Polyline(line, {
-        style: {
-          strokeColor: colorMap[route.color],
-          lineWidth: index === selectedIndex ? 10 : 6,
-          opacity: index === selectedIndex ? 1 : 0.45,
-        },
+      // --- ADD START MARKER ---
+      const first = routes[0]?.coordinates?.[0];
+      if (first) {
+        const [lng, lat] = first;
+        group.addObject(new window.H.map.Marker({ lat, lng }, { icon: startIcon }));
+      }
+
+      // --- ADD END MARKER ---
+      const last = routes[selectedIndex]?.coordinates?.slice(-1)[0];
+      if (last) {
+        const [lng, lat] = last;
+        group.addObject(new window.H.map.Marker({ lat, lng }, { icon: endIcon }));
+      }
+
+      map.addObject(group);
+      map.getViewModel().setLookAtData({
+        bounds: group.getBoundingBox(),
+        padding: 20,
       });
-
-      polyline.addEventListener("tap", () => setSelectedIndex(index));
-      group.addObject(polyline);
-    });
-
-    // --- ADD START MARKER ---
-    const first = routes[0]?.coordinates?.[0];
-    if (first) {
-      const [lng, lat] = first;
-      group.addObject(new window.H.map.Marker({ lat, lng }, { icon: startIcon }));
+    } catch (error) {
+      console.error("Error drawing routes on HERE map:", error);
+      setMapError("There was a problem displaying the routes on the map.");
     }
-
-    // --- ADD END MARKER ---
-    const last = routes[selectedIndex]?.coordinates?.slice(-1)[0];
-    if (last) {
-      const [lng, lat] = last;
-      group.addObject(new window.H.map.Marker({ lat, lng }, { icon: endIcon }));
-    }
-
-    map.addObject(group);
-    map.getViewModel().setLookAtData({
-      bounds: group.getBoundingBox(),
-      padding: 20,
-    });
   }, [routes, selectedIndex]);
 
   return (
     <div className="map-screen">
+      {mapError && <p className="error-message">{mapError}</p>}
+
       {routes.length === 0 && <h3 className="no-routes">No routes available.</h3>}
 
       {routes.length > 0 && (
         <>
-          <h2 className="title">Available Routes</h2>
+          <h2 className="title">Routes</h2>
 
           <div id="here-map-container" className="map-container"></div>
 
