@@ -1,28 +1,64 @@
 // driver/api.js
 
-// هنا نحط IP حق اللابتوب من ipconfig
-const BASE_URL = "http://192.168.0.112:8000";
+const BASE_URL = "http://192.168.0.112:8000"; 
 
-export async function getRoutes(params) {
-  const query = new URLSearchParams({
-    origin: params.origin,
-    destination: params.destination,
-    city: params.city,
-    vehicleType: params.vehicleType,
-    fuelType: params.fuelType,
-    modelYear: String(params.modelYear),
-  }).toString();
+// PROCESS TRIP  → Used in TripScreen
 
-  const url = `${BASE_URL}/routes?${query}`;
-  console.log("Calling backend:", url);
+export async function processTrip(tripData) {
+  try {
+    const res = await fetch(`${BASE_URL}/process_trip`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(tripData),
+    });
 
-  const res = await fetch(url, { method: "GET" });
-
-  if (!res.ok) {
-    const text = await res.text();
-    throw new Error(`Backend error ${res.status}: ${text}`);
+    const data = await res.json();
+    return data;
+  } catch (err) {
+    console.log("processTrip() error:", err);
+    throw err;
   }
+}
 
-  // هذا اللي رجعتيه في الرسالة: { routes: [...] }
-  return await res.json();
+// INIT NAVIGATION ROUTE → Used in NavigationScreen
+
+export async function initNavigationRoute(coords, durationText) {
+  try {
+    const res = await fetch(`${BASE_URL}/navigation/init_route`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        coords: coords,
+        duration_text: durationText,
+      }),
+    });
+
+    const data = await res.json();
+    return data;
+  } catch (err) {
+    console.log("initNavigationRoute() error:", err);
+    throw err;
+  }
+}
+
+// 3) SEND LOCATION UPDATE → Used in NavigationScreen
+
+export async function sendLocationUpdate(location, heading, speedKmh) {
+  try {
+    const res = await fetch(`${BASE_URL}/navigation/location_update`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        location: location,
+        heading: heading,
+        speed_kmh: speedKmh, // 👈 Matches backend exactly
+      }),
+    });
+
+    const data = await res.json();
+    return data;
+  } catch (err) {
+    console.log("sendLocationUpdate() error:", err);
+    throw err;
+  }
 }

@@ -5,7 +5,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 import TripScreen from "./screens/TripScreen";
-import RoutesScreen from "./screens/RoutesScreen"; // اسم أوضح من Results
+import RoutesScreen from "./screens/RoutesScreen"; 
 import NavigationScreen from "./screens/NavigationScreen";
 
 const Stack = createNativeStackNavigator();

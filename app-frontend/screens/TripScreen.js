@@ -11,6 +11,7 @@ import {
 
 import { styles } from "../Style/TripScreenStyle";
 
+import { processTrip } from "../api";
 
 const VEHICLE_TYPES = [
   "Car",
@@ -43,13 +44,8 @@ const CITIES = [
 const CURRENT_YEAR = new Date().getFullYear();
 const MODEL_YEARS = [];
 for (let y = CURRENT_YEAR; y >= 1960; y--) {
-  MODEL_YEARS.push(String(y)); // "2025", "2024", ... "1960"
+  MODEL_YEARS.push(String(y)); 
 }
-
-// هنا بنستخدم IP الباك إند
-// Emulator: غالباً http://10.0.2.2:8000
-// جوال حقيقي: http://<IP اللابتوب>:8000
-const BASE_URL = "http://192.168.1.137:8000";
 
 export default function TripScreen({ navigation }) {
   const [fuelType, setFuelType] = useState("Petrol");
@@ -81,7 +77,7 @@ export default function TripScreen({ navigation }) {
     handleChange("fuelType", type);
   };
 
-  // هنا الربط مع الباك إند مباشرة من داخل TripScreen
+
   const handleCreateTrip = async () => {
     if (
       !tripData.origin ||
@@ -97,23 +93,9 @@ export default function TripScreen({ navigation }) {
     try {
       setLoading(true);
 
-      // استدعاء الـ backend مباشرة
-      const res = await fetch(`${BASE_URL}/process_trip`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          origin: tripData.origin,
-          destination: tripData.destination,
-          city: tripData.city,
-          vehicleType: tripData.vehicleType,
-          fuelType: tripData.fuelType,
-          modelYear: tripData.modelYear,
-        }),
-      });
+      const data = await processTrip(tripData);
 
-      const data = await res.json();
-
-      if (!res.ok || data.error) {
+      if (data.error) {
         throw new Error(data.error || "Failed to fetch routes");
       }
 
@@ -122,11 +104,12 @@ export default function TripScreen({ navigation }) {
         return;
       }
 
-      // الذهاب لشاشة عرض المسارات وتمرير النتائج لها
+      // ✔️ الانتقال إلى شاشة المسارات
       navigation.navigate("Routes", {
         routes: data.routes,
         meta: tripData,
       });
+
     } catch (error) {
       console.error(error);
       Alert.alert("Error", error.message || "Unknown error");
@@ -144,6 +127,7 @@ export default function TripScreen({ navigation }) {
 
         {/* Vehicle Type + Model Year */}
         <View style={styles.row}>
+
           {/* Vehicle Type */}
           <View style={styles.block}>
             <Text style={styles.label}>Vehicle Type</Text>
