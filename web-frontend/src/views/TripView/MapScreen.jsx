@@ -9,8 +9,6 @@ const colorMap = {
 };
 
 export default function MapScreen() {
-  console.log("MapScreen mounted");
-  console.log("window.H =", window.H);
   const { state } = useLocation();
   const routes = useMemo(() => state?.routes ?? [], [state]);
 

@@ -3,7 +3,9 @@ from fastapi.middleware.cors import CORSMiddleware
 import json
 import os
 from dotenv import load_dotenv
+
 from controllers.TripController import TripController
+from controllers.NavigationController import NavigationController   # ✅ جديد
 
 # Load environment variables
 load_dotenv()
@@ -26,8 +28,9 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-
+# --------- Controllers instances ----------
 trip_controller = TripController(API_KEY, GHG_DATA)
+navigation_controller = NavigationController()   # ✅ جديد
 
 
 @app.post("/process_trip")
@@ -52,3 +55,27 @@ def process_trip(payload: dict):
     except Exception as e:
         return {"error": "Server error", "details": str(e)}
 
+
+# ====== ✅ ENDPOINTS الخاصة بالملاحة Navigation ======
+
+@app.post("/navigation/init_route")
+def init_route(payload: dict):
+    """يستقبل coords + duration_text من الفرونت إند أو من /process_trip"""
+    try:
+        coords = payload.get("coords", [])          # [{latitude, longitude}, ...]
+        duration_text = payload.get("duration_text", "")  # "32 mins"
+        return navigation_controller.init_route(coords, duration_text)
+    except Exception as e:
+        return {"error": "Server error", "details": str(e)}
+
+
+@app.post("/navigation/location_update")
+def location_update(payload: dict):
+    """يستقبل location الحالية + heading + السرعة ويعيد remainingKm + ETA"""
+    try:
+        location = payload.get("location")  # {latitude, longitude}
+        heading = payload.get("heading", 0)
+        speed_kmh = payload.get("speed_kmh", 0)
+        return navigation_controller.location_update(location, heading, speed_kmh)
+    except Exception as e:
+        return {"error": "Server error", "details": str(e)}
