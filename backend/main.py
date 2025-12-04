@@ -5,20 +5,16 @@ import os
 from dotenv import load_dotenv
 
 from controllers.TripController import TripController
-from controllers.NavigationController import NavigationController   # ✅ جديد
 
 # Load environment variables
 load_dotenv()
 API_KEY = os.getenv("GOOGLE_DIRECTIONS_KEY")
-
 # Load GHG factors JSON
 GHG_DATA_PATH = "models/ghg_factors.json"
 with open(GHG_DATA_PATH, "r", encoding="utf-8") as file:
     GHG_DATA = json.load(file)
-
 # Initialize FastAPI
 app = FastAPI(debug=True)
-
 # Allow frontend access 
 app.add_middleware(
     CORSMiddleware,
@@ -28,9 +24,8 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# --------- Controllers instances ----------
+
 trip_controller = TripController(API_KEY, GHG_DATA)
-navigation_controller = NavigationController()   # ✅ جديد
 
 
 @app.post("/process_trip")
