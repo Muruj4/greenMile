@@ -1,6 +1,6 @@
 // driver/api.js
 
-const BASE_URL = "http://192.168.0.112:8000"; 
+const BASE_URL = "http://192.168.1.137:8000";
 
 // PROCESS TRIP  → Used in TripScreen
 
@@ -51,7 +51,7 @@ export async function sendLocationUpdate(location, heading, speedKmh) {
       body: JSON.stringify({
         location: location,
         heading: heading,
-        speed_kmh: speedKmh, // 👈 Matches backend exactly
+        speed_kmh: speedKmh, 
       }),
     });
 
