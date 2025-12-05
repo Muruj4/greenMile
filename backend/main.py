@@ -5,46 +5,33 @@ import json
 import os
 from dotenv import load_dotenv
 
-# Controllers
+
 from controllers.TripController import TripController
 from controllers.NavigationController import NavigationController
 
-# ============================
-# LOAD ENV + DATA
-# ============================
+
 load_dotenv()
 API_KEY = os.getenv("GOOGLE_DIRECTIONS_KEY")
 
-# Load GHG factors JSON
 GHG_DATA_PATH = "models/ghg_factors.json"
 with open(GHG_DATA_PATH, "r", encoding="utf-8") as file:
     GHG_DATA = json.load(file)
 
-# ============================
-# INITIALIZE FASTAPI
-# ============================
 app = FastAPI(debug=True)
 
-# ============================
-# ENABLE CORS
-# ============================
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],       # React / React Native frontend
+    allow_origins=["*"],       
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# ============================
-# CONTROLLERS INSTANCES
-# ============================
+
 trip_controller = TripController(API_KEY, GHG_DATA)
 navigation_controller = NavigationController()
 
-# ============================
-# PROCESS TRIP (ROUTES + EMISSIONS)
-# ============================
 
 @app.post("/process_trip")
 def process_trip(payload: dict):
@@ -75,9 +62,6 @@ def process_trip(payload: dict):
             "details": str(e),
         }
 
-# ============================
-# INIT NAVIGATION (BEFORE ENTERING MAP)
-# ============================
 
 @app.post("/navigation/init_route")
 def init_route(payload: dict):
@@ -99,9 +83,6 @@ def init_route(payload: dict):
             "details": str(e),
         }
 
-# ============================
-# LIVE NAVIGATION UPDATES
-# ============================
 
 @app.post("/navigation/location_update")
 def location_update(payload: dict):
@@ -114,9 +95,9 @@ def location_update(payload: dict):
     - speed
     """
     try:
-        location = payload.get("location")     # { lat, lng }
-        heading = payload.get("heading")       # float
-        speed_kmh = payload.get("speed_kmh")   # float
+        location = payload.get("location")     
+        heading = payload.get("heading")      
+        speed_kmh = payload.get("speed_kmh") 
 
         return navigation_controller.location_update(location, heading, speed_kmh)
 
@@ -127,9 +108,6 @@ def location_update(payload: dict):
         }
 
 
-# ============================
-# HEALTH CHECK
-# ============================
 @app.get("/")
 def root():
     return {"message": "GreenMile Backend Running Successfully 🚀"}
