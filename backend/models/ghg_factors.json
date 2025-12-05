@@ -1720,7 +1720,7 @@
       "co2_factor": 2320.0
     },
     {
-      "vehicle_type": "Light-Duty Trucks ",
+      "vehicle_type": "Light-Duty Trucks",
       "fuel_type": "Petrol",
       "model_year_range": "1975",
       "ch4_factor": 0.10153,
@@ -1728,7 +1728,7 @@
       "co2_factor": 2320.0
     },
     {
-      "vehicle_type": "Light-Duty Trucks ",
+      "vehicle_type": "Light-Duty Trucks",
       "fuel_type": "Petrol",
       "model_year_range": "1976",
       "ch4_factor": 0.09905,
@@ -1768,7 +1768,7 @@
       "co2_factor": 2320.0
     },
     {
-      "vehicle_type": "Light-Duty Trucks ",
+      "vehicle_type": "Light-Duty Trucks",
       "fuel_type": "Petrol",
       "model_year_range": "1981",
       "ch4_factor": 0.0919,
@@ -1776,7 +1776,7 @@
       "co2_factor": 2320.0
     },
     {
-      "vehicle_type": "Light-Duty Trucks ",
+      "vehicle_type": "Light-Duty Trucks",
       "fuel_type": "Petrol",
       "model_year_range": "1982",
       "ch4_factor": 0.0896,
@@ -1784,7 +1784,7 @@
       "co2_factor": 2320.0
     },
     {
-      "vehicle_type": "Light-Duty Trucks ",
+      "vehicle_type": "Light-Duty Trucks",
       "fuel_type": "Petrol",
       "model_year_range": "1983",
       "ch4_factor": 0.085,
@@ -1792,7 +1792,7 @@
       "co2_factor": 2320.0
     },
     {
-      "vehicle_type": "Light-Duty Trucks ",
+      "vehicle_type": "Light-Duty Trucks",
       "fuel_type": "Petrol",
       "model_year_range": "1984",
       "ch4_factor": 0.08041,
@@ -1800,7 +1800,7 @@
       "co2_factor": 2320.0
     },
     {
-      "vehicle_type": "Light-Duty Trucks ",
+      "vehicle_type": "Light-Duty Trucks",
       "fuel_type": "Petrol",
       "model_year_range": "1985",
       "ch4_factor": 0.07581,
@@ -1808,7 +1808,7 @@
       "co2_factor": 2320.0
     },
     {
-      "vehicle_type": "Light-Duty Trucks ",
+      "vehicle_type": "Light-Duty Trucks",
       "fuel_type": "Petrol",
       "model_year_range": "1986",
       "ch4_factor": 0.07121,
@@ -1872,7 +1872,7 @@
       "co2_factor": 2320.0
     },
     {
-      "vehicle_type": "Light-Duty Trucks ",
+      "vehicle_type": "Light-Duty Trucks",
       "fuel_type": "Petrol",
       "model_year_range": "1994",
       "ch4_factor": 0.04014,
@@ -1880,7 +1880,7 @@
       "co2_factor": 2320.0
     },
     {
-      "vehicle_type": "Light-Duty Trucks ",
+      "vehicle_type": "Light-Duty Trucks",
       "fuel_type": "Petrol",
       "model_year_range": "1995",
       "ch4_factor": 0.03212,
@@ -1888,7 +1888,7 @@
       "co2_factor": 2320.0
     },
     {
-      "vehicle_type": "Light-Duty Trucks ",
+      "vehicle_type": "Light-Duty Trucks",
       "fuel_type": "Petrol",
       "model_year_range": "1996",
       "ch4_factor": 0.02809,
@@ -1896,7 +1896,7 @@
       "co2_factor": 2320.0
     },
     {
-      "vehicle_type": "Light-Duty Trucks ",
+      "vehicle_type": "Light-Duty Trucks",
       "fuel_type": "Petrol",
       "model_year_range": "1997",
       "ch4_factor": 0.02809,
@@ -1904,7 +1904,7 @@
       "co2_factor": 2320.0
     },
     {
-      "vehicle_type": "Light-Duty Trucks ",
+      "vehicle_type": "Light-Duty Trucks",
       "fuel_type": "Petrol",
       "model_year_range": "1998",
       "ch4_factor": 0.0256,
@@ -1912,7 +1912,7 @@
       "co2_factor": 2320.0
     },
     {
-      "vehicle_type": "Light-Duty Trucks ",
+      "vehicle_type": "Light-Duty Trucks",
       "fuel_type": "Petrol",
       "model_year_range": "1999",
       "ch4_factor": 0.02069,
@@ -1920,7 +1920,7 @@
       "co2_factor": 2320.0
     },
     {
-      "vehicle_type": "Light-Duty Trucks ",
+      "vehicle_type": "Light-Duty Trucks",
       "fuel_type": "Petrol",
       "model_year_range": "2000",
       "ch4_factor": 0.02113,
@@ -1928,7 +1928,7 @@
       "co2_factor": 2320.0
     },
     {
-      "vehicle_type": "Light-Duty Trucks ",
+      "vehicle_type": "Light-Duty Trucks",
       "fuel_type": "Petrol",
       "model_year_range": "2001",
       "ch4_factor": 0.01373,
@@ -1936,7 +1936,7 @@
       "co2_factor": 2320.0
     },
     {
-      "vehicle_type": "Light-Duty Trucks ",
+      "vehicle_type": "Light-Duty Trucks",
       "fuel_type": "Petrol",
       "model_year_range": "2002",
       "ch4_factor": 0.01504,
@@ -1944,7 +1944,7 @@
       "co2_factor": 2320.0
     },
     {
-      "vehicle_type": "Light-Duty Trucks ",
+      "vehicle_type": "Light-Duty Trucks",
       "fuel_type": "Petrol",
       "model_year_range": "2003",
       "ch4_factor": 0.01373,
@@ -1952,7 +1952,7 @@
       "co2_factor": 2320.0
     },
     {
-      "vehicle_type": "Light-Duty Trucks ",
+      "vehicle_type": "Light-Duty Trucks",
       "fuel_type": "Petrol",
       "model_year_range": "2004",
       "ch4_factor": 0.00715,
@@ -1960,7 +1960,7 @@
       "co2_factor": 2320.0
     },
     {
-      "vehicle_type": "Light-Duty Trucks ",
+      "vehicle_type": "Light-Duty Trucks",
       "fuel_type": "Petrol",
       "model_year_range": "2005",
       "ch4_factor": 0.00652,
@@ -1968,7 +1968,7 @@
       "co2_factor": 2320.0
     },
     {
-      "vehicle_type": "Light-Duty Trucks ",
+      "vehicle_type": "Light-Duty Trucks",
       "fuel_type": "Petrol",
       "model_year_range": "2006",
       "ch4_factor": 0.00671,
@@ -1976,7 +1976,7 @@
       "co2_factor": 2320.0
     },
     {
-      "vehicle_type": "Light-Duty Trucks ",
+      "vehicle_type": "Light-Duty Trucks",
       "fuel_type": "Petrol",
       "model_year_range": "2007",
       "ch4_factor": 0.0064,
@@ -1984,7 +1984,7 @@
       "co2_factor": 2320.0
     },
     {
-      "vehicle_type": "Light-Duty Trucks ",
+      "vehicle_type": "Light-Duty Trucks",
       "fuel_type": "Petrol",
       "model_year_range": "2008",
       "ch4_factor": 0.0059,
@@ -1992,7 +1992,7 @@
       "co2_factor": 2320.0
     },
     {
-      "vehicle_type": "Light-Duty Trucks ",
+      "vehicle_type": "Light-Duty Trucks",
       "fuel_type": "Petrol",
       "model_year_range": "2009",
       "ch4_factor": 0.0059,
@@ -2000,7 +2000,7 @@
       "co2_factor": 2320.0
     },
     {
-      "vehicle_type": "Light-Duty Trucks ",
+      "vehicle_type": "Light-Duty Trucks",
       "fuel_type": "Petrol",
       "model_year_range": "2010",
       "ch4_factor": 0.0059,
@@ -2008,7 +2008,7 @@
       "co2_factor": 2320.0
     },
     {
-      "vehicle_type": "Light-Duty Trucks ",
+      "vehicle_type": "Light-Duty Trucks",
       "fuel_type": "Petrol",
       "model_year_range": "2011",
       "ch4_factor": 0.00597,
@@ -2016,7 +2016,7 @@
       "co2_factor": 2320.0
     },
     {
-      "vehicle_type": "Light-Duty Trucks ",
+      "vehicle_type": "Light-Duty Trucks",
       "fuel_type": "Petrol",
       "model_year_range": "2012",
       "ch4_factor": 0.00597,
@@ -2024,7 +2024,7 @@
       "co2_factor": 2320.0
     },
     {
-      "vehicle_type": "Light-Duty Trucks ",
+      "vehicle_type": "Light-Duty Trucks",
       "fuel_type": "Petrol",
       "model_year_range": "2013",
       "ch4_factor": 0.0059,
@@ -2032,7 +2032,7 @@
       "co2_factor": 2320.0
     },
     {
-      "vehicle_type": "Light-Duty Trucks ",
+      "vehicle_type": "Light-Duty Trucks",
       "fuel_type": "Petrol",
       "model_year_range": "2014",
       "ch4_factor": 0.0059,
@@ -2040,7 +2040,7 @@
       "co2_factor": 2320.0
     },
     {
-      "vehicle_type": "Light-Duty Trucks ",
+      "vehicle_type": "Light-Duty Trucks",
       "fuel_type": "Petrol",
       "model_year_range": "2015",
       "ch4_factor": 0.00584,
@@ -2048,7 +2048,7 @@
       "co2_factor": 2320.0
     },
     {
-      "vehicle_type": "Light-Duty Trucks ",
+      "vehicle_type": "Light-Duty Trucks",
       "fuel_type": "Petrol",
       "model_year_range": "2016",
       "ch4_factor": 0.00565,
@@ -2056,7 +2056,7 @@
       "co2_factor": 2320.0
     },
     {
-      "vehicle_type": "Light-Duty Trucks ",
+      "vehicle_type": "Light-Duty Trucks",
       "fuel_type": "Petrol",
       "model_year_range": "2017",
       "ch4_factor": 0.00522,
@@ -2064,7 +2064,7 @@
       "co2_factor": 2320.0
     },
     {
-      "vehicle_type": "Light-Duty Trucks ",
+      "vehicle_type": "Light-Duty Trucks",
       "fuel_type": "Petrol",
       "model_year_range": "2018",
       "ch4_factor": 0.00503,
@@ -2072,7 +2072,7 @@
       "co2_factor": 2320.0
     },
     {
-      "vehicle_type": "Light-Duty Trucks ",
+      "vehicle_type": "Light-Duty Trucks",
       "fuel_type": "Petrol",
       "model_year_range": "2019",
       "ch4_factor": 0.00497,
@@ -2080,7 +2080,7 @@
       "co2_factor": 2320.0
     },
     {
-      "vehicle_type": "Light-Duty Trucks ",
+      "vehicle_type": "Light-Duty Trucks",
       "fuel_type": "Petrol",
       "model_year_range": "2020",
       "ch4_factor": 0.00491,
@@ -2088,7 +2088,7 @@
       "co2_factor": 2320.0
     },
     {
-      "vehicle_type": "Light-Duty Trucks ",
+      "vehicle_type": "Light-Duty Trucks",
       "fuel_type": "Petrol",
       "model_year_range": "2021",
       "ch4_factor": 0.00491,

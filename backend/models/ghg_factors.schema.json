@@ -1,0 +1,75 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/Muruj4/greenMile/refs/heads/main/backend/models/ghg_factors.schema.json",
+  "title": "Vehicle emission factors",
+  "description": "Fuel consumption and CH4, N2O, CO2 emission factors by vehicle type and model year.",
+  "type": "object",
+  "required": ["fuel_consumption", "units", "factors"],
+  "additionalProperties": false,
+
+  "properties": {
+    "fuel_consumption": {
+      "type": "object",
+      "properties": {
+        "Passenger Cars": { "type": "number", "minimum": 0 },
+        "Light-Duty Trucks": { "type": "number", "minimum": 0 },
+        "Medium- and Heavy-Duty Vehicles (Trucks)": { "type": "number", "minimum": 0 },
+        "Motorcycles": { "type": "number", "minimum": 0 }
+      },
+      "required": [
+        "Passenger Cars",
+        "Light-Duty Trucks",
+        "Medium- and Heavy-Duty Vehicles (Trucks)",
+        "Motorcycles"
+      ],
+      "additionalProperties": false
+    },
+
+    "units": {
+      "type": "object",
+      "properties": {
+        "ch4_factor": { "type": "string" },
+        "n2o_factor": { "type": "string" },
+        "co2_factor": { "type": "string" }
+      },
+      "required": ["ch4_factor", "n2o_factor", "co2_factor"],
+      "additionalProperties": false
+    },
+
+    "factors": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "vehicle_type": {
+            "type": "string",
+            "enum": [
+              "Passenger Cars",
+              "Light-Duty Trucks",
+              "Medium- and Heavy-Duty Vehicles (Trucks)",
+              "Motorcycles"
+            ]
+          },
+          "fuel_type": { "type": "string" },
+          "model_year_range": {
+            "type": "string",
+            "pattern": "^[0-9]{4}$"
+          },
+          "ch4_factor": { "type": "number", "minimum": 0 },
+          "n2o_factor": { "type": "number", "minimum": 0 },
+          "co2_factor": { "type": "number", "minimum": 0 }
+        },
+        "required": [
+          "vehicle_type",
+          "fuel_type",
+          "model_year_range",
+          "ch4_factor",
+          "n2o_factor",
+          "co2_factor"
+        ]
+      }
+    }
+  }
+}
