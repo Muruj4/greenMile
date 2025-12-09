@@ -1,15 +1,16 @@
 .trip-screen {
-  max-width: 600px;
-  margin: 40px auto;
-  padding: 40px;
+  max-width: 1200px;
+  margin: 80px auto;
+  padding: 80px 100px;
   background: #f5f7f4;
-  border-radius: 12px;
+  border-radius: 20px;
   font-family: "Poppins", sans-serif;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.07);
 }
 
 h2 {
-  font-size: 28px;
-  margin-bottom: 25px;
+  font-size: 36px;
+  margin-bottom: 30px;
   color: #1a2e1a;
 }
 
@@ -21,36 +22,39 @@ h2 {
 form {
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 20px;
 }
 
 .form-row {
   display: flex;
-  gap: 10px;
+  gap: 15px;
 }
 
 select, input {
-  padding: 12px;
+  padding: 16px;
   border-radius: 8px;
   border: none;
   background: #dfe5df;
-  font-size: 15px;
+  font-size: 16px;
   width: 100%;
+  height: 56px;
+  box-sizing: border-box;
 }
 
 .fuel-toggle {
   display: flex;
-  gap: 10px;
+  gap: 15px;
 }
 
 .fuel-toggle button {
   flex: 1;
-  padding: 12px;
+  padding: 16px;
   background: #dfe5df;
   border: none;
   border-radius: 8px;
   cursor: pointer;
   transition: 0.3s;
+  font-size: 16px;
 }
 
 .fuel-toggle button.active {
@@ -61,19 +65,20 @@ select, input {
 button[type="submit"] {
   background: #1e4620;
   color: white;
-  padding: 14px;
+  padding: 18px;
   border: none;
   border-radius: 8px;
-  margin-top: 10px;
+  margin-top: 15px;
   cursor: pointer;
-  font-size: 16px;
+  font-size: 18px;
   font-weight: 500;
 }
 
 .error-message {
   color: #b71c1c;
-  padding: 10px;
+  padding: 12px;
   background: #ffdada;
   border-radius: 6px;
   margin-top: 10px;
+  font-size: 15px;
 }
