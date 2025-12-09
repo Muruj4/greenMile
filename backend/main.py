@@ -13,7 +13,10 @@ from controllers.NavigationController import NavigationController
 load_dotenv()
 API_KEY = os.getenv("GOOGLE_DIRECTIONS_KEY")
 
-GHG_DATA_PATH = "models/ghg_factors.json"
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+GHG_DATA_PATH = os.path.join(BASE_DIR, "models", "ghg_factors.json")
+
 with open(GHG_DATA_PATH, "r", encoding="utf-8") as file:
     GHG_DATA = json.load(file)
 
@@ -65,20 +68,21 @@ def process_trip(payload: dict):
 
 @app.post("/navigation/init_route")
 def init_route(payload: dict):
-    """
-    Called from RoutesScreen before entering NavigationScreen.
-    This initializes the Navigation Model (Python) with:
-    - route coordinates
-    - duration_text (from Google)
-    """
     try:
         coords = payload.get("coords")
         duration_text = payload.get("duration_text")
 
-        return navigation_controller.init_route(coords, duration_text)
+        route_data = navigation_controller.init_route(coords, duration_text)
+
+        return {
+            "status": "ok",
+            "route": route_data
+        }
 
     except Exception as e:
+        # Return an error status if something goes wrong
         return {
+            "status": "error",
             "error": "Server error inside /navigation/init_route",
             "details": str(e),
         }
