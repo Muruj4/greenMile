@@ -117,9 +117,14 @@ export default function NavigationScreen({ navigation, route }) {
   return (
     <View style={styles.container}>
       {/* Back Button */}
-      <TouchableOpacity style={styles.backButton} onPress={() => navigation.goBack()}>
-        <Ionicons name="arrow-back" size={26} color="#fff" />
-      </TouchableOpacity>
+     <TouchableOpacity
+  style={styles.backButton}
+  onPress={() => navigation.goBack()}
+  testID="back-button"
+>
+  <Ionicons name="arrow-back" size={26} color="#fff" />
+</TouchableOpacity>
+
 
       {/* Header */}
       <View style={styles.header}>
@@ -188,22 +193,28 @@ export default function NavigationScreen({ navigation, route }) {
 
       {/* Buttons */}
       {!tripStarted && (
-        <TouchableOpacity style={styles.startButton} onPress={() => setTripStarted(true)}>
-          <Text style={styles.startButtonText}>Start Navigation</Text>
-        </TouchableOpacity>
-      )}
+  <TouchableOpacity
+    style={styles.startButton}
+    onPress={() => setTripStarted(true)}
+    testID="start-navigation-button"
+  >
+    <Text style={styles.startButtonText}>Start Navigation</Text>
+  </TouchableOpacity>
+)}
+
 
       {tripStarted && (
-        <TouchableOpacity
-          style={styles.exitButton}
-          onPress={() => {
-            setTripStarted(false);
-            navigation.goBack();
-          }}
-        >
-          <Text style={styles.exitButtonText}>Exit</Text>
-        </TouchableOpacity>
-      )}
+  <TouchableOpacity
+    style={styles.exitButton}
+    onPress={() => {
+      setTripStarted(false);
+      navigation.goBack();
+    }}
+    testID="exit-navigation-button"
+  >
+    <Text style={styles.exitButtonText}>Exit</Text>
+  </TouchableOpacity>
+)}
     </View>
   );
 }

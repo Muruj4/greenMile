@@ -97,15 +97,16 @@ export default function RoutesScreen({ navigation, route }) {
 
       {/* bottom button */}
       <Pressable
-        style={[
-          styles.previewButton,
-          selectedIndex === null && styles.previewButtonDisabled,
-        ]}
-        onPress={handlePreview}
-        disabled={selectedIndex === null}
-      >
-        <Text style={styles.previewButtonText}>View Route</Text>
-      </Pressable>
+     testID="view-route-button"
+     style={[
+    styles.previewButton,
+    selectedIndex === null && styles.previewButtonDisabled,
+    ]}
+    onPress={handlePreview} 
+    >
+   <Text style={styles.previewButtonText}>View Route</Text>
+   </Pressable>
+
     </View>
   );
 }

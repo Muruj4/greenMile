@@ -133,6 +133,7 @@ export default function TripScreen({ navigation }) {
             <Text style={styles.label}>Vehicle Type</Text>
 
             <TouchableOpacity
+              testID="vehicle-type-select"
               activeOpacity={0.8}
               onPress={() => {
                 setShowVehicleTypeList(!showVehicleTypeList);
@@ -177,6 +178,7 @@ export default function TripScreen({ navigation }) {
             <Text style={styles.label}>Model Year</Text>
 
             <TouchableOpacity
+             testID="model-year-select"
               activeOpacity={0.8}
               onPress={() => {
                 setShowModelYearList(!showModelYearList);
@@ -265,6 +267,7 @@ export default function TripScreen({ navigation }) {
           <Text style={styles.label}>City</Text>
 
           <TouchableOpacity
+          testID="city-select"
             activeOpacity={0.8}
             onPress={() => {
               setShowCityList(!showCityList);
@@ -336,6 +339,7 @@ export default function TripScreen({ navigation }) {
 
         {/* Button */}
         <TouchableOpacity
+         testID="create-trip-button"
           style={styles.button}
           onPress={handleCreateTrip}
           disabled={loading}
