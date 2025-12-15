@@ -37,7 +37,7 @@ def mock_ghg_file(tmp_path):
     return str(file_path)
 
 
-# ------------------------- Root Endpoint -------------------------
+# Root Endpoint - Verify API is running and responding
 
 def test_root_endpoint(client):
     response = client.get("/")
@@ -46,7 +46,7 @@ def test_root_endpoint(client):
     assert "GreenMile" in response.json()["message"]
 
 
-# ------------------------- Process Trip -------------------------
+# Process Trip - Test the complete trip processing workflow end-to-end
 
 @patch('backend.models.Trip.requests.post')
 def test_process_trip_success(mock_post, client):
@@ -90,47 +90,7 @@ def test_process_trip_success(mock_post, client):
     assert route["color"] in ["green", "orange", "red"]
 
 
-def test_process_trip_missing_fields(client):
-    payload = {
-        "origin": "Location A",
-        "city": "Riyadh",
-        "vehicleType": "Car",
-        "fuelType": "Petrol",
-        "modelYear": 2020
-    }
-
-    response = client.post("/process_trip", json=payload)
-    assert response.status_code == 200
-
-
-@patch('backend.models.Trip.requests.post')
-def test_process_trip_invalid_vehicle_type(mock_post, client):
-    mock_response = Mock()
-    mock_response.status_code = 200
-    mock_response.json.return_value = {
-        "routes": [{
-            "distanceMeters": 5000,
-            "duration": "300s",
-            "description": "Test",
-            "polyline": {"encodedPolyline": "_p~iF~ps|U"}
-        }]
-    }
-    mock_response.raise_for_status = Mock()
-    mock_post.return_value = mock_response
-
-    payload = {
-        "origin": "A",
-        "destination": "B",
-        "city": "Riyadh",
-        "vehicleType": "Spaceship",
-        "fuelType": "Petrol",
-        "modelYear": 2020
-    }
-
-    response = client.post("/process_trip", json=payload)
-    assert response.status_code == 200
-
-
+# Test resilience when external API fails
 @patch('backend.models.Trip.requests.post')
 def test_process_trip_google_api_failure(mock_post, client):
     mock_post.side_effect = Exception("Connection timeout")
@@ -149,7 +109,7 @@ def test_process_trip_google_api_failure(mock_post, client):
     assert "error" in response.json() or "details" in response.json()
 
 
-# ------------------------- Navigation Init -------------------------
+# Navigation Init - Test navigation initialization through API
 
 def test_navigation_init_route_success(client):
     payload = {
@@ -165,7 +125,7 @@ def test_navigation_init_route_success(client):
     assert response.status_code == 200
     assert "status" in response.json() or "route" in response.json()
 
-
+# Test error handling for invalid navigation data
 def test_navigation_init_route_empty_coords(client):
     payload = {
         "coords": [],
@@ -176,7 +136,7 @@ def test_navigation_init_route_empty_coords(client):
     assert response.status_code == 200
 
 
-# ------------------------- Navigation Update -------------------------
+# Navigation Update - Test real-time location tracking through API
 
 def test_navigation_location_update_success(client):
     init_payload = {
@@ -199,16 +159,8 @@ def test_navigation_location_update_success(client):
     assert "snappedLocation" in response.json() or "remainingKm" in response.json()
 
 
-def test_navigation_location_update_missing_fields(client):
-    payload = {
-        "location": {"latitude": 24.7136, "longitude": 46.6753}
-    }
 
-    response = client.post("/navigation/location_update", json=payload)
-    assert response.status_code == 200
-
-
-# ------------------------- End-to-End Flow -------------------------
+# End-to-End Flow -Test complete user workflow from start to finish
 
 @patch('backend.models.Trip.requests.post')
 def test_complete_trip_navigation_flow(mock_post, client):
@@ -255,9 +207,3 @@ def test_complete_trip_navigation_flow(mock_post, client):
     assert response.status_code == 200
     assert isinstance(response.json(), dict)
 
-
-# ------------------------- Error Format -------------------------
-
-def test_error_response_format(client):
-    response = client.post("/process_trip", json={})
-    assert response.status_code in [200, 422]

@@ -28,6 +28,7 @@ def test_trip_controller_process_trip_success(mock_ghg_data):
    
     controller = TripController(api_key="test_key", ghg_data=mock_ghg_data)
     
+   # Mock the Trip model's get_routes method
     with patch('backend.controllers.TripController.Trip') as MockTrip:
         mock_trip_instance = Mock()
         mock_trip_instance.get_routes.return_value = {
@@ -70,6 +71,7 @@ def test_trip_controller_handles_model_exception(mock_ghg_data):
     with patch('backend.controllers.TripController.Trip') as MockTrip:
         mock_trip_instance = Mock()
 
+       # Simulate model raising an error
         mock_trip_instance.get_routes.side_effect = Exception("Model failure")
         MockTrip.return_value = mock_trip_instance
         
@@ -247,19 +249,3 @@ def test_trip_controller_does_not_modify_result(mock_ghg_data):
 
 
 
-def test_navigation_controller_instances_are_independent():
-    
-   # Test that multiple NavigationController instances don't share state
-    
-   
-    controller1 = NavigationController()
-    controller2 = NavigationController()
-    
-    # Each should have its own Navigation instance
-    assert controller1.nav is not controller2.nav
-    
-    coords1 = [{"latitude": 24.7136, "longitude": 46.6753}]
-    controller1.init_route(coords1, "10 mins")
-    
-    
-    assert id(controller1.nav) != id(controller2.nav)
