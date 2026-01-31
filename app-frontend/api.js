@@ -1,6 +1,6 @@
 // driver/api.js
 
-const BASE_URL = "http://192.168.1.137:8000";
+const BASE_URL = "http://192.168.0.125:8000";
 
 // PROCESS TRIP  → Used in TripScreen
 

@@ -4,6 +4,7 @@ import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
+import LoginScreen from "./screens/LoginScreen";
 import TripScreen from "./screens/TripScreen";
 import RoutesScreen from "./screens/RoutesScreen"; 
 import NavigationScreen from "./screens/NavigationScreen";
@@ -14,6 +15,11 @@ export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator>
+       <Stack.Screen
+          name="Login"
+          component={LoginScreen}  
+          options={{ headerShown: false }}
+        />
         <Stack.Screen
           name="Trip"
           component={TripScreen}
