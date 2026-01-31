@@ -38,7 +38,7 @@ class Navigation:
         R = 6371000.0
         lat1, lon1 = math.radians(a.latitude), math.radians(a.longitude)
         lat2, lon2 = math.radians(b.latitude), math.radians(b.longitude)
-
+        
         dlat = lat2 - lat1
         dlon = lon2 - lon1
 
