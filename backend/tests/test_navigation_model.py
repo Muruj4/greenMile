@@ -79,10 +79,8 @@ def test_update_location_off_route():
     assert "snappedLocation" in result or "warning" in result
 
 
-# ============================================================================
-# TEST 5: ETA Calculation with Zero Speed
-# ============================================================================
-# WHY: Driver might be stopped at traffic light
+
+# Driver might be stopped at traffic light
 def test_update_location_zero_speed():
 
     nav = Navigation()

@@ -3,7 +3,7 @@ from unittest.mock import Mock, patch
 from backend.models.Trip import Trip
 
 
-#
+
 @pytest.fixture
 def mock_ghg_data():
     
@@ -202,10 +202,7 @@ def test_get_routes_complete_flow(mock_post, mock_ghg_data):
         assert "color" in route
 
 
-# ============================================================================
-# TEST 10: Unsupported Fuel Type Error
-# ============================================================================
-# WHY: System must reject invalid fuel types for specific vehicles
+# System must reject invalid fuel types for specific vehicles
 def test_get_routes_unsupported_fuel_type(mock_ghg_data):
    
     with patch('backend.models.Trip.requests.post') as mock_post:
