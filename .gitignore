@@ -1,0 +1,37 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+.venv/
+venv/
+ENV/
+env/
+
+# VS Code
+.vscode/
+
+# macOS
+.DS_Store
+
+# Expo/React Native
+.expo/
+node_modules/
+app-frontend/node_modules/
+
+# Testing
+.pytest_cache/
+
+# Environment variables
+.env
+.env.local
+
+# Large AI model files (DON'T upload to GitHub)
+backend/models/ai_models/trained_models/*.pkl
+
+# Other large files
+*.pkl
+*.h5
+*.joblib
+*.model
