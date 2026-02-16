@@ -13,6 +13,7 @@ export default function MapScreen() {
   const routes = useMemo(() => state?.routes ?? [], [state]);
 
   const mapRef = useRef(null);
+  const mapInstanceRef = useRef(null);
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [mapError, setMapError] = useState(null);
 
@@ -80,7 +81,7 @@ export default function MapScreen() {
   }, [routes, state]);
 
   useEffect(() => {
-    if (!routes.length || mapRef.current || !window.H) return;
+    if (!routes.length || mapInstanceRef.current || !window.H) return;
 
     try {
       const platform = new window.H.service.Platform({
@@ -88,25 +89,28 @@ export default function MapScreen() {
       });
 
       const layers = platform.createDefaultLayers();
-      mapRef.current = new window.H.Map(
-        document.getElementById("here-map-container"),
+      const map = new window.H.Map(
+        mapRef.current,
         layers.vector.normal.map,
         { center: { lat: 21.543333, lng: 39.172779 }, zoom: 12 }
       );
 
       new window.H.mapevents.Behavior(
-        new window.H.mapevents.MapEvents(mapRef.current)
+        new window.H.mapevents.MapEvents(map)
       );
-      window.H.ui.UI.createDefault(mapRef.current, layers);
-    } catch {
+      window.H.ui.UI.createDefault(map, layers);
+      
+      mapInstanceRef.current = map;
+    } catch (error) {
+      console.error("Map initialization error:", error);
       setMapError("There was a problem loading the map.");
     }
   }, [routes]);
 
   useEffect(() => {
-    if (!mapRef.current || !routes.length || !window.H) return;
+    if (!mapInstanceRef.current || !routes.length || !window.H) return;
 
-    const map = mapRef.current;
+    const map = mapInstanceRef.current;
     map.removeObjects(map.getObjects());
 
     const group = new window.H.map.Group();
@@ -144,7 +148,13 @@ export default function MapScreen() {
 
       <h2 className="title">Routes</h2>
 
-      <div id="here-map-container" className="map-container"></div>
+      {/* MAP CONTAINER - KEPT! */}
+      <div 
+        ref={mapRef}
+        id="here-map-container" 
+        className="map-container"
+        style={{ width: '100%', height: '400px', marginBottom: '20px' }}
+      ></div>
 
       {aiLoading && (
         <div className="ai-loading">
@@ -161,7 +171,7 @@ export default function MapScreen() {
       {aiAnalysis && !aiLoading && (
         <div className="ai-summary-compact">
           <div className="ai-summary-header">
-            <h3> AI Recommendation</h3>
+            <h3> Smart Recommendation</h3>
             <span className={`badge badge-${routes.find(r => r.summary === aiAnalysis.best_route.route_name)?.color || 'green'}`}>
               Best: {routes.find(r => r.summary === aiAnalysis.best_route.route_name)?.color?.toUpperCase() || 'GREEN'}
             </span>
@@ -174,6 +184,19 @@ export default function MapScreen() {
               <> ({aiAnalysis.co2e_saving_percent.toFixed(1)}% reduction)</>
             )}
           </p>
+
+          {/* Fuel Savings - ONLY for best route */}
+          {aiAnalysis.fuel_saving_liters > 0 && (
+            <div className="fuel-savings-banner">
+              <span className="fuel-icon"></span>
+              <span className="fuel-savings-text">
+                Save <strong>{aiAnalysis.fuel_saving_liters.toFixed(2)} L</strong> of fuel
+                {aiAnalysis.fuel_saving_percent > 0 && (
+                  <> • <strong>{aiAnalysis.fuel_saving_percent.toFixed(1)}%</strong></>
+                )}
+              </span>
+            </div>
+          )}
 
           {aiAnalysis.recommendations && aiAnalysis.recommendations.length > 0 && (
             <div className="ai-all-recommendations">
@@ -229,26 +252,37 @@ export default function MapScreen() {
               <div className="route-details">
                 <span>{route.distance}</span>
                 <span>{route.duration}</span>
-                
               </div>
 
               {route.ai && aiAnalysis && (
-                <div className="ai-prediction-line">
-                  <div className="ai-pred-left">
-                    <span className="ai-label">AI:</span>
-                    <span className="ai-value">{route.ai.predicted_co2e_kg.toFixed(2)} kg</span>
+                <>
+                  <div className="ai-prediction-line">
+                    <div className="ai-pred-left">
+                      <span className="ai-label">AI:</span>
+                      <span className="ai-value">{route.ai.predicted_co2e_kg.toFixed(2)} kg CO₂e</span>
+                    </div>
+                    
+                    <div className="ai-pred-right">
+                      {isBest ? (
+                        <span className="ai-best-tag">✓ Best Choice</span>
+                      ) : (
+                        <span className="ai-extra-emissions">
+                          +{(route.ai.predicted_co2e_kg - aiAnalysis.best_route.predicted_co2e_kg).toFixed(2)} kg
+                        </span>
+                      )}
+                    </div>
                   </div>
-                  
-                  <div className="ai-pred-right">
-                    {isBest ? (
-                      <span className="ai-best-tag">✓ Best Choice</span>
-                    ) : (
-                      <span className="ai-extra-emissions">
-                        +{(route.ai.predicted_co2e_kg - aiAnalysis.best_route.predicted_co2e_kg).toFixed(2)} kg
+
+                  {/* Fuel Consumption Info - ONLY show on best route */}
+                  {isBest && route.ai.fuel_consumption && (
+                    <div className="fuel-consumption-line">
+                      <span className="fuel-icon-small"></span>
+                      <span className="fuel-amount">
+                        {route.ai.fuel_consumption.fuel_liters.toFixed(2)} L
                       </span>
-                    )}
-                  </div>
-                </div>
+                    </div>
+                  )}
+                </>
               )}
             </div>
           );

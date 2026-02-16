@@ -7,6 +7,24 @@ from typing import Dict, List, Any, Tuple
 
 
 class GreenMileRecommendationEngine:
+    
+    # Fuel consumption factors (kg CO2e per liter of fuel)
+    FUEL_CO2_FACTORS = {
+        "Diesel": 2.68,      # kg CO2e per liter
+        "Gasoline": 2.31,    # kg CO2e per liter
+        "CNG": 1.85,         # kg CO2e per liter equivalent
+        "Electric": 0.0,     # No direct emissions
+        "Hybrid": 1.50,      # Average between gas and electric
+    }
+    
+    # Average fuel costs (SAR per liter) - Used internally only for backend calculations
+    FUEL_COSTS_SAR = {
+        "Diesel": 0.47,
+        "Gasoline": 2.18,
+        "CNG": 1.25,
+        "Electric": 0.18,    # per kWh equivalent
+        "Hybrid": 1.50,
+    }
 
     def __init__(
         self,
@@ -30,6 +48,41 @@ class GreenMileRecommendationEngine:
         ]
 
         self.class_labels = list(self.classification_model.classes_)
+
+    # -----------------------------
+    # Fuel Calculations
+    # -----------------------------
+    def calculate_fuel_consumption(self, co2e_kg, fuel_type):
+        """
+        Calculate fuel consumption from CO2e emissions
+        
+        Args:
+            co2e_kg: CO2e emissions in kilograms
+            fuel_type: Type of fuel used
+            
+        Returns:
+            dict with fuel_liters and fuel_cost
+        """
+        co2_factor = self.FUEL_CO2_FACTORS.get(fuel_type, 2.31)  # Default to Gasoline
+        
+        if co2_factor == 0:  # Electric vehicle
+            return {
+                "fuel_liters": 0.0,
+                "fuel_cost_sar": 0.0,
+                "fuel_unit": "kWh"
+            }
+        
+        # Calculate liters of fuel
+        fuel_liters = co2e_kg / co2_factor
+        
+        # Calculate cost
+        fuel_cost = fuel_liters * self.FUEL_COSTS_SAR.get(fuel_type, 2.18)
+        
+        return {
+            "fuel_liters": round(fuel_liters, 2),
+            "fuel_cost_sar": round(fuel_cost, 2),
+            "fuel_unit": "L"
+        }
 
     # -----------------------------
     # Encoding
@@ -106,6 +159,10 @@ class GreenMileRecommendationEngine:
             cls: float(p)
             for cls, p in zip(self.class_labels, proba)
         }
+        
+        # Calculate fuel consumption
+        fuel_type = route_data.get("Fuel Type", "Gasoline")
+        fuel_data = self.calculate_fuel_consumption(predicted_co2, fuel_type)
 
         return {
 
@@ -116,6 +173,8 @@ class GreenMileRecommendationEngine:
             "category": predicted_category,
 
             "probabilities": category_probs,
+            
+            "fuel_consumption": fuel_data,
 
             "meta": {
 
@@ -130,6 +189,9 @@ class GreenMileRecommendationEngine:
 
                 "temperature":
                     float(route_data.get("Temperature", 0)),
+                
+                "fuel_type":
+                    fuel_type,
             },
 
             "warnings": warnings,
@@ -162,13 +224,30 @@ class GreenMileRecommendationEngine:
             savings / worst["predicted_co2e_kg"] * 100
             if worst["predicted_co2e_kg"] > 0 else 0
         )
+        
+        # Calculate fuel savings
+        fuel_saved_liters = (
+            worst["fuel_consumption"]["fuel_liters"] - 
+            best["fuel_consumption"]["fuel_liters"]
+        )
+        
+        fuel_saved_percent = (
+            (fuel_saved_liters / worst["fuel_consumption"]["fuel_liters"] * 100)
+            if worst["fuel_consumption"]["fuel_liters"] > 0 else 0
+        )
+        
+        cost_saved_sar = (
+            worst["fuel_consumption"]["fuel_cost_sar"] - 
+            best["fuel_consumption"]["fuel_cost_sar"]
+        )
 
-        reasons = self._build_reasons(best, worst)
+        reasons = self._build_reasons(best, worst, fuel_saved_liters)
 
         recommendations = self._generate_recommendations(
             best,
             worst,
             predictions_sorted,
+            fuel_saved_liters,
         )
 
         return {
@@ -185,6 +264,12 @@ class GreenMileRecommendationEngine:
                 savings_percent,
                 2
             ),
+            
+            "fuel_saving_liters": round(fuel_saved_liters, 2),
+            
+            "fuel_saving_percent": round(fuel_saved_percent, 2),
+            
+            "cost_saving_sar": round(cost_saved_sar, 2),
 
             "reasons": reasons,
 
@@ -199,14 +284,14 @@ class GreenMileRecommendationEngine:
     # -----------------------------
     # Reasons
     # -----------------------------
-    def _build_reasons(self, best, worst):
+    def _build_reasons(self, best, worst, fuel_saved):
 
         reasons = []
 
         reasons.append(
             f"Selected '{best['route_name']}' because it "
             f"has the lowest emissions "
-            f"({best['predicted_co2e_kg']:.2f} kg CO2e)."
+            f"({best['predicted_co2e_kg']:.2f} kg CO₂e)."
         )
 
         diff = (
@@ -219,6 +304,15 @@ class GreenMileRecommendationEngine:
             f"{diff:.2f} kg compared to "
             f"'{worst['route_name']}'."
         )
+        
+        # Add fuel savings (no cost)
+        if fuel_saved > 0:
+            fuel_unit = best["fuel_consumption"]["fuel_unit"]
+            fuel_percent = (fuel_saved / worst["fuel_consumption"]["fuel_liters"]) * 100 if worst["fuel_consumption"]["fuel_liters"] > 0 else 0
+            reasons.append(
+                f"You'll save {fuel_saved:.2f} {fuel_unit} of fuel "
+                f"({fuel_percent:.1f}%)."
+            )
 
         return reasons
 
@@ -230,6 +324,7 @@ class GreenMileRecommendationEngine:
         best,
         worst,
         all_routes,
+        fuel_saved,
     ):
 
         recommendations = []
@@ -237,33 +332,43 @@ class GreenMileRecommendationEngine:
         best_temp = best["meta"]["temperature"]
         best_dist = best["meta"]["distance_km"]
         best_traffic = best["meta"]["traffic_conditions"]
+        fuel_unit = best["fuel_consumption"]["fuel_unit"]
 
-        # FIXED: removed category
-        recommendations.append(
-            f"Choose '{best['route_name']}' "
-            f"to minimize CO2e emissions "
-            f"({best['predicted_co2e_kg']:.2f} kg)."
-        )
+        # Main recommendation with fuel savings (no cost)
+        if fuel_saved > 0:
+            fuel_percent = (fuel_saved / worst["fuel_consumption"]["fuel_liters"]) * 100 if worst["fuel_consumption"]["fuel_liters"] > 0 else 0
+            recommendations.append(
+                f"Choose '{best['route_name']}' to save "
+                f"{fuel_saved:.2f} {fuel_unit} of fuel "
+                f"({fuel_percent:.1f}%) and reduce emissions by "
+                f"{best['predicted_co2e_kg']:.2f} kg CO₂e."
+            )
+        else:
+            recommendations.append(
+                f"Choose '{best['route_name']}' "
+                f"to minimize CO₂e emissions "
+                f"({best['predicted_co2e_kg']:.2f} kg)."
+            )
 
         if best_temp > 35:
 
             recommendations.append(
                 "High temperature detected. "
-                "Use cooler delivery hours."
+                "Use cooler delivery hours to reduce fuel consumption."
             )
 
         if best_traffic in ["Heavy", "Severe"]:
 
             recommendations.append(
                 "Heavy traffic detected. "
-                "Consider off-peak hours."
+                "Consider off-peak hours to save fuel and time."
             )
 
         if best_dist > 30:
 
             recommendations.append(
                 "Long distance trip. "
-                "Maintain steady speed."
+                "Maintain steady speed (80-90 km/h) for optimal fuel efficiency."
             )
 
         green_routes = [
@@ -274,9 +379,11 @@ class GreenMileRecommendationEngine:
         if len(green_routes) > 1:
 
             recommendations.append(
-                f"{len(green_routes)} eco-friendly routes available."
+                f"{len(green_routes)} eco-friendly routes available. "
+                f"All provide excellent fuel efficiency."
             )
-
+        
+ 
         return recommendations
 
     # -----------------------------
@@ -286,14 +393,28 @@ class GreenMileRecommendationEngine:
 
         report = []
 
-        report.append("GREENMILE REPORT")
+        report.append("=" * 50)
+        report.append("GREENMILE RECOMMENDATION REPORT")
+        report.append("=" * 50)
+        report.append("")
 
-        report.append(
-            f"Best route: {analysis['best_route']['route_name']}"
-        )
+        report.append(f"🏆 Best Route: {analysis['best_route']['route_name']}")
+        report.append(f"   CO₂e Emissions: {analysis['best_route']['predicted_co2e_kg']:.2f} kg")
+        report.append(f"   Fuel: {analysis['best_route']['fuel_consumption']['fuel_liters']:.2f} L")
+        report.append("")
 
-        report.append(
-            f"Savings: {analysis['co2e_saving_kg']} kg"
-        )
+        report.append(f"💰 Savings (vs worst route):")
+        report.append(f"   CO₂e: {analysis['co2e_saving_kg']:.2f} kg ({analysis['co2e_saving_percent']:.1f}%)")
+        report.append(f"   Fuel: {analysis['fuel_saving_liters']:.2f} L ({analysis['fuel_saving_percent']:.1f}%)")
+        report.append("")
+
+        report.append("📋 Recommendations:")
+        for i, rec in enumerate(analysis['recommendations'], 1):
+            report.append(f"   {i}. {rec}")
+        
+        report.append("")
+        report.append("=" * 50)
+        report.append(f"Generated: {analysis['generated_at']}")
+        report.append("=" * 50)
 
         return "\n".join(report)

@@ -40,7 +40,7 @@ export default function RoutesScreen({ navigation, route }) {
           windSpeed: 10,
         };
 
-        const response = await fetch("http:/192.168.0.125:8000/ai/analyze_routes", {
+        const response = await fetch("http://192.168.0.125:8000/ai/analyze_routes", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -168,6 +168,20 @@ export default function RoutesScreen({ navigation, route }) {
               )}
             </Text>
 
+            {/* Fuel Savings */}
+            {aiAnalysis.fuel_saving_liters > 0 && (
+              <View style={styles.fuelSavings}>
+                <Text style={styles.fuelSavingsText}>
+                  ⛽ Save <Text style={styles.boldText}>{aiAnalysis.fuel_saving_liters.toFixed(2)} L</Text> of fuel
+                  {aiAnalysis.fuel_saving_percent > 0 && (
+                    <Text> • <Text style={styles.boldText}>
+                      {aiAnalysis.fuel_saving_percent.toFixed(1)}%
+                    </Text></Text>
+                  )}
+                </Text>
+              </View>
+            )}
+
             {/* Quick Tip */}
             {aiAnalysis.recommendations && aiAnalysis.recommendations.length > 0 && (
               <View style={styles.aiTip}>
@@ -220,27 +234,38 @@ export default function RoutesScreen({ navigation, route }) {
                 <Text style={styles.cardText}>CO2e: {r.emissions.co2e.toFixed(2)} kg</Text>
               )}
 
-              {/* AI Prediction */}
+              {/* AI Prediction with Fuel Info */}
               {aiData && aiAnalysis && (
-                <View style={styles.aiPrediction}>
-                  <Text style={styles.aiPredictionLabel}>AI: </Text>
-                  <Text style={styles.aiPredictionValue}>
-                    {aiData.predicted_co2e_kg.toFixed(2)} kg
-                  </Text>
-                  {isBest ? (
-                    <View style={styles.aiBestTag}>
-                      <Text style={styles.aiBestTagText}>✓ Best</Text>
-                    </View>
-                  ) : (
-                    <Text style={styles.aiExtraText}>
-                      +
-                      {(
-                        aiData.predicted_co2e_kg - aiAnalysis.best_route.predicted_co2e_kg
-                      ).toFixed(2)}{" "}
-                      kg
+                <>
+                  <View style={styles.aiPrediction}>
+                    <Text style={styles.aiPredictionLabel}>AI: </Text>
+                    <Text style={styles.aiPredictionValue}>
+                      {aiData.predicted_co2e_kg.toFixed(2)} kg
                     </Text>
+                    {isBest ? (
+                      <View style={styles.aiBestTag}>
+                        <Text style={styles.aiBestTagText}>✓ Best</Text>
+                      </View>
+                    ) : (
+                      <Text style={styles.aiExtraText}>
+                        +
+                        {(
+                          aiData.predicted_co2e_kg - aiAnalysis.best_route.predicted_co2e_kg
+                        ).toFixed(2)}{" "}
+                        kg
+                      </Text>
+                    )}
+                  </View>
+
+                  {/* Fuel Consumption */}
+                  {aiData.fuel_consumption && (
+                    <View style={styles.fuelInfo}>
+                      <Text style={styles.fuelInfoText}>
+                        ⛽ {aiData.fuel_consumption.fuel_liters.toFixed(2)} L
+                      </Text>
+                    </View>
                   )}
-                </View>
+                </>
               )}
 
               {isSelected && <Text style={styles.selectedText}>Selected route</Text>}

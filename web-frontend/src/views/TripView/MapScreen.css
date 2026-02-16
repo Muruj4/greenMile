@@ -329,3 +329,338 @@
   font-weight: 600;
   border: 1px solid #ffc107;
 }
+/* MapScreen.css - Enhanced with Fuel Savings Styles */
+
+/* Existing styles... */
+
+/* Fuel Savings Banner */
+.fuel-savings-banner {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
+  background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
+  border-radius: 8px;
+  margin: 12px 0;
+  color: white;
+  font-size: 15px;
+  box-shadow: 0 2px 8px rgba(39, 174, 96, 0.2);
+}
+
+.fuel-icon {
+  font-size: 24px;
+}
+
+.fuel-savings-text {
+  flex: 1;
+}
+
+.fuel-savings-text strong {
+  font-weight: 700;
+  font-size: 16px;
+}
+
+/* Fuel Consumption Line in Route Cards */
+.fuel-consumption-line {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background-color: #f8f9fa;
+  border-radius: 6px;
+  margin-top: 8px;
+  font-size: 13px;
+  color: #495057;
+}
+
+.fuel-icon-small {
+  font-size: 16px;
+}
+
+.fuel-amount {
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+.fuel-separator {
+  color: #adb5bd;
+  font-weight: 300;
+}
+
+.fuel-cost {
+  color: #27ae60;
+  font-weight: 600;
+}
+
+.fuel-extra {
+  margin-left: auto;
+  color: #e74c3c;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+/* AI Prediction Line Enhancements */
+.ai-prediction-line {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 12px;
+  background-color: #e8f5e9;
+  border-radius: 6px;
+  margin-top: 8px;
+}
+
+.ai-pred-left {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.ai-label {
+  font-size: 12px;
+  color: #666;
+  font-weight: 600;
+}
+
+.ai-value {
+  font-size: 14px;
+  color: #2c3e50;
+  font-weight: 700;
+}
+
+.ai-pred-right {
+  display: flex;
+  align-items: center;
+}
+
+.ai-best-tag {
+  background-color: #27ae60;
+  color: white;
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.ai-extra-emissions {
+  color: #e74c3c;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+/* Best Route Ribbon */
+.best-route-ribbon {
+  position: absolute;
+  top: 12px;
+  right: -8px;
+  background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);  /* Changed to green gradient */
+  color: white;
+  padding: 6px 16px;
+  border-radius: 4px 0 0 4px;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  box-shadow: 0 2px 8px rgba(39, 174, 96, 0.3);  /* Green shadow */
+}
+
+.best-route-ribbon::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  bottom: -6px;
+  width: 0;
+  height: 0;
+  border-right: 8px solid transparent;
+  border-top: 6px solid #1e8449;  /* Darker green for triangle */
+}
+
+/* Route Card Enhancements */
+.route-card {
+  position: relative;
+  background: white;
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 2px solid transparent;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.route-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+}
+
+.route-card.selected {
+  border-color: #27ae60;
+  box-shadow: 0 4px 16px rgba(39, 174, 96, 0.2);
+}
+
+.route-card.ai-best {
+  border-color: #27ae60;  /* Changed from orange to green */
+  background: linear-gradient(to bottom, #e8f5e9 0%, white 100%);  /* Light green gradient */
+}
+
+/* AI Summary Compact */
+.ai-summary-compact {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  border-left: 4px solid #27ae60;
+}
+
+.ai-summary-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.ai-summary-header h3 {
+  margin: 0;
+  font-size: 18px;
+  color: #2c3e50;
+  font-weight: 700;
+}
+
+.ai-summary-text {
+  font-size: 15px;
+  line-height: 1.6;
+  color: #495057;
+  margin: 12px 0;
+}
+
+.ai-summary-text strong {
+  color: #27ae60;
+  font-weight: 700;
+}
+
+/* Badge Styles */
+.badge {
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.badge-green {
+  background-color: #d4edda;
+  color: #155724;
+}
+
+.badge-orange {
+  background-color: #fff3cd;
+  color: #856404;
+}
+
+.badge-red {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+/* Recommendations and Reasons */
+.ai-all-recommendations,
+.ai-reasons {
+  margin-top: 16px;
+  padding: 12px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+}
+
+.ai-all-recommendations strong,
+.ai-reasons strong {
+  display: block;
+  margin-bottom: 8px;
+  color: #2c3e50;
+  font-size: 14px;
+}
+
+.ai-all-recommendations ul,
+.ai-reasons ul {
+  margin: 0;
+  padding-left: 20px;
+  list-style-type: none;
+}
+
+.ai-all-recommendations li,
+.ai-reasons li {
+  position: relative;
+  padding-left: 20px;
+  margin-bottom: 6px;
+  font-size: 13px;
+  line-height: 1.5;
+  color: #495057;
+}
+
+.ai-all-recommendations li::before,
+.ai-reasons li::before {
+  content: '✓';
+  position: absolute;
+  left: 0;
+  color: #27ae60;
+  font-weight: bold;
+}
+
+/* Loading State */
+.ai-loading {
+  text-align: center;
+  padding: 20px;
+  background: white;
+  border-radius: 12px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.ai-loading p {
+  margin: 0;
+  color: #27ae60;
+  font-weight: 600;
+}
+
+/* Error State */
+.ai-error {
+  padding: 16px;
+  background-color: #f8d7da;
+  border-left: 4px solid #e74c3c;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.ai-error p {
+  margin: 0;
+  color: #721c24;
+  font-weight: 600;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .fuel-savings-banner {
+    flex-direction: column;
+    text-align: center;
+    gap: 8px;
+  }
+
+  .fuel-consumption-line {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .best-route-ribbon {
+    font-size: 10px;
+    padding: 4px 12px;
+  }
+
+  .ai-summary-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+}
