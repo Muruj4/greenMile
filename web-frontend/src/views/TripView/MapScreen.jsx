@@ -11,12 +11,16 @@ const colorMap = {
 export default function MapScreen() {
   const { state } = useLocation();
   const routes = useMemo(() => state?.routes ?? [], [state]);
-
+  const meta = useMemo(() => state?.meta ?? null, [state]);
   const mapRef = useRef(null);
   const mapInstanceRef = useRef(null);
+  
+
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [mapError, setMapError] = useState(null);
-
+  const [saveLoading, setSaveLoading] = useState(false);
+  const [saveMsg, setSaveMsg] = useState("");
+  const [saveError, setSaveError] = useState("");
   const [aiAnalysis, setAiAnalysis] = useState(null);
   const [aiLoading, setAiLoading] = useState(false);
   const [aiError, setAiError] = useState(null);
@@ -59,14 +63,14 @@ export default function MapScreen() {
       setAiError(null);
 
       try {
-        const tripMetadata = {
-          city: state?.city || "Riyadh",
-          vehicleType: state?.vehicleType || "Light-Duty Trucks",
-          fuelType: state?.fuelType || "Diesel",
-          temperature: 28,
-          humidity: 40,
-          windSpeed: 10,
-        };
+           const tripMetadata = {
+           city: meta?.city || "Riyadh",
+           vehicleType: meta?.vehicleType || "Light-Duty Trucks",
+           fuelType: meta?.fuelType || "Diesel",
+           temperature: 28,
+           humidity: 40,
+           windSpeed: 10,
+         };
 
         const result = await getAIRecommendations(routes, tripMetadata);
         setAiAnalysis(result);
@@ -78,7 +82,7 @@ export default function MapScreen() {
     };
 
     analyze();
-  }, [routes, state]);
+ }, [routes, meta]);
 
   useEffect(() => {
     if (!routes.length || mapInstanceRef.current || !window.H) return;
@@ -125,7 +129,7 @@ export default function MapScreen() {
 
       const polyline = new window.H.map.Polyline(line, {
         style: {
-          strokeColor: colorMap[route.color],
+          strokeColor: colorMap[route.color] || "#27ae60",
           lineWidth: index === selectedIndex ? 10 : 6,
           opacity: index === selectedIndex ? 1 : 0.45,
         },
@@ -141,12 +145,95 @@ export default function MapScreen() {
       padding: 20,
     });
   }, [routes, selectedIndex]);
+ const handleSaveSelected = async () => {
+  setSaveMsg("");
+  setSaveError("");
 
+  if (!meta) {
+    setSaveError("Missing trip info. Go back and create the trip again.");
+    return;
+  }
+
+  const token =
+    localStorage.getItem("token") || sessionStorage.getItem("token");
+
+  if (!token) {
+    setSaveError("Session expired. Please log in again.");
+    // optional redirect:
+    // window.location.href = "/";
+    return;
+  }
+
+  const selectedRoute = routes[selectedIndex];
+  if (!selectedRoute) {
+    setSaveError("Please select a route first.");
+    return;
+  }
+
+  setSaveLoading(true);
+
+  try {
+    const res = await fetch("http://127.0.0.1:8000/trips/save_selected", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        origin: meta.origin,
+        destination: meta.destination,
+        city: meta.city,
+        vehicleType: meta.vehicleType,
+        fuelType: meta.fuelType,
+        modelYear: Number(meta.modelYear),
+        route: selectedRoute,
+      }),
+    });
+
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.detail || "Failed to save");
+
+    setSaveMsg("Your Route Is Saved Successfully");
+  } catch (err) {
+    setSaveError(err.message);
+  } finally {
+    setSaveLoading(false);
+  }
+};
   return (
     <div className="map-screen">
       {mapError && <p className="error-message">{mapError}</p>}
 
       <h2 className="title">Routes</h2>
+      <button
+  onClick={handleSaveSelected}
+  disabled={saveLoading || !routes.length}
+  style={{
+    background: "#27ae60",
+    color: "white",
+    border: "none",
+    padding: "10px 16px",
+    borderRadius: "10px",
+    fontWeight: 700,
+    cursor: "pointer",
+    marginBottom: "15px",
+    opacity: saveLoading ? 0.7 : 1
+  }}
+>
+  {saveLoading ? "Saving..." : "Save Selected Route"}
+</button>
+
+{saveMsg && (
+  <div style={{ background: "#e8f5e9", padding: 10, borderRadius: 10, marginBottom: 10 }}>
+    {saveMsg}
+  </div>
+)}
+
+{saveError && (
+  <div style={{ background: "#fee", padding: 10, borderRadius: 10, marginBottom: 10, color: "#c33" }}>
+    ❌ {saveError}
+  </div>
+)}
 
       {/* MAP CONTAINER - KEPT! */}
       <div 

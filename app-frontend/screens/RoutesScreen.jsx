@@ -9,6 +9,7 @@ import {
   ActivityIndicator,
 } from "react-native";
 import { styles } from "../Style/RoutesScreenStyle";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const PRIMARY = "#00542A";
 
@@ -40,7 +41,7 @@ export default function RoutesScreen({ navigation, route }) {
           windSpeed: 10,
         };
 
-        const response = await fetch("http://192.168.0.125:8000/ai/analyze_routes", {
+        const response = await fetch("192.168.3.214:8000/ai/analyze_routes", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -80,20 +81,63 @@ export default function RoutesScreen({ navigation, route }) {
     setSelectedIndex(index);
   };
 
-  const handlePreview = () => {
-    if (selectedIndex === null) {
-      Alert.alert("Select a Route", "Please select a route first.");
+const handlePreview = async () => {
+  if (selectedIndex === null) {
+    Alert.alert("Select a Route", "Please select a route first.");
+    return;
+  }
+
+  try {
+    const token = await AsyncStorage.getItem("token");
+
+    if (!token) {
+      Alert.alert("Session expired", "Please log in again.");
+      navigation.navigate("Login");
       return;
     }
 
     const selectedRoute = routes[selectedIndex];
 
+    const response = await fetch(
+      "http://192.168.3.214:8000/trips/save_selected", 
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          origin: meta.origin,
+          destination: meta.destination,
+          city: meta.city,
+          vehicleType: meta.vehicleType,
+          fuelType: meta.fuelType,
+          modelYear: Number(meta.modelYear),
+          route: selectedRoute,
+        }),
+      }
+    );
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.detail || "Failed to save trip");
+    }
+
+    console.log("Trip saved:", data);
+
+    // ✅ after saving → navigate
     navigation.navigate("NavigationScreen", {
       routeData: selectedRoute,
       meta,
       preview: true,
     });
-  };
+
+  } catch (error) {
+    console.error("Save trip error:", error);
+    Alert.alert("Error", error.message);
+  }
+};
 
   // get AI data for a specific route summary
   const getAIForRoute = (routeSummary) => {

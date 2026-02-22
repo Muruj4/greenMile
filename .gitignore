@@ -26,6 +26,7 @@ app-frontend/node_modules/
 # Environment variables
 .env
 .env.local
+backend/.env
 
 # Large AI model files (DON'T upload to GitHub)
 backend/models/ai_models/trained_models/*.pkl

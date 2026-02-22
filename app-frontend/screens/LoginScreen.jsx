@@ -1,70 +1,162 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
   View,
   Text,
   TextInput,
   TouchableOpacity,
   ScrollView,
-} from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+  Alert,
+} from "react-native";
+import { Ionicons } from "@expo/vector-icons";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { styles } from "../Style/LoginScreenStyles";
+
+const API_BASE = "192.168.3.214:8000"; // change it to your ipv4
 
 export default function LoginScreen({ navigation }) {
   const [isSignIn, setIsSignIn] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
-  const [emailError, setEmailError] = useState('');
+  const [emailError, setEmailError] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
+
+  const companies = [
+    "Saudi Post (SPL)",
+    "Aramex",
+    "Naqel Express",
+    "SMSA Express",
+    "DHL Saudi Arabia",
+    "UPS Saudi Arabia",
+    "FedEx Saudi Arabia",
+    "Amazon Saudi Arabia",
+    "Noon",
+    "Ninja",
+    "HungerStation",
+    "Jahez",
+    "Mrsool",
+    "Keeta",
+    "ToYou",
+    "Jtex",
+    "Nana",
+  ];
 
   const [showCompanyDropdown, setShowCompanyDropdown] = useState(false);
 
   const [formData, setFormData] = useState({
-    name: '',
-    company: '',
-    email: '',
-    password: ''
+    name: "",
+    company: "",
+    email: "",
+    password: "",
   });
 
-  const validateEmail = (email) => {
-    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailPattern.test(email);
-  };
-
-  const handleSubmit = () => {
-    if (!formData.email) {
-      setEmailError('Email is required');
-      return;
-    }
-
-    if (!validateEmail(formData.email)) {
-      setEmailError('Please enter a valid email address');
-      return;
-    }
-
-    setEmailError('');
-    console.log('Form submitted:', formData);
-
-    navigation.navigate('Trip');
-  };
+  const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
   const handleInputChange = (field, value) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
-
-    if (field === 'email' && emailError) {
-      setEmailError('');
-    }
+    setFormData((prev) => ({ ...prev, [field]: value }));
+    if (field === "email" && emailError) setEmailError("");
   };
 
   const switchToSignIn = () => {
     setIsSignIn(true);
     setShowCompanyDropdown(false);
+    setShowPassword(false);
+    setEmailError("");
   };
 
   const switchToSignUp = () => {
     setIsSignIn(false);
     setShowCompanyDropdown(false);
+    setShowPassword(false);
+    setEmailError("");
   };
 
-  // ✅ Whole page wrapper: View for Log In, ScrollView for Sign Up
+  const handleSubmit = async () => {
+    // email validation
+    if (!formData.email.trim()) {
+      setEmailError("Email is required");
+      return;
+    }
+    if (!validateEmail(formData.email.trim())) {
+      setEmailError("Please enter a valid email address");
+      return;
+    }
+    setEmailError("");
+
+    try {
+      if (isSignIn) {
+        // ---------- SIGN IN ----------
+        if (!formData.password) {
+          Alert.alert("Missing data", "Please enter your password.");
+          return;
+        }
+
+        const res = await fetch(`${API_BASE}/auth/signin`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            email: formData.email.trim(),
+            password: formData.password,
+          }),
+        });
+
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.detail || "Sign in failed");
+
+        // Optional: block manager accounts from mobile
+        if (data.role !== "driver") {
+          throw new Error("This app is for drivers only. Please use the manager web portal.");
+        }
+
+        await AsyncStorage.setItem("token", data.token);
+        await AsyncStorage.setItem("role", data.role);
+
+        if (rememberMe) await AsyncStorage.setItem("rememberMe", "1");
+        else await AsyncStorage.removeItem("rememberMe");
+
+        navigation.navigate("Trip");
+        return;
+      }
+
+      // ---------- DRIVER SIGN UP ----------
+      if (!formData.name.trim()) {
+        Alert.alert("Missing data", "Please enter your name.");
+        return;
+      }
+      if (!formData.company.trim()) {
+        Alert.alert("Missing data", "Please select your company.");
+        return;
+      }
+      if (!formData.password) {
+        Alert.alert("Missing data", "Please enter a password.");
+        return;
+      }
+
+      const res = await fetch(`${API_BASE}/auth/driver/signup`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: formData.name.trim(),
+          company: formData.company.trim(),
+          email: formData.email.trim(),
+          password: formData.password,
+        }),
+      });
+
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.detail || "Sign up failed");
+
+      
+      setIsSignIn(true);
+      setShowCompanyDropdown(false);
+      setShowPassword(false);
+
+      // Clear fields (recommended)
+      setFormData({ name: "", company: "", email: "", password: "" });
+    } catch (err) {
+      Alert.alert("Error", err.message);
+    }
+  };
+
+  // Whole page wrapper: View for Sign In, ScrollView for Sign Up
   const PageWrapper = isSignIn ? View : ScrollView;
 
   const pageWrapperProps = isSignIn
@@ -73,32 +165,31 @@ export default function LoginScreen({ navigation }) {
         style: styles.containerNoPadding,
         contentContainerStyle: styles.scrollContainer,
         showsVerticalScrollIndicator: false,
-        keyboardShouldPersistTaps: 'handled',
+        keyboardShouldPersistTaps: "handled",
       };
 
   return (
     <PageWrapper {...pageWrapperProps}>
-      {/* Background decorations */}
       <View style={styles.backgroundOrb1} />
       <View style={styles.backgroundOrb2} />
 
       <View style={styles.contentWrapper}>
-        {/* Brand Section */}
         <View style={styles.brandSection}>
-          <Text style={styles.brandTitle}>GreenMlie</Text>
-          <Text style={styles.brandTagline}>Sustainable Travel Solutions</Text>
+          <Text style={styles.brandTitle}>GreenMile</Text>
+          <Text style={styles.brandTagline}>
+            Sustainable Last-Mile Delivery Platform
+          </Text>
         </View>
 
-        {/* Main Card */}
         <View style={styles.authCard}>
-          {/* Toggle Tabs */}
+          {/* Tabs */}
           <View style={styles.tabContainer}>
             <TouchableOpacity
               style={[styles.tab, isSignIn && styles.tabActive]}
               onPress={switchToSignIn}
             >
               <Text style={[styles.tabText, isSignIn && styles.tabTextActive]}>
-                Log In
+                Sign In
               </Text>
             </TouchableOpacity>
 
@@ -112,26 +203,30 @@ export default function LoginScreen({ navigation }) {
             </TouchableOpacity>
           </View>
 
-          {/* Form */}
           <View style={styles.form}>
+            {/* SIGN UP EXTRA FIELDS */}
             {!isSignIn && (
               <>
                 {/* Full Name */}
                 <View style={styles.formGroup}>
                   <Text style={styles.label}>Full Name</Text>
                   <View style={styles.inputWrapper}>
-                    <Ionicons name="person-outline" size={20} style={styles.inputIcon} />
+                    <Ionicons
+                      name="person-outline"
+                      size={20}
+                      style={styles.inputIcon}
+                    />
                     <TextInput
                       style={styles.input}
                       placeholder="Enter your name"
                       placeholderTextColor="#94a3b8"
                       value={formData.name}
-                      onChangeText={(value) => handleInputChange('name', value)}
+                      onChangeText={(v) => handleInputChange("name", v)}
                     />
                   </View>
                 </View>
 
-                {/* Company Name (Dropdown) */}
+                {/* Company dropdown */}
                 <View style={styles.formGroup}>
                   <Text style={styles.label}>Company Name</Text>
 
@@ -140,7 +235,11 @@ export default function LoginScreen({ navigation }) {
                     onPress={() => setShowCompanyDropdown(!showCompanyDropdown)}
                   >
                     <View style={styles.inputWrapper}>
-                      <Ionicons name="business-outline" size={20} style={styles.inputIcon} />
+                      <Ionicons
+                        name="business-outline"
+                        size={20}
+                        style={styles.inputIcon}
+                      />
 
                       <View style={styles.input}>
                         <Text
@@ -150,7 +249,7 @@ export default function LoginScreen({ navigation }) {
                               : styles.dropdownPlaceholderText
                           }
                         >
-                          {formData.company || 'Select your Company'}
+                          {formData.company || "Select your Company"}
                         </Text>
                       </View>
                     </View>
@@ -158,11 +257,11 @@ export default function LoginScreen({ navigation }) {
 
                   {showCompanyDropdown && (
                     <View style={styles.dropdownContainer}>
-                      {['Aramco','Other'].map((company, index, arr) => (
+                      {companies.map((company, index, arr) => (
                         <TouchableOpacity
                           key={company}
                           onPress={() => {
-                            handleInputChange('company', company);
+                            handleInputChange("company", company);
                             setShowCompanyDropdown(false);
                           }}
                           style={[
@@ -189,27 +288,29 @@ export default function LoginScreen({ navigation }) {
                   placeholder="you@example.com"
                   placeholderTextColor="#94a3b8"
                   value={formData.email}
-                  onChangeText={(value) => handleInputChange('email', value)}
+                  onChangeText={(v) => handleInputChange("email", v)}
                   keyboardType="email-address"
                   autoCapitalize="none"
                 />
               </View>
-              {emailError ? (
-                <Text style={styles.errorText}>{emailError}</Text>
-              ) : null}
+              {emailError ? <Text style={styles.errorText}>{emailError}</Text> : null}
             </View>
 
             {/* Password */}
             <View style={styles.formGroup}>
               <Text style={styles.label}>Password</Text>
               <View style={styles.inputWrapper}>
-                <Ionicons name="lock-closed-outline" size={20} style={styles.inputIcon} />
+                <Ionicons
+                  name="lock-closed-outline"
+                  size={20}
+                  style={styles.inputIcon}
+                />
                 <TextInput
                   style={styles.input}
                   placeholder="••••••••"
                   placeholderTextColor="#94a3b8"
                   value={formData.password}
-                  onChangeText={(value) => handleInputChange('password', value)}
+                  onChangeText={(v) => handleInputChange("password", v)}
                   secureTextEntry={!showPassword}
                 />
                 <TouchableOpacity
@@ -217,7 +318,7 @@ export default function LoginScreen({ navigation }) {
                   onPress={() => setShowPassword(!showPassword)}
                 >
                   <Ionicons
-                    name={showPassword ? "eye-off-outline" : "eye-outline"}
+                    name={showPassword ? "eye-outline" : "eye-off-outline"}
                     size={20}
                     color="rgba(5, 150, 105, 0.6)"
                   />
@@ -225,7 +326,7 @@ export default function LoginScreen({ navigation }) {
               </View>
             </View>
 
-            {/* Remember me / Forgot password (Log In only) */}
+            {/* Remember me (signin only) */}
             {isSignIn && (
               <View style={styles.rememberForgotRow}>
                 <TouchableOpacity
@@ -233,9 +334,7 @@ export default function LoginScreen({ navigation }) {
                   onPress={() => setRememberMe(!rememberMe)}
                 >
                   <View style={[styles.checkbox, rememberMe && styles.checkboxChecked]}>
-                    {rememberMe && (
-                      <Ionicons name="checkmark" size={16} color="white" />
-                    )}
+                    {rememberMe && <Ionicons name="checkmark" size={16} color="white" />}
                   </View>
                   <Text style={styles.rememberText}>Remember me</Text>
                 </TouchableOpacity>
@@ -247,14 +346,10 @@ export default function LoginScreen({ navigation }) {
             )}
 
             {/* Submit */}
-            <TouchableOpacity
-              style={styles.submitButton}
-              onPress={handleSubmit}
-            >
+            <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
               <Text style={styles.submitButtonText}>
-                {isSignIn ? 'Log In' : 'Create Account'}
+                {isSignIn ? "Sign In" : "Create Account"}
               </Text>
-              <Ionicons name="arrow-forward" size={20} color="white" />
             </TouchableOpacity>
           </View>
         </View>
