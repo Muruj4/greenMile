@@ -10,6 +10,7 @@ import {
 } from "react-native";
 import { styles } from "../Style/RoutesScreenStyle";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { API_BASE_URL } from "../config";
 
 const PRIMARY = "#00542A";
 
@@ -41,7 +42,7 @@ export default function RoutesScreen({ navigation, route }) {
           windSpeed: 10,
         };
 
-        const response = await fetch("192.168.3.214:8000/ai/analyze_routes", {
+        const response = await fetch(`${API_BASE_URL}/ai/analyze_routes`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -98,9 +99,7 @@ const handlePreview = async () => {
 
     const selectedRoute = routes[selectedIndex];
 
-    const response = await fetch(
-      "http://192.168.3.214:8000/trips/save_selected", 
-      {
+    const response = await fetch(`${API_BASE_URL}/trips/save_selected`, { 
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -126,7 +125,7 @@ const handlePreview = async () => {
 
     console.log("Trip saved:", data);
 
-    // ✅ after saving → navigate
+    
     navigation.navigate("NavigationScreen", {
       routeData: selectedRoute,
       meta,

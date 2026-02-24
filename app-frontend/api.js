@@ -1,7 +1,7 @@
 // driver/api.js
-
-const BASE_URL = "192.168.3.214:8000";
-
+import { API_BASE_URL } from "./config";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+const BASE_URL = API_BASE_URL;
 
 // PROCESS TRIP  → Used in TripScreen
 

@@ -47,18 +47,27 @@ export const styles = {
     marginBottom: 50,
   },
 
-  brandTitle: {
-    fontSize: 36,
-    fontWeight: 'bold',
-    color: '#0f172a',
-    marginBottom: 4,
-    fontFamily: 'System',
-  },
-  brandTagline: {
-    fontSize: 16,
-    color: '#475569',
-    letterSpacing: 0.5,
-  },
+brandTitle: {
+  fontSize: 36,
+  fontWeight: 'bold',
+  color: '#0f172a',
+  marginBottom: 4,
+  fontFamily: 'System',
+},
+
+greenText: {
+  color: "#013f2b",
+},
+
+mileText: {
+  color: "#080b13",
+},
+
+brandTagline: {
+  fontSize: 16,
+  color: '#475569',
+  letterSpacing: 0.5,
+},
   authCard: {
     backgroundColor: 'white',
     borderRadius: 24,

@@ -10,8 +10,7 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { styles } from "../Style/LoginScreenStyles";
-
-const API_BASE = "192.168.3.214:8000"; // change it to your ipv4
+import { API_BASE_URL } from "../config";
 
 export default function LoginScreen({ navigation }) {
   const [isSignIn, setIsSignIn] = useState(true);
@@ -89,7 +88,7 @@ export default function LoginScreen({ navigation }) {
           return;
         }
 
-        const res = await fetch(`${API_BASE}/auth/signin`, {
+        const res = await fetch(`${API_BASE_URL}/auth/signin`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -130,7 +129,7 @@ export default function LoginScreen({ navigation }) {
         return;
       }
 
-      const res = await fetch(`${API_BASE}/auth/driver/signup`, {
+      const res = await fetch(`${API_BASE_URL}/auth/driver/signup`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -175,7 +174,9 @@ export default function LoginScreen({ navigation }) {
 
       <View style={styles.contentWrapper}>
         <View style={styles.brandSection}>
-          <Text style={styles.brandTitle}>GreenMile</Text>
+          <Text style={styles.brandTitle}>
+          <Text style={styles.greenText}>Green</Text>
+          <Text style={styles.mileText}>Mile</Text></Text>
           <Text style={styles.brandTagline}>
             Sustainable Last-Mile Delivery Platform
           </Text>

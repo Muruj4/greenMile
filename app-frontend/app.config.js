@@ -3,11 +3,11 @@ import 'dotenv/config';
 
 export default {
   expo: {
-    name: "driver",
+    name: "GreenMile",
     slug: "driver-app",
     version: "1.0.0",
     orientation: "portrait",
-    icon: "./assets/icon.png",
+    icon: "./assets/Logo.png",
     userInterfaceStyle: "light",
 
     plugins: [],
