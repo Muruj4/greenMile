@@ -1,3 +1,5 @@
+#models/trip_db.py 
+
 from sqlalchemy import Column, Integer, String, Float, ForeignKey, DateTime
 from sqlalchemy.dialects.postgresql import JSONB
 from datetime import datetime

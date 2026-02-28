@@ -12,6 +12,16 @@ jest.mock("@react-native-async-storage/async-storage", () => ({
   removeItem: jest.fn(),
 }));
 
+// Ensure fetch is always defined in the Jest Node environment.
+// Individual tests override this with their own mock as needed.
+beforeAll(() => {
+  if (!global.fetch) global.fetch = jest.fn();
+  // Suppress expected console noise from intentional error/network scenarios
+  jest.spyOn(console, "error").mockImplementation(() => {});
+  jest.spyOn(console, "warn").mockImplementation(() => {});
+  jest.spyOn(console, "log").mockImplementation(() => {});
+});
+
 
 describe("RoutesScreen (React Native)", () => {
   const mockNavigate = jest.fn();
@@ -53,6 +63,12 @@ describe("RoutesScreen (React Native)", () => {
   beforeEach(() => {
     jest.clearAllMocks();
     jest.spyOn(Alert, "alert").mockImplementation(() => {});
+    // Required: handlePreview reads AsyncStorage and calls fetch before navigating
+    AsyncStorage.getItem.mockResolvedValue("valid-token");
+    global.fetch = jest.fn().mockResolvedValue({
+      ok: true,
+      json: async () => ({ message: "saved" }),
+    });
   });
 
   // ------------------ TC-RS-01 ------------------
@@ -68,7 +84,7 @@ describe("RoutesScreen (React Native)", () => {
     getByText("Scenic Route");
     getByText("Distance: 10 km");
     getByText("Duration: 15 mins");
-    getByText("CO2e: 12.34");
+    getByText("CO2e: 12.34 kg");
   });
 
   // ------------------ TC-RS-02 ------------------
@@ -86,7 +102,7 @@ describe("RoutesScreen (React Native)", () => {
   });
 
   // ------------------ TC-RS-03 ------------------
-  test("TC-RS-03: selecting a route then View Route navigates with params", () => {
+  test("TC-RS-03: selecting a route then View Route navigates with params", async () => {
     const { getByText } = renderScreen();
 
     // نختار المسار الثاني "Scenic Route"
@@ -95,7 +111,9 @@ describe("RoutesScreen (React Native)", () => {
 
     // نضغط الزر
     const button = getByText("View Route");
-    fireEvent.press(button);
+    await act(async () => {
+      fireEvent.press(button);
+    });
 
     expect(mockNavigate).toHaveBeenCalledWith("NavigationScreen", {
       routeData: sampleRoutes[1],
@@ -259,7 +277,7 @@ describe("RoutesScreen — AI API Call", () => {
     await waitFor(() => expect(global.fetch).toHaveBeenCalled());
 
     const [url, options] = global.fetch.mock.calls[0];
-    expect(url).toBe("192.168.3.214:8000/ai/analyze_routes");
+    expect(url).toBe("http://192.168.3.214:8000/ai/analyze_routes");
     expect(options.method).toBe("POST");
   });
 
@@ -840,5 +858,537 @@ describe("RoutesScreen — handlePreview with AsyncStorage", () => {
 
     expect(Alert.alert).toHaveBeenCalledWith("Error", "Failed to save trip");
     expect(mockNavigate).not.toHaveBeenCalledWith("NavigationScreen", expect.anything());
+  });
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// DB INTEGRATION — save_selected HTTP Request Payload
+// ─────────────────────────────────────────────────────────────────────────────
+
+describe("RoutesScreen — DB Integration: save_selected Request Payload", () => {
+  const mockNavigate = jest.fn();
+
+  function renderWithNav(routes = AI_ROUTES, meta = AI_META) {
+    return render(
+      <RoutesScreen
+        navigation={{ navigate: mockNavigate }}
+        route={{ params: { routes, meta } }}
+      />
+    );
+  }
+
+  beforeEach(() => {
+    jest.clearAllMocks();
+    jest.spyOn(Alert, "alert").mockImplementation(() => {});
+  });
+
+  // TC-DB-01
+  test("TC-DB-01: POSTs to the correct save_selected endpoint", async () => {
+    mockBothFetchSuccess();
+    AsyncStorage.getItem.mockResolvedValue("token-abc");
+
+    const { getByTestId, getByText } = renderWithNav();
+    await waitFor(() => getByText("Selected route"));
+
+    await act(async () => {
+      fireEvent.press(getByTestId("view-route-button"));
+    });
+
+    const saveCall = global.fetch.mock.calls[1];
+    expect(saveCall[0]).toContain("/trips/save_selected");
+  });
+
+  // TC-DB-02
+  test("TC-DB-02: save_selected request uses POST method", async () => {
+    mockBothFetchSuccess();
+    AsyncStorage.getItem.mockResolvedValue("token-abc");
+
+    const { getByTestId, getByText } = renderWithNav();
+    await waitFor(() => getByText("Selected route"));
+
+    await act(async () => {
+      fireEvent.press(getByTestId("view-route-button"));
+    });
+
+    const saveOptions = global.fetch.mock.calls[1][1];
+    expect(saveOptions.method).toBe("POST");
+  });
+
+  // TC-DB-03
+  test("TC-DB-03: save_selected request sends Content-Type: application/json", async () => {
+    mockBothFetchSuccess();
+    AsyncStorage.getItem.mockResolvedValue("token-abc");
+
+    const { getByTestId, getByText } = renderWithNav();
+    await waitFor(() => getByText("Selected route"));
+
+    await act(async () => {
+      fireEvent.press(getByTestId("view-route-button"));
+    });
+
+    const saveOptions = global.fetch.mock.calls[1][1];
+    expect(saveOptions.headers["Content-Type"]).toBe("application/json");
+  });
+
+  // TC-DB-04
+  test("TC-DB-04: sends origin in save_selected body", async () => {
+    mockBothFetchSuccess();
+    AsyncStorage.getItem.mockResolvedValue("token-abc");
+
+    const { getByTestId, getByText } = renderWithNav();
+    await waitFor(() => getByText("Selected route"));
+
+    await act(async () => {
+      fireEvent.press(getByTestId("view-route-button"));
+    });
+
+    const body = JSON.parse(global.fetch.mock.calls[1][1].body);
+    expect(body.origin).toBe(AI_META.origin);
+  });
+
+  // TC-DB-05
+  test("TC-DB-05: sends destination in save_selected body", async () => {
+    mockBothFetchSuccess();
+    AsyncStorage.getItem.mockResolvedValue("token-abc");
+
+    const { getByTestId, getByText } = renderWithNav();
+    await waitFor(() => getByText("Selected route"));
+
+    await act(async () => {
+      fireEvent.press(getByTestId("view-route-button"));
+    });
+
+    const body = JSON.parse(global.fetch.mock.calls[1][1].body);
+    expect(body.destination).toBe(AI_META.destination);
+  });
+
+  // TC-DB-06
+  test("TC-DB-06: sends city in save_selected body", async () => {
+    mockBothFetchSuccess();
+    AsyncStorage.getItem.mockResolvedValue("token-abc");
+
+    const { getByTestId, getByText } = renderWithNav();
+    await waitFor(() => getByText("Selected route"));
+
+    await act(async () => {
+      fireEvent.press(getByTestId("view-route-button"));
+    });
+
+    const body = JSON.parse(global.fetch.mock.calls[1][1].body);
+    expect(body.city).toBe(AI_META.city);
+  });
+
+  // TC-DB-07
+  test("TC-DB-07: sends vehicleType in save_selected body", async () => {
+    mockBothFetchSuccess();
+    AsyncStorage.getItem.mockResolvedValue("token-abc");
+
+    const { getByTestId, getByText } = renderWithNav();
+    await waitFor(() => getByText("Selected route"));
+
+    await act(async () => {
+      fireEvent.press(getByTestId("view-route-button"));
+    });
+
+    const body = JSON.parse(global.fetch.mock.calls[1][1].body);
+    expect(body.vehicleType).toBe(AI_META.vehicleType);
+  });
+
+  // TC-DB-08
+  test("TC-DB-08: sends fuelType in save_selected body", async () => {
+    mockBothFetchSuccess();
+    AsyncStorage.getItem.mockResolvedValue("token-abc");
+
+    const { getByTestId, getByText } = renderWithNav();
+    await waitFor(() => getByText("Selected route"));
+
+    await act(async () => {
+      fireEvent.press(getByTestId("view-route-button"));
+    });
+
+    const body = JSON.parse(global.fetch.mock.calls[1][1].body);
+    expect(body.fuelType).toBe(AI_META.fuelType);
+  });
+
+  // TC-DB-09
+  test("TC-DB-09: sends modelYear as a number (not string)", async () => {
+    mockBothFetchSuccess();
+    AsyncStorage.getItem.mockResolvedValue("token-abc");
+
+    // meta.modelYear is "2022" (string) — component must coerce it with Number()
+    const { getByTestId, getByText } = renderWithNav();
+    await waitFor(() => getByText("Selected route"));
+
+    await act(async () => {
+      fireEvent.press(getByTestId("view-route-button"));
+    });
+
+    const body = JSON.parse(global.fetch.mock.calls[1][1].body);
+    expect(typeof body.modelYear).toBe("number");
+    expect(body.modelYear).toBe(2022);
+  });
+
+  // TC-DB-10
+  test("TC-DB-10: saves the AI-selected best route (index 0 = Highway Express)", async () => {
+    mockBothFetchSuccess();
+    AsyncStorage.getItem.mockResolvedValue("token-abc");
+
+    const { getByTestId, getByText } = renderWithNav();
+    await waitFor(() => getByText("Selected route"));
+
+    await act(async () => {
+      fireEvent.press(getByTestId("view-route-button"));
+    });
+
+    const body = JSON.parse(global.fetch.mock.calls[1][1].body);
+    expect(body.route.summary).toBe("Highway Express");
+  });
+
+  // TC-DB-11
+  test("TC-DB-11: saves the user-selected route when manually changed before pressing View Route", async () => {
+    mockBothFetchSuccess();
+    AsyncStorage.getItem.mockResolvedValue("token-abc");
+
+    const { getByTestId, getByText } = renderWithNav();
+
+    // Wait for AI to auto-select Highway Express
+    await waitFor(() => getByText("Selected route"));
+
+    // User manually picks City Road
+    fireEvent.press(getByText("City Road"));
+
+    await act(async () => {
+      fireEvent.press(getByTestId("view-route-button"));
+    });
+
+    const body = JSON.parse(global.fetch.mock.calls[1][1].body);
+    expect(body.route.summary).toBe("City Road");
+  });
+
+  // TC-DB-12
+  test("TC-DB-12: route body includes distance field", async () => {
+    mockBothFetchSuccess();
+    AsyncStorage.getItem.mockResolvedValue("token-abc");
+
+    const { getByTestId, getByText } = renderWithNav();
+    await waitFor(() => getByText("Selected route"));
+
+    await act(async () => {
+      fireEvent.press(getByTestId("view-route-button"));
+    });
+
+    const body = JSON.parse(global.fetch.mock.calls[1][1].body);
+    expect(body.route.distance).toBeDefined();
+  });
+
+  // TC-DB-13
+  test("TC-DB-13: route body includes duration field", async () => {
+    mockBothFetchSuccess();
+    AsyncStorage.getItem.mockResolvedValue("token-abc");
+
+    const { getByTestId, getByText } = renderWithNav();
+    await waitFor(() => getByText("Selected route"));
+
+    await act(async () => {
+      fireEvent.press(getByTestId("view-route-button"));
+    });
+
+    const body = JSON.parse(global.fetch.mock.calls[1][1].body);
+    expect(body.route.duration).toBeDefined();
+  });
+
+  // TC-DB-14
+  test("TC-DB-14: route body includes emissions object with co2e", async () => {
+    mockBothFetchSuccess();
+    AsyncStorage.getItem.mockResolvedValue("token-abc");
+
+    const { getByTestId, getByText } = renderWithNav();
+    await waitFor(() => getByText("Selected route"));
+
+    await act(async () => {
+      fireEvent.press(getByTestId("view-route-button"));
+    });
+
+    const body = JSON.parse(global.fetch.mock.calls[1][1].body);
+    expect(body.route.emissions).toBeDefined();
+    expect(body.route.emissions.co2e).toBeDefined();
+  });
+
+  // TC-DB-15
+  test("TC-DB-15: route body includes color field", async () => {
+    mockBothFetchSuccess();
+    AsyncStorage.getItem.mockResolvedValue("token-abc");
+
+    const { getByTestId, getByText } = renderWithNav();
+    await waitFor(() => getByText("Selected route"));
+
+    await act(async () => {
+      fireEvent.press(getByTestId("view-route-button"));
+    });
+
+    const body = JSON.parse(global.fetch.mock.calls[1][1].body);
+    expect(body.route.color).toBe("green"); // Highway Express = green
+  });
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// DB INTEGRATION — save_selected Error & Edge Cases
+// ─────────────────────────────────────────────────────────────────────────────
+
+describe("RoutesScreen — DB Integration: save_selected Error & Edge Cases", () => {
+  const mockNavigate = jest.fn();
+
+  function renderWithNav(routes = AI_ROUTES, meta = AI_META) {
+    return render(
+      <RoutesScreen
+        navigation={{ navigate: mockNavigate }}
+        route={{ params: { routes, meta } }}
+      />
+    );
+  }
+
+  beforeEach(() => {
+    jest.clearAllMocks();
+    jest.spyOn(Alert, "alert").mockImplementation(() => {});
+  });
+
+  // TC-DB-16
+  test("TC-DB-16: does not call save_selected when no route is selected", async () => {
+    // AI fetch fails so no auto-select happens → selectedIndex stays null
+    mockAIFetchError("AI down");
+
+    const { getByTestId } = renderWithNav();
+
+    await waitFor(() =>
+      expect(global.fetch).toHaveBeenCalledTimes(1) // only the AI call
+    );
+
+    await act(async () => {
+      fireEvent.press(getByTestId("view-route-button"));
+    });
+
+    // Only the AI call; save_selected must NOT be called
+    expect(global.fetch).toHaveBeenCalledTimes(1);
+    expect(Alert.alert).toHaveBeenCalledWith(
+      "Select a Route",
+      "Please select a route first."
+    );
+  });
+
+  // TC-DB-17
+  test("TC-DB-17: does not call save_selected when token is missing", async () => {
+    mockBothFetchSuccess();
+    AsyncStorage.getItem.mockResolvedValue(null);
+
+    const { getByTestId, getByText } = renderWithNav();
+    await waitFor(() => getByText("Selected route"));
+
+    await act(async () => {
+      fireEvent.press(getByTestId("view-route-button"));
+    });
+
+    // save_selected (2nd fetch) must not be called
+    expect(global.fetch).toHaveBeenCalledTimes(1);
+  });
+
+  // TC-DB-18
+  test("TC-DB-18: shows alert with server detail on non-ok save response", async () => {
+    global.fetch = jest
+      .fn()
+      .mockResolvedValueOnce({
+        ok: true,
+        json: async () => ({ analysis: MOCK_AI_ANALYSIS }),
+      })
+      .mockResolvedValueOnce({
+        ok: false,
+        json: async () => ({ detail: "Database write error" }),
+      });
+
+    AsyncStorage.getItem.mockResolvedValue("token-xyz");
+
+    const { getByTestId, getByText } = renderWithNav();
+    await waitFor(() => getByText("Selected route"));
+
+    await act(async () => {
+      fireEvent.press(getByTestId("view-route-button"));
+    });
+
+    expect(Alert.alert).toHaveBeenCalledWith("Error", "Database write error");
+  });
+
+  // TC-DB-19
+  test("TC-DB-19: shows fallback alert message when detail field is missing in save error", async () => {
+    global.fetch = jest
+      .fn()
+      .mockResolvedValueOnce({
+        ok: true,
+        json: async () => ({ analysis: MOCK_AI_ANALYSIS }),
+      })
+      .mockResolvedValueOnce({
+        ok: false,
+        json: async () => ({}), // no detail key
+      });
+
+    AsyncStorage.getItem.mockResolvedValue("token-xyz");
+
+    const { getByTestId, getByText } = renderWithNav();
+    await waitFor(() => getByText("Selected route"));
+
+    await act(async () => {
+      fireEvent.press(getByTestId("view-route-button"));
+    });
+
+    expect(Alert.alert).toHaveBeenCalledWith("Error", "Failed to save trip");
+  });
+
+  // TC-DB-20
+  test("TC-DB-20: shows alert on network failure during save_selected", async () => {
+    global.fetch = jest
+      .fn()
+      .mockResolvedValueOnce({
+        ok: true,
+        json: async () => ({ analysis: MOCK_AI_ANALYSIS }),
+      })
+      .mockRejectedValueOnce(new Error("Connection refused"));
+
+    AsyncStorage.getItem.mockResolvedValue("token-xyz");
+
+    const { getByTestId, getByText } = renderWithNav();
+    await waitFor(() => getByText("Selected route"));
+
+    await act(async () => {
+      fireEvent.press(getByTestId("view-route-button"));
+    });
+
+    expect(Alert.alert).toHaveBeenCalledWith("Error", "Connection refused");
+  });
+
+  // TC-DB-21
+  test("TC-DB-21: does not navigate to NavigationScreen on save network failure", async () => {
+    global.fetch = jest
+      .fn()
+      .mockResolvedValueOnce({
+        ok: true,
+        json: async () => ({ analysis: MOCK_AI_ANALYSIS }),
+      })
+      .mockRejectedValueOnce(new Error("Timeout"));
+
+    AsyncStorage.getItem.mockResolvedValue("token-xyz");
+
+    const { getByTestId, getByText } = renderWithNav();
+    await waitFor(() => getByText("Selected route"));
+
+    await act(async () => {
+      fireEvent.press(getByTestId("view-route-button"));
+    });
+
+    expect(mockNavigate).not.toHaveBeenCalledWith(
+      "NavigationScreen",
+      expect.anything()
+    );
+  });
+
+  // TC-DB-22
+  test("TC-DB-22: save_selected is called exactly once per button press", async () => {
+    mockBothFetchSuccess();
+    AsyncStorage.getItem.mockResolvedValue("token-abc");
+
+    const { getByTestId, getByText } = renderWithNav();
+    await waitFor(() => getByText("Selected route"));
+
+    await act(async () => {
+      fireEvent.press(getByTestId("view-route-button"));
+    });
+
+    // Total: 1 AI call + 1 save call
+    expect(global.fetch).toHaveBeenCalledTimes(2);
+  });
+
+  // TC-DB-23
+  test("TC-DB-23: AsyncStorage.getItem is called with the key 'token'", async () => {
+    mockBothFetchSuccess();
+    AsyncStorage.getItem.mockResolvedValue("token-abc");
+
+    const { getByTestId, getByText } = renderWithNav();
+    await waitFor(() => getByText("Selected route"));
+
+    await act(async () => {
+      fireEvent.press(getByTestId("view-route-button"));
+    });
+
+    expect(AsyncStorage.getItem).toHaveBeenCalledWith("token");
+  });
+
+  // TC-DB-24
+  test("TC-DB-24: navigates to Login screen (not NavigationScreen) when token is null", async () => {
+    mockBothFetchSuccess();
+    AsyncStorage.getItem.mockResolvedValue(null);
+
+    const { getByTestId, getByText } = renderWithNav();
+    await waitFor(() => getByText("Selected route"));
+
+    await act(async () => {
+      fireEvent.press(getByTestId("view-route-button"));
+    });
+
+    expect(mockNavigate).toHaveBeenCalledWith("Login");
+    expect(mockNavigate).not.toHaveBeenCalledWith(
+      "NavigationScreen",
+      expect.anything()
+    );
+  });
+
+  // TC-DB-25
+  test("TC-DB-25: navigation to NavigationScreen includes preview:true flag", async () => {
+    mockBothFetchSuccess();
+    AsyncStorage.getItem.mockResolvedValue("valid-token");
+
+    const { getByTestId, getByText } = renderWithNav();
+    await waitFor(() => getByText("Selected route"));
+
+    await act(async () => {
+      fireEvent.press(getByTestId("view-route-button"));
+    });
+
+    expect(mockNavigate).toHaveBeenCalledWith(
+      "NavigationScreen",
+      expect.objectContaining({ preview: true })
+    );
+  });
+
+  // TC-DB-26
+  test("TC-DB-26: navigation to NavigationScreen passes meta object", async () => {
+    mockBothFetchSuccess();
+    AsyncStorage.getItem.mockResolvedValue("valid-token");
+
+    const { getByTestId, getByText } = renderWithNav();
+    await waitFor(() => getByText("Selected route"));
+
+    await act(async () => {
+      fireEvent.press(getByTestId("view-route-button"));
+    });
+
+    expect(mockNavigate).toHaveBeenCalledWith(
+      "NavigationScreen",
+      expect.objectContaining({ meta: AI_META })
+    );
+  });
+
+  // TC-DB-27
+  test("TC-DB-27: navigation to NavigationScreen passes the selected routeData", async () => {
+    mockBothFetchSuccess();
+    AsyncStorage.getItem.mockResolvedValue("valid-token");
+
+    const { getByTestId, getByText } = renderWithNav();
+    await waitFor(() => getByText("Selected route"));
+
+    await act(async () => {
+      fireEvent.press(getByTestId("view-route-button"));
+    });
+
+    expect(mockNavigate).toHaveBeenCalledWith(
+      "NavigationScreen",
+      expect.objectContaining({ routeData: AI_ROUTES[0] })
+    );
   });
 });

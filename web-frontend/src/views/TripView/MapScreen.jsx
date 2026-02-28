@@ -14,7 +14,6 @@ export default function MapScreen() {
   const meta = useMemo(() => state?.meta ?? null, [state]);
   const mapRef = useRef(null);
   const mapInstanceRef = useRef(null);
-  
 
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [mapError, setMapError] = useState(null);
@@ -63,14 +62,20 @@ export default function MapScreen() {
       setAiError(null);
 
       try {
-           const tripMetadata = {
-           city: meta?.city || "Riyadh",
-           vehicleType: meta?.vehicleType || "Light-Duty Trucks",
-           fuelType: meta?.fuelType || "Diesel",
-           temperature: 28,
-           humidity: 40,
-           windSpeed: 10,
-         };
+        // FIX: read city/vehicleType/fuelType from state directly first,
+        // then fall back to state.meta, then fall back to defaults.
+        const city = state?.city || meta?.city || "Riyadh";
+        const vehicleType = state?.vehicleType || meta?.vehicleType || "Light-Duty Trucks";
+        const fuelType = state?.fuelType || meta?.fuelType || "Diesel";
+
+        const tripMetadata = {
+          city,
+          vehicleType,
+          fuelType,
+          temperature: 28,
+          humidity: 40,
+          windSpeed: 10,
+        };
 
         const result = await getAIRecommendations(routes, tripMetadata);
         setAiAnalysis(result);
@@ -82,7 +87,7 @@ export default function MapScreen() {
     };
 
     analyze();
- }, [routes, meta]);
+  }, [routes, meta, state]);
 
   useEffect(() => {
     if (!routes.length || mapInstanceRef.current || !window.H) return;
@@ -103,7 +108,7 @@ export default function MapScreen() {
         new window.H.mapevents.MapEvents(map)
       );
       window.H.ui.UI.createDefault(map, layers);
-      
+
       mapInstanceRef.current = map;
     } catch (error) {
       console.error("Map initialization error:", error);
@@ -145,102 +150,102 @@ export default function MapScreen() {
       padding: 20,
     });
   }, [routes, selectedIndex]);
- const handleSaveSelected = async () => {
-  setSaveMsg("");
-  setSaveError("");
 
-  if (!meta) {
-    setSaveError("Missing trip info. Go back and create the trip again.");
-    return;
-  }
+  const handleSaveSelected = async () => {
+    setSaveMsg("");
+    setSaveError("");
 
-  const token =
-    localStorage.getItem("token") || sessionStorage.getItem("token");
+    if (!meta) {
+      setSaveError("Missing trip info. Go back and create the trip again.");
+      return;
+    }
 
-  if (!token) {
-    setSaveError("Session expired. Please log in again.");
-    // optional redirect:
-    // window.location.href = "/";
-    return;
-  }
+    const token =
+      localStorage.getItem("token") || sessionStorage.getItem("token");
 
-  const selectedRoute = routes[selectedIndex];
-  if (!selectedRoute) {
-    setSaveError("Please select a route first.");
-    return;
-  }
+    if (!token) {
+      setSaveError("Session expired. Please log in again.");
+      return;
+    }
 
-  setSaveLoading(true);
+    const selectedRoute = routes[selectedIndex];
+    if (!selectedRoute) {
+      setSaveError("Please select a route first.");
+      return;
+    }
 
-  try {
-    const res = await fetch("http://127.0.0.1:8000/trips/save_selected", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({
-        origin: meta.origin,
-        destination: meta.destination,
-        city: meta.city,
-        vehicleType: meta.vehicleType,
-        fuelType: meta.fuelType,
-        modelYear: Number(meta.modelYear),
-        route: selectedRoute,
-      }),
-    });
+    setSaveLoading(true);
 
-    const data = await res.json();
-    if (!res.ok) throw new Error(data.detail || "Failed to save");
+    try {
+      const res = await fetch("http://127.0.0.1:8000/trips/save_selected", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          origin: meta.origin,
+          destination: meta.destination,
+          city: meta.city,
+          vehicleType: meta.vehicleType,
+          fuelType: meta.fuelType,
+          modelYear: Number(meta.modelYear),
+          route: selectedRoute,
+        }),
+      });
 
-    setSaveMsg("Your Route Is Saved Successfully");
-  } catch (err) {
-    setSaveError(err.message);
-  } finally {
-    setSaveLoading(false);
-  }
-};
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.detail || "Failed to save");
+
+      setSaveMsg("Your Route Is Saved Successfully");
+    } catch (err) {
+      setSaveError(err.message);
+    } finally {
+      setSaveLoading(false);
+    }
+  };
+
   return (
     <div className="map-screen">
       {mapError && <p className="error-message">{mapError}</p>}
 
       <h2 className="title">Routes</h2>
       <button
-  onClick={handleSaveSelected}
-  disabled={saveLoading || !routes.length}
-  style={{
-    background: "#27ae60",
-    color: "white",
-    border: "none",
-    padding: "10px 16px",
-    borderRadius: "10px",
-    fontWeight: 700,
-    cursor: "pointer",
-    marginBottom: "15px",
-    opacity: saveLoading ? 0.7 : 1
-  }}
->
-  {saveLoading ? "Saving..." : "Save Selected Route"}
-</button>
+        onClick={handleSaveSelected}
+        disabled={saveLoading || !routes.length}
+        style={{
+          background: "#27ae60",
+          color: "white",
+          border: "none",
+          padding: "10px 16px",
+          borderRadius: "10px",
+          fontWeight: 700,
+          cursor: "pointer",
+          marginBottom: "15px",
+          opacity: saveLoading ? 0.7 : 1,
+        }}
+      >
+        {saveLoading ? "Saving..." : "Save Selected Route"}
+      </button>
 
-{saveMsg && (
-  <div style={{ background: "#e8f5e9", padding: 10, borderRadius: 10, marginBottom: 10 }}>
-    {saveMsg}
-  </div>
-)}
+      {saveMsg && (
+        <div style={{ background: "#e8f5e9", padding: 10, borderRadius: 10, marginBottom: 10 }}>
+          {saveMsg}
+        </div>
+      )}
 
-{saveError && (
-  <div style={{ background: "#fee", padding: 10, borderRadius: 10, marginBottom: 10, color: "#c33" }}>
-    ❌ {saveError}
-  </div>
-)}
+      {saveError && (
+        <div style={{ background: "#fee", padding: 10, borderRadius: 10, marginBottom: 10, color: "#c33" }}>
+          ❌ {saveError}
+        </div>
+      )}
 
-      {/* MAP CONTAINER - KEPT! */}
-      <div 
+      {/* MAP CONTAINER */}
+      <div
         ref={mapRef}
-        id="here-map-container" 
+        id="here-map-container"
         className="map-container"
-        style={{ width: '100%', height: '400px', marginBottom: '20px' }}
+        style={{ width: "100%", height: "400px", marginBottom: "20px" }}
       ></div>
 
       {aiLoading && (
@@ -259,8 +264,15 @@ export default function MapScreen() {
         <div className="ai-summary-compact">
           <div className="ai-summary-header">
             <h3> Smart Recommendation</h3>
-            <span className={`badge badge-${routes.find(r => r.summary === aiAnalysis.best_route.route_name)?.color || 'green'}`}>
-              Best: {routes.find(r => r.summary === aiAnalysis.best_route.route_name)?.color?.toUpperCase() || 'GREEN'}
+            <span
+              className={`badge badge-${
+                routes.find((r) => r.summary === aiAnalysis.best_route.route_name)?.color || "green"
+              }`}
+            >
+              Best:{" "}
+              {routes
+                .find((r) => r.summary === aiAnalysis.best_route.route_name)
+                ?.color?.toUpperCase() || "GREEN"}
             </span>
           </div>
 
@@ -272,14 +284,16 @@ export default function MapScreen() {
             )}
           </p>
 
-          {/* Fuel Savings - ONLY for best route */}
           {aiAnalysis.fuel_saving_liters > 0 && (
             <div className="fuel-savings-banner">
               <span className="fuel-icon"></span>
               <span className="fuel-savings-text">
                 Save <strong>{aiAnalysis.fuel_saving_liters.toFixed(2)} L</strong> of fuel
                 {aiAnalysis.fuel_saving_percent > 0 && (
-                  <> • <strong>{aiAnalysis.fuel_saving_percent.toFixed(1)}%</strong></>
+                  <>
+                    {" "}
+                    • <strong>{aiAnalysis.fuel_saving_percent.toFixed(1)}%</strong>
+                  </>
                 )}
               </span>
             </div>
@@ -312,15 +326,14 @@ export default function MapScreen() {
       <div className="routes-list">
         {routesWithAI.map((route, index) => {
           const isBest =
-            aiAnalysis &&
-            route.summary === aiAnalysis.best_route.route_name;
+            aiAnalysis && route.summary === aiAnalysis.best_route.route_name;
 
           return (
             <div
               key={index}
-              className={`route-card ${
-                index === selectedIndex ? "selected" : ""
-              } ${isBest ? "ai-best" : ""}`}
+              className={`route-card ${index === selectedIndex ? "selected" : ""} ${
+                isBest ? "ai-best" : ""
+              }`}
               onClick={() => setSelectedIndex(index)}
             >
               {isBest && <div className="best-route-ribbon">⭐ AI Recommended</div>}
@@ -346,21 +359,27 @@ export default function MapScreen() {
                   <div className="ai-prediction-line">
                     <div className="ai-pred-left">
                       <span className="ai-label">AI:</span>
-                      <span className="ai-value">{route.ai.predicted_co2e_kg.toFixed(2)} kg CO₂e</span>
+                      <span className="ai-value">
+                        {route.ai.predicted_co2e_kg.toFixed(2)} kg CO₂e
+                      </span>
                     </div>
-                    
+
                     <div className="ai-pred-right">
                       {isBest ? (
                         <span className="ai-best-tag">✓ Best Choice</span>
                       ) : (
                         <span className="ai-extra-emissions">
-                          +{(route.ai.predicted_co2e_kg - aiAnalysis.best_route.predicted_co2e_kg).toFixed(2)} kg
+                          +
+                          {(
+                            route.ai.predicted_co2e_kg -
+                            aiAnalysis.best_route.predicted_co2e_kg
+                          ).toFixed(2)}{" "}
+                          kg
                         </span>
                       )}
                     </div>
                   </div>
 
-                  {/* Fuel Consumption Info - ONLY show on best route */}
                   {isBest && route.ai.fuel_consumption && (
                     <div className="fuel-consumption-line">
                       <span className="fuel-icon-small"></span>
