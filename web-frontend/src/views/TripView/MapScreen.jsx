@@ -245,13 +245,13 @@ export default function MapScreen() {
 
       {aiLoading && (
         <div className="ai-loading">
-          <p>🤖 Analyzing routes with AI...</p>
+          <p>Analyzing routes with AI...</p>
         </div>
       )}
 
       {aiError && (
         <div className="ai-error">
-          <p>❌ AI Error: {aiError}</p>
+          <p> AI Error: {aiError}</p>
         </div>
       )}
 
