@@ -10,3 +10,4 @@ class CompanyDB(Base):
 
     managers = relationship("ManagerDB", back_populates="company")
     drivers = relationship("DriverDB", back_populates="company")
+    #trips = relationship("TripDB", back_populates="company")

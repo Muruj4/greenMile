@@ -281,6 +281,7 @@ const handleSubmit = async (e) => {
                             handleInputChange("company", company);
                             setShowCompanyDropdown(false);
                           }}
+                          // eslint-disable-next-line jsx-a11y/role-has-required-aria-props
                           role="option"
                         >
                           {company}

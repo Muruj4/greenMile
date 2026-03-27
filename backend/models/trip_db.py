@@ -16,6 +16,7 @@ class TripDB(Base):
     company_id = Column(Integer, ForeignKey("companies.id"), nullable=False)
     driver_id = Column(Integer, ForeignKey("drivers.id"), nullable=True)
     driver = relationship("DriverDB", back_populates="trips")
+    # company = relationship("CompanyDB", back_populates="trips")
 
     # trip meta
     origin = Column(String, nullable=False)
