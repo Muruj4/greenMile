@@ -1,0 +1,843 @@
+// tests/LoginScreen.test.jsx
+import React from "react";
+import { Alert } from "react-native";
+import { render, fireEvent, waitFor, act } from "@testing-library/react-native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import LoginScreen from "../screens/LoginScreen";
+
+// Mocks 
+
+jest.mock("@react-native-async-storage/async-storage", () => ({
+  getItem: jest.fn(),
+  setItem: jest.fn(),
+  removeItem: jest.fn(),
+}));
+
+jest.mock("@expo/vector-icons", () => ({
+  Ionicons: () => null,
+}));
+
+// These paths must match exactly what LoginScreen.jsx imports
+jest.mock("../Style/LoginScreenStyles", () => ({
+  styles: {},
+}), { virtual: true });
+
+jest.mock("../config", () => ({
+  API_BASE_URL: "http://192.168.3.214:8000",
+}), { virtual: true });
+
+// Suppress expected console noise from intentional error/network scenarios
+beforeAll(() => {
+  if (!global.fetch) global.fetch = jest.fn();
+  jest.spyOn(console, "error").mockImplementation(() => {});
+  jest.spyOn(console, "warn").mockImplementation(() => {});
+  jest.spyOn(console, "log").mockImplementation(() => {});
+});
+
+// Helpers
+
+const mockNavigate = jest.fn();
+
+function renderScreen() {
+  return render(<LoginScreen navigation={{ navigate: mockNavigate }} />);
+}
+
+/** Switch to Sign Up tab */
+function switchToSignUp(getByText) {
+  fireEvent.press(getByText("Sign Up"));
+}
+
+/**
+ * Press the Sign In SUBMIT button (not the tab).
+ * In Sign In mode, "Sign In" appears twice: once as a tab, once as the submit button.
+ * getAllByText returns them in DOM order — the submit button is always last.
+ */
+function pressSubmitSignIn(getAllByText) {
+  fireEvent.press(getAllByText("Sign In").at(-1));
+}
+
+/** Fill Sign In fields */
+function fillSignIn({ email = "driver@test.com", password = "Pass123!" } = {}, getByPlaceholderText) {
+  fireEvent.changeText(getByPlaceholderText("you@example.com"), email);
+  fireEvent.changeText(getByPlaceholderText("••••••••"), password);
+}
+
+/** Fill all Sign Up fields (including company selection) */
+async function fillSignUp(
+  {
+    name = "Ahmed Ali",
+    company = "Aramex",
+    email = "ahmed@test.com",
+    password = "Pass123!",
+  } = {},
+  utils
+) {
+  const { getByPlaceholderText, getByText } = utils;
+  fireEvent.changeText(getByPlaceholderText("Enter your name"), name);
+  // Open dropdown and pick company
+  fireEvent.press(getByText("Select your Company"));
+  fireEvent.press(getByText(company));
+  fireEvent.changeText(getByPlaceholderText("you@example.com"), email);
+  fireEvent.changeText(getByPlaceholderText("••••••••"), password);
+}
+
+function mockSignInSuccess(role = "driver") {
+  global.fetch = jest.fn().mockResolvedValueOnce({
+    ok: true,
+    json: async () => ({ token: "jwt-token-abc", role }),
+  });
+}
+
+function mockSignInError(detail = "Invalid credentials") {
+  global.fetch = jest.fn().mockResolvedValueOnce({
+    ok: false,
+    json: async () => ({ detail }),
+  });
+}
+
+function mockSignUpSuccess() {
+  global.fetch = jest.fn().mockResolvedValueOnce({
+    ok: true,
+    json: async () => ({ message: "Account created" }),
+  });
+}
+
+function mockSignUpError(detail = "Email already registered") {
+  global.fetch = jest.fn().mockResolvedValueOnce({
+    ok: false,
+    json: async () => ({ detail }),
+  });
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// 1. Unit Tests — Rendering & Initial State
+// ─────────────────────────────────────────────────────────────────────────────
+
+describe("LoginScreen — Rendering & Initial State", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+    jest.spyOn(Alert, "alert").mockImplementation(() => {});
+  });
+
+  // TC-LS-01
+  test("TC-LS-01: renders GreenMile brand title", () => {
+    const { getByText } = renderScreen();
+    getByText("Green");
+    getByText("Mile");
+  });
+
+  // TC-LS-02
+  test("TC-LS-02: renders brand tagline", () => {
+    const { getByText } = renderScreen();
+    getByText("Sustainable Last-Mile Delivery Platform");
+  });
+
+  // TC-LS-03
+  test("TC-LS-03: renders Sign In and Sign Up tabs", () => {
+    const { getAllByText } = renderScreen();
+    // "Sign In" appears in tab AND submit button
+    expect(getAllByText("Sign In").length).toBeGreaterThanOrEqual(1);
+    expect(getAllByText("Sign Up").length).toBeGreaterThanOrEqual(1);
+  });
+
+  // TC-LS-04
+  test("TC-LS-04: Sign In tab is active by default", () => {
+    const { getAllByText } = renderScreen();
+    // Submit button shows "Sign In" confirming isSignIn = true
+    expect(getAllByText("Sign In").length).toBeGreaterThanOrEqual(1);
+  });
+
+  // TC-LS-05
+  test("TC-LS-05: renders email and password inputs on Sign In", () => {
+    const { getByPlaceholderText } = renderScreen();
+    getByPlaceholderText("you@example.com");
+    getByPlaceholderText("••••••••");
+  });
+
+  // TC-LS-06
+  test("TC-LS-06: renders Remember me text on Sign In", () => {
+    const { getByText } = renderScreen();
+    getByText("Remember me");
+  });
+
+  // TC-LS-07
+  test("TC-LS-07: renders Forgot password link on Sign In", () => {
+    const { getByText } = renderScreen();
+    getByText("Forgot password?");
+  });
+
+  // TC-LS-08
+  test("TC-LS-08: does not show Full Name input on Sign In", () => {
+    const { queryByPlaceholderText } = renderScreen();
+    expect(queryByPlaceholderText("Enter your name")).toBeNull();
+  });
+
+  // TC-LS-09
+  test("TC-LS-09: does not show company dropdown on Sign In", () => {
+    const { queryByText } = renderScreen();
+    expect(queryByText("Select your Company")).toBeNull();
+  });
+
+  // TC-LS-10
+  test("TC-LS-10: does not show email error on initial render", () => {
+    const { queryByText } = renderScreen();
+    expect(queryByText("Email is required")).toBeNull();
+    expect(queryByText("Please enter a valid email address")).toBeNull();
+  });
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// 2. Unit Tests — Tab Switching
+// ─────────────────────────────────────────────────────────────────────────────
+
+describe("LoginScreen — Tab Switching", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+    jest.spyOn(Alert, "alert").mockImplementation(() => {});
+  });
+
+  // TC-LS-11
+  test("TC-LS-11: switching to Sign Up shows Full Name input", () => {
+    const { getByText, getByPlaceholderText } = renderScreen();
+    switchToSignUp(getByText);
+    getByPlaceholderText("Enter your name");
+  });
+
+  // TC-LS-12
+  test("TC-LS-12: switching to Sign Up shows company dropdown placeholder", () => {
+    const { getByText } = renderScreen();
+    switchToSignUp(getByText);
+    getByText("Select your Company");
+  });
+
+  // TC-LS-13
+  test("TC-LS-13: switching to Sign Up shows Create Account button", () => {
+    const { getByText } = renderScreen();
+    switchToSignUp(getByText);
+    getByText("Create Account");
+  });
+
+  // TC-LS-14
+  test("TC-LS-14: switching to Sign Up hides Remember me", () => {
+    const { getByText, queryByText } = renderScreen();
+    switchToSignUp(getByText);
+    expect(queryByText("Remember me")).toBeNull();
+  });
+
+  // TC-LS-15
+  test("TC-LS-15: switching to Sign Up hides Forgot password", () => {
+    const { getByText, queryByText } = renderScreen();
+    switchToSignUp(getByText);
+    expect(queryByText("Forgot password?")).toBeNull();
+  });
+
+  // TC-LS-16
+  test("TC-LS-16: switching back to Sign In from Sign Up hides Full Name", () => {
+    const { getByText, getAllByText, queryByPlaceholderText } = renderScreen();
+    switchToSignUp(getByText);
+    fireEvent.press(getAllByText("Sign In")[0]); // press Sign In TAB
+    expect(queryByPlaceholderText("Enter your name")).toBeNull();
+  });
+
+  // TC-LS-17
+  test("TC-LS-17: switching back to Sign In restores Remember me", () => {
+    const { getByText, getAllByText } = renderScreen();
+    switchToSignUp(getByText);
+    fireEvent.press(getAllByText("Sign In")[0]); // press Sign In TAB
+    getByText("Remember me");
+  });
+
+  // TC-LS-18
+  test("TC-LS-18: switching tabs clears email error", () => {
+    const { getByText, queryByText, getAllByText } = renderScreen();
+    // Trigger email error by pressing the submit button with empty email
+    pressSubmitSignIn(getAllByText);
+    // Switch to Sign Up — error should clear
+    switchToSignUp(getByText);
+    expect(queryByText("Email is required")).toBeNull();
+  });
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// 3. Unit Tests — Email Validation
+// ─────────────────────────────────────────────────────────────────────────────
+
+describe("LoginScreen — Email Validation", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+    jest.spyOn(Alert, "alert").mockImplementation(() => {});
+    global.fetch = jest.fn();
+  });
+
+  // TC-LS-19
+  test("TC-LS-19: shows Email is required when submitting with empty email", async () => {
+    const { getAllByText, findByText } = renderScreen();
+    await act(async () => { pressSubmitSignIn(getAllByText); });
+    await findByText("Email is required");
+  });
+
+  // TC-LS-20
+  test("TC-LS-20: shows invalid email error for malformed email", async () => {
+    const { getAllByText, getByPlaceholderText, findByText } = renderScreen();
+    fireEvent.changeText(getByPlaceholderText("you@example.com"), "notanemail");
+    await act(async () => { pressSubmitSignIn(getAllByText); });
+    await findByText("Please enter a valid email address");
+  });
+
+  // TC-LS-21
+  test("TC-LS-21: clears email error when user starts typing in email field", async () => {
+    const { getAllByText, getByPlaceholderText, findByText, queryByText } = renderScreen();
+    await act(async () => { pressSubmitSignIn(getAllByText); });
+    await findByText("Email is required");
+    fireEvent.changeText(getByPlaceholderText("you@example.com"), "a");
+    expect(queryByText("Email is required")).toBeNull();
+  });
+
+  // TC-LS-22
+  test("TC-LS-22: does not show email error for a valid email", async () => {
+    const { getAllByText, getByPlaceholderText, queryByText } = renderScreen();
+    fireEvent.changeText(getByPlaceholderText("you@example.com"), "valid@email.com");
+    fireEvent.changeText(getByPlaceholderText("••••••••"), "pass");
+    global.fetch = jest.fn().mockResolvedValueOnce({
+      ok: true,
+      json: async () => ({ token: "t", role: "driver" }),
+    });
+    await act(async () => { pressSubmitSignIn(getAllByText); });
+    expect(queryByText("Email is required")).toBeNull();
+    expect(queryByText("Please enter a valid email address")).toBeNull();
+  });
+
+  // TC-LS-23
+  test("TC-LS-23: trims whitespace before validating email", async () => {
+    const { getAllByText, getByPlaceholderText, queryByText } = renderScreen();
+    fireEvent.changeText(getByPlaceholderText("you@example.com"), "  valid@email.com  ");
+    fireEvent.changeText(getByPlaceholderText("••••••••"), "pass");
+    global.fetch = jest.fn().mockResolvedValueOnce({
+      ok: true,
+      json: async () => ({ token: "t", role: "driver" }),
+    });
+    await act(async () => { pressSubmitSignIn(getAllByText); });
+    expect(queryByText("Please enter a valid email address")).toBeNull();
+  });
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// 4. Unit Tests — Company Dropdown (Sign Up)
+// ─────────────────────────────────────────────────────────────────────────────
+
+describe("LoginScreen — Company Dropdown", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+    jest.spyOn(Alert, "alert").mockImplementation(() => {});
+  });
+
+  // TC-LS-24
+  test("TC-LS-24: pressing company field opens dropdown", () => {
+    const { getByText } = renderScreen();
+    switchToSignUp(getByText);
+    fireEvent.press(getByText("Select your Company"));
+    getByText("Aramex");
+    getByText("Saudi Post (SPL)");
+  });
+
+  // TC-LS-25
+  test("TC-LS-25: selecting a company closes dropdown and shows selected value", () => {
+    const { getByText, queryByText } = renderScreen();
+    switchToSignUp(getByText);
+    fireEvent.press(getByText("Select your Company"));
+    fireEvent.press(getByText("Aramex"));
+    // Dropdown list item is gone
+    expect(queryByText("Saudi Post (SPL)")).toBeNull();
+    // Selected value shows
+    getByText("Aramex");
+  });
+
+  // TC-LS-26
+  test("TC-LS-26: pressing company field again toggles dropdown closed", () => {
+    const { getByText, queryByText } = renderScreen();
+    switchToSignUp(getByText);
+    fireEvent.press(getByText("Select your Company"));
+    getByText("Aramex"); // open
+    fireEvent.press(getByText("Select your Company"));
+    expect(queryByText("Aramex")).toBeNull(); // closed
+  });
+
+  // TC-LS-27
+  test("TC-LS-27: dropdown contains all 17 company options", () => {
+    const { getByText, getAllByText } = renderScreen();
+    switchToSignUp(getByText);
+    fireEvent.press(getByText("Select your Company"));
+    const companies = [
+      "Saudi Post (SPL)", "Aramex", "Naqel Express", "SMSA Express",
+      "DHL Saudi Arabia", "UPS Saudi Arabia", "FedEx Saudi Arabia",
+      "Amazon Saudi Arabia", "Noon", "Ninja", "HungerStation",
+      "Jahez", "Mrsool", "Keeta", "ToYou", "Jtex", "Nana",
+    ];
+    companies.forEach((c) => getByText(c));
+  });
+});
+
+
+
+// Unit Tests — Sign In Client-Side Validation
+
+describe("LoginScreen — Sign In Client-Side Validation", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+    jest.spyOn(Alert, "alert").mockImplementation(() => {});
+    global.fetch = jest.fn();
+  });
+
+  // TC-LS-31
+  test("TC-LS-31: shows alert when password is empty on Sign In", async () => {
+    const { getAllByText, getByPlaceholderText } = renderScreen();
+    fireEvent.changeText(getByPlaceholderText("you@example.com"), "driver@test.com");
+    await act(async () => { pressSubmitSignIn(getAllByText); });
+    expect(Alert.alert).toHaveBeenCalledWith("Missing data", "Please enter your password.");
+  });
+
+  // TC-LS-32
+  test("TC-LS-32: does not call fetch when password is missing on Sign In", async () => {
+    const { getAllByText, getByPlaceholderText } = renderScreen();
+    fireEvent.changeText(getByPlaceholderText("you@example.com"), "driver@test.com");
+    await act(async () => { pressSubmitSignIn(getAllByText); });
+    expect(global.fetch).not.toHaveBeenCalled();
+  });
+
+  // TC-LS-33
+  test("TC-LS-33: does not call fetch when email is empty on Sign In", async () => {
+    const { getAllByText } = renderScreen();
+    await act(async () => { pressSubmitSignIn(getAllByText); });
+    expect(global.fetch).not.toHaveBeenCalled();
+  });
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// 7. Unit Tests — Sign Up Client-Side Validation
+// ─────────────────────────────────────────────────────────────────────────────
+
+describe("LoginScreen — Sign Up Client-Side Validation", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+    jest.spyOn(Alert, "alert").mockImplementation(() => {});
+    global.fetch = jest.fn();
+  });
+
+  // TC-LS-34
+  test("TC-LS-34: shows alert when name is missing on Sign Up", async () => {
+    const utils = renderScreen();
+    const { getByText, getByPlaceholderText } = utils;
+    switchToSignUp(getByText);
+    // Fill email and password but NOT name
+    fireEvent.changeText(getByPlaceholderText("you@example.com"), "a@b.com");
+    fireEvent.changeText(getByPlaceholderText("••••••••"), "pass");
+    await act(async () => { fireEvent.press(getByText("Create Account")); });
+    expect(Alert.alert).toHaveBeenCalledWith("Missing data", "Please enter your name.");
+  });
+
+  // TC-LS-35
+  test("TC-LS-35: shows alert when company is missing on Sign Up", async () => {
+    const utils = renderScreen();
+    const { getByText, getByPlaceholderText } = utils;
+    switchToSignUp(getByText);
+    fireEvent.changeText(getByPlaceholderText("Enter your name"), "Ahmed");
+    // skip company
+    fireEvent.changeText(getByPlaceholderText("you@example.com"), "a@b.com");
+    fireEvent.changeText(getByPlaceholderText("••••••••"), "pass");
+    await act(async () => { fireEvent.press(getByText("Create Account")); });
+    expect(Alert.alert).toHaveBeenCalledWith("Missing data", "Please select your company.");
+  });
+
+  // TC-LS-36
+  test("TC-LS-36: shows alert when password is missing on Sign Up", async () => {
+    const utils = renderScreen();
+    const { getByText, getByPlaceholderText } = utils;
+    switchToSignUp(getByText);
+    fireEvent.changeText(getByPlaceholderText("Enter your name"), "Ahmed");
+    fireEvent.press(getByText("Select your Company"));
+    fireEvent.press(getByText("Aramex"));
+    fireEvent.changeText(getByPlaceholderText("you@example.com"), "a@b.com");
+    // skip password
+    await act(async () => { fireEvent.press(getByText("Create Account")); });
+    expect(Alert.alert).toHaveBeenCalledWith("Missing data", "Please enter a password.");
+  });
+
+  // TC-LS-37
+  test("TC-LS-37: does not call fetch when name is missing on Sign Up", async () => {
+    const utils = renderScreen();
+    const { getByText, getByPlaceholderText } = utils;
+    switchToSignUp(getByText);
+    fireEvent.changeText(getByPlaceholderText("you@example.com"), "a@b.com");
+    fireEvent.changeText(getByPlaceholderText("••••••••"), "pass");
+    await act(async () => { fireEvent.press(getByText("Create Account")); });
+    expect(global.fetch).not.toHaveBeenCalled();
+  });
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// 8. DB Integration — Sign In HTTP Request
+// ─────────────────────────────────────────────────────────────────────────────
+
+describe("LoginScreen — DB Integration: Sign In Request", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+    jest.spyOn(Alert, "alert").mockImplementation(() => {});
+  });
+
+  // TC-LS-38
+  test("TC-LS-38: POSTs to the correct Sign In endpoint", async () => {
+    mockSignInSuccess();
+    const { getAllByText, getByPlaceholderText } = renderScreen();
+    fillSignIn({}, getByPlaceholderText);
+    await act(async () => { pressSubmitSignIn(getAllByText); });
+    expect(global.fetch.mock.calls[0][0]).toBe("http://192.168.3.214:8000/auth/signin");
+  });
+
+  // TC-LS-39
+  test("TC-LS-39: uses POST method for Sign In", async () => {
+    mockSignInSuccess();
+    const { getAllByText, getByPlaceholderText } = renderScreen();
+    fillSignIn({}, getByPlaceholderText);
+    await act(async () => { pressSubmitSignIn(getAllByText); });
+    expect(global.fetch.mock.calls[0][1].method).toBe("POST");
+  });
+
+  // TC-LS-40
+  test("TC-LS-40: sends Content-Type application/json header on Sign In", async () => {
+    mockSignInSuccess();
+    const { getAllByText, getByPlaceholderText } = renderScreen();
+    fillSignIn({}, getByPlaceholderText);
+    await act(async () => { pressSubmitSignIn(getAllByText); });
+    expect(global.fetch.mock.calls[0][1].headers["Content-Type"]).toBe("application/json");
+  });
+
+  // TC-LS-41
+  test("TC-LS-41: sends email trimmed in Sign In body", async () => {
+    mockSignInSuccess();
+    const { getAllByText, getByPlaceholderText } = renderScreen();
+    fireEvent.changeText(getByPlaceholderText("you@example.com"), "  driver@test.com  ");
+    fireEvent.changeText(getByPlaceholderText("••••••••"), "Pass123!");
+    await act(async () => { pressSubmitSignIn(getAllByText); });
+    const body = JSON.parse(global.fetch.mock.calls[0][1].body);
+    expect(body.email).toBe("driver@test.com");
+  });
+
+  // TC-LS-42
+  test("TC-LS-42: sends password in Sign In body", async () => {
+    mockSignInSuccess();
+    const { getAllByText, getByPlaceholderText } = renderScreen();
+    fillSignIn({ email: "driver@test.com", password: "MyPass99!" }, getByPlaceholderText);
+    await act(async () => { pressSubmitSignIn(getAllByText); });
+    const body = JSON.parse(global.fetch.mock.calls[0][1].body);
+    expect(body.password).toBe("MyPass99!");
+  });
+
+  // TC-LS-43
+  test("TC-LS-43: Sign In body contains exactly email and password keys", async () => {
+    mockSignInSuccess();
+    const { getAllByText, getByPlaceholderText } = renderScreen();
+    fillSignIn({}, getByPlaceholderText);
+    await act(async () => { pressSubmitSignIn(getAllByText); });
+    const body = JSON.parse(global.fetch.mock.calls[0][1].body);
+    expect(Object.keys(body).sort()).toEqual(["email", "password"]);
+  });
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// 9. DB Integration — Sign In Response Handling
+// ─────────────────────────────────────────────────────────────────────────────
+
+describe("LoginScreen — DB Integration: Sign In Response", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+    jest.spyOn(Alert, "alert").mockImplementation(() => {});
+  });
+
+  // TC-LS-44
+  test("TC-LS-44: stores token in AsyncStorage on successful Sign In", async () => {
+    mockSignInSuccess("driver");
+    const { getAllByText, getByPlaceholderText } = renderScreen();
+    fillSignIn({}, getByPlaceholderText);
+    await act(async () => { pressSubmitSignIn(getAllByText); });
+    expect(AsyncStorage.setItem).toHaveBeenCalledWith("token", "jwt-token-abc");
+  });
+
+  // TC-LS-45
+  test("TC-LS-45: stores role in AsyncStorage on successful Sign In", async () => {
+    mockSignInSuccess("driver");
+    const { getAllByText, getByPlaceholderText } = renderScreen();
+    fillSignIn({}, getByPlaceholderText);
+    await act(async () => { pressSubmitSignIn(getAllByText); });
+    expect(AsyncStorage.setItem).toHaveBeenCalledWith("role", "driver");
+  });
+
+  // TC-LS-46
+  test("TC-LS-46: navigates to Trip screen on successful driver Sign In", async () => {
+    mockSignInSuccess("driver");
+    const { getAllByText, getByPlaceholderText } = renderScreen();
+    fillSignIn({}, getByPlaceholderText);
+    await act(async () => { pressSubmitSignIn(getAllByText); });
+    expect(mockNavigate).toHaveBeenCalledWith("Trip");
+  });
+
+  // TC-LS-47
+  test("TC-LS-47: blocks manager role and shows driver-only error", async () => {
+    mockSignInSuccess("manager");
+    const { getAllByText, getByPlaceholderText } = renderScreen();
+    fillSignIn({}, getByPlaceholderText);
+    await act(async () => { pressSubmitSignIn(getAllByText); });
+    expect(Alert.alert).toHaveBeenCalledWith(
+      "Error",
+      "This app is for drivers only. Please use the manager web portal."
+    );
+    expect(mockNavigate).not.toHaveBeenCalled();
+  });
+
+  // TC-LS-48
+  test("TC-LS-48: does not navigate on Sign In server error", async () => {
+    mockSignInError("Invalid credentials");
+    const { getAllByText, getByPlaceholderText } = renderScreen();
+    fillSignIn({}, getByPlaceholderText);
+    await act(async () => { pressSubmitSignIn(getAllByText); });
+    expect(mockNavigate).not.toHaveBeenCalled();
+  });
+
+  // TC-LS-49
+  test("TC-LS-49: shows error alert with server detail on Sign In failure", async () => {
+    mockSignInError("Account not found");
+    const { getAllByText, getByPlaceholderText } = renderScreen();
+    fillSignIn({}, getByPlaceholderText);
+    await act(async () => { pressSubmitSignIn(getAllByText); });
+    expect(Alert.alert).toHaveBeenCalledWith("Error", "Account not found");
+  });
+
+  // TC-LS-50
+  test("TC-LS-50: shows fallback error message when server detail is missing", async () => {
+    global.fetch = jest.fn().mockResolvedValueOnce({
+      ok: false,
+      json: async () => ({}),
+    });
+    const { getAllByText, getByPlaceholderText } = renderScreen();
+    fillSignIn({}, getByPlaceholderText);
+    await act(async () => { pressSubmitSignIn(getAllByText); });
+    expect(Alert.alert).toHaveBeenCalledWith("Error", "Sign in failed");
+  });
+
+  // TC-LS-51
+  test("TC-LS-51: shows error alert on network failure during Sign In", async () => {
+    global.fetch = jest.fn().mockRejectedValueOnce(new Error("No internet"));
+    const { getAllByText, getByPlaceholderText } = renderScreen();
+    fillSignIn({}, getByPlaceholderText);
+    await act(async () => { pressSubmitSignIn(getAllByText); });
+    expect(Alert.alert).toHaveBeenCalledWith("Error", "No internet");
+  });
+
+  // TC-LS-52
+  test("TC-LS-52: stores rememberMe flag when Remember Me is checked", async () => {
+    mockSignInSuccess("driver");
+    const { getByText, getAllByText, getByPlaceholderText } = renderScreen();
+    fillSignIn({}, getByPlaceholderText);
+    fireEvent.press(getByText("Remember me"));
+    await act(async () => { pressSubmitSignIn(getAllByText); });
+    expect(AsyncStorage.setItem).toHaveBeenCalledWith("rememberMe", "1");
+  });
+
+  // TC-LS-53
+  test("TC-LS-53: removes rememberMe flag when Remember Me is unchecked", async () => {
+    mockSignInSuccess("driver");
+    const { getAllByText, getByPlaceholderText } = renderScreen();
+    fillSignIn({}, getByPlaceholderText);
+    // rememberMe defaults to false → removeItem should be called
+    await act(async () => { pressSubmitSignIn(getAllByText); });
+    expect(AsyncStorage.removeItem).toHaveBeenCalledWith("rememberMe");
+  });
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// 10. DB Integration — Sign Up HTTP Request
+// ─────────────────────────────────────────────────────────────────────────────
+
+describe("LoginScreen — DB Integration: Sign Up Request", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+    jest.spyOn(Alert, "alert").mockImplementation(() => {});
+  });
+
+  // TC-LS-54
+  test("TC-LS-54: POSTs to the correct Sign Up endpoint", async () => {
+    mockSignUpSuccess();
+    const utils = renderScreen();
+    switchToSignUp(utils.getByText);
+    await fillSignUp({}, utils);
+    await act(async () => { fireEvent.press(utils.getByText("Create Account")); });
+    expect(global.fetch.mock.calls[0][0]).toBe(
+      "http://192.168.3.214:8000/auth/driver/signup"
+    );
+  });
+
+  // TC-LS-55
+  test("TC-LS-55: uses POST method for Sign Up", async () => {
+    mockSignUpSuccess();
+    const utils = renderScreen();
+    switchToSignUp(utils.getByText);
+    await fillSignUp({}, utils);
+    await act(async () => { fireEvent.press(utils.getByText("Create Account")); });
+    expect(global.fetch.mock.calls[0][1].method).toBe("POST");
+  });
+
+  // TC-LS-56
+  test("TC-LS-56: sends Content-Type application/json header on Sign Up", async () => {
+    mockSignUpSuccess();
+    const utils = renderScreen();
+    switchToSignUp(utils.getByText);
+    await fillSignUp({}, utils);
+    await act(async () => { fireEvent.press(utils.getByText("Create Account")); });
+    expect(global.fetch.mock.calls[0][1].headers["Content-Type"]).toBe("application/json");
+  });
+
+  // TC-LS-57
+  test("TC-LS-57: sends name trimmed in Sign Up body", async () => {
+    mockSignUpSuccess();
+    const utils = renderScreen();
+    switchToSignUp(utils.getByText);
+    await fillSignUp({ name: "  Ahmed Ali  " }, utils);
+    await act(async () => { fireEvent.press(utils.getByText("Create Account")); });
+    const body = JSON.parse(global.fetch.mock.calls[0][1].body);
+    expect(body.name).toBe("Ahmed Ali");
+  });
+
+  // TC-LS-58
+  test("TC-LS-58: sends company in Sign Up body", async () => {
+    mockSignUpSuccess();
+    const utils = renderScreen();
+    switchToSignUp(utils.getByText);
+    await fillSignUp({ company: "Aramex" }, utils);
+    await act(async () => { fireEvent.press(utils.getByText("Create Account")); });
+    const body = JSON.parse(global.fetch.mock.calls[0][1].body);
+    expect(body.company).toBe("Aramex");
+  });
+
+  // TC-LS-59
+  test("TC-LS-59: sends email trimmed in Sign Up body", async () => {
+    mockSignUpSuccess();
+    const utils = renderScreen();
+    switchToSignUp(utils.getByText);
+    await fillSignUp({ email: "  ahmed@test.com  " }, utils);
+    await act(async () => { fireEvent.press(utils.getByText("Create Account")); });
+    const body = JSON.parse(global.fetch.mock.calls[0][1].body);
+    expect(body.email).toBe("ahmed@test.com");
+  });
+
+  // TC-LS-60
+  test("TC-LS-60: sends password in Sign Up body", async () => {
+    mockSignUpSuccess();
+    const utils = renderScreen();
+    switchToSignUp(utils.getByText);
+    await fillSignUp({ password: "Secure99!" }, utils);
+    await act(async () => { fireEvent.press(utils.getByText("Create Account")); });
+    const body = JSON.parse(global.fetch.mock.calls[0][1].body);
+    expect(body.password).toBe("Secure99!");
+  });
+
+  // TC-LS-61
+  test("TC-LS-61: Sign Up body contains exactly name, company, email, password", async () => {
+    mockSignUpSuccess();
+    const utils = renderScreen();
+    switchToSignUp(utils.getByText);
+    await fillSignUp({}, utils);
+    await act(async () => { fireEvent.press(utils.getByText("Create Account")); });
+    const body = JSON.parse(global.fetch.mock.calls[0][1].body);
+    expect(Object.keys(body).sort()).toEqual(["company", "email", "name", "password"]);
+  });
+});
+
+// ─────────────────────────────────────────────────────────────────────────────
+// 11. DB Integration — Sign Up Response Handling
+// ─────────────────────────────────────────────────────────────────────────────
+
+describe("LoginScreen — DB Integration: Sign Up Response", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+    jest.spyOn(Alert, "alert").mockImplementation(() => {});
+  });
+
+  // TC-LS-62
+  test("TC-LS-62: switches back to Sign In tab after successful Sign Up", async () => {
+    mockSignUpSuccess();
+    const utils = renderScreen();
+    switchToSignUp(utils.getByText);
+    await fillSignUp({}, utils);
+    await act(async () => { fireEvent.press(utils.getByText("Create Account")); });
+    await waitFor(() => expect(utils.queryByText("Create Account")).toBeNull());
+    utils.getAllByText("Sign In"); // Sign In tab and button visible
+  });
+
+  // TC-LS-63
+  test("TC-LS-63: clears form fields after successful Sign Up", async () => {
+    mockSignUpSuccess();
+    const utils = renderScreen();
+    switchToSignUp(utils.getByText);
+    await fillSignUp({}, utils);
+    await act(async () => { fireEvent.press(utils.getByText("Create Account")); });
+    // After signup → switched to Sign In. Switch back to verify fields cleared.
+    await waitFor(() => expect(utils.queryByText("Create Account")).toBeNull());
+    fireEvent.press(utils.getAllByText("Sign Up")[0]);
+    expect(utils.getByPlaceholderText("Enter your name").props.value).toBe("");
+    expect(utils.getByPlaceholderText("you@example.com").props.value).toBe("");
+  });
+
+  // TC-LS-64
+  test("TC-LS-64: shows error alert with server detail on Sign Up failure", async () => {
+    mockSignUpError("Email already registered");
+    const utils = renderScreen();
+    switchToSignUp(utils.getByText);
+    await fillSignUp({}, utils);
+    await act(async () => { fireEvent.press(utils.getByText("Create Account")); });
+    expect(Alert.alert).toHaveBeenCalledWith("Error", "Email already registered");
+  });
+
+  // TC-LS-65
+  test("TC-LS-65: shows fallback error when server detail is missing on Sign Up failure", async () => {
+    global.fetch = jest.fn().mockResolvedValueOnce({
+      ok: false,
+      json: async () => ({}),
+    });
+    const utils = renderScreen();
+    switchToSignUp(utils.getByText);
+    await fillSignUp({}, utils);
+    await act(async () => { fireEvent.press(utils.getByText("Create Account")); });
+    expect(Alert.alert).toHaveBeenCalledWith("Error", "Sign up failed");
+  });
+
+  // TC-LS-66
+  test("TC-LS-66: shows error alert on network failure during Sign Up", async () => {
+    global.fetch = jest.fn().mockRejectedValueOnce(new Error("Connection refused"));
+    const utils = renderScreen();
+    switchToSignUp(utils.getByText);
+    await fillSignUp({}, utils);
+    await act(async () => { fireEvent.press(utils.getByText("Create Account")); });
+    expect(Alert.alert).toHaveBeenCalledWith("Error", "Connection refused");
+  });
+
+  // TC-LS-67
+  test("TC-LS-67: does not navigate anywhere after successful Sign Up", async () => {
+    mockSignUpSuccess();
+    const utils = renderScreen();
+    switchToSignUp(utils.getByText);
+    await fillSignUp({}, utils);
+    await act(async () => { fireEvent.press(utils.getByText("Create Account")); });
+    expect(mockNavigate).not.toHaveBeenCalled();
+  });
+
+  // TC-LS-68
+  test("TC-LS-68: stays on Sign Up tab when Sign Up fails", async () => {
+    mockSignUpError("Server error");
+    const utils = renderScreen();
+    switchToSignUp(utils.getByText);
+    await fillSignUp({}, utils);
+    await act(async () => { fireEvent.press(utils.getByText("Create Account")); });
+    await waitFor(() =>
+      expect(utils.queryByText("Create Account")).not.toBeNull()
+    );
+  });
+});
