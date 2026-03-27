@@ -1,10 +1,7 @@
 #models/trip_db.py 
-
-from sqlalchemy import Column, Integer, String, Float, ForeignKey, DateTime
-from sqlalchemy.dialects.postgresql import JSONB
+from sqlalchemy import Column, Integer, String, Float, ForeignKey, DateTime, JSON
 from datetime import datetime
 from sqlalchemy.orm import relationship
-from sqlalchemy import ForeignKey
 from db.base import Base
 
 class TripDB(Base):
@@ -13,28 +10,28 @@ class TripDB(Base):
     id = Column(Integer, primary_key=True, index=True)
 
     # who saved it (manager OR driver)
-    saved_by_role = Column(String, nullable=False)  
-    saved_by_id = Column(Integer, nullable=False)    
+    saved_by_role = Column(String(50), nullable=False)
+    saved_by_id = Column(Integer, nullable=False)
     company_id = Column(Integer, ForeignKey("companies.id"), nullable=False)
     driver_id = Column(Integer, ForeignKey("drivers.id"), nullable=True)
     driver = relationship("DriverDB", back_populates="trips")
-    # company = relationship("CompanyDB", back_populates="trips")
+    company = relationship("CompanyDB", back_populates="trips")
 
     # trip meta
-    origin = Column(String, nullable=False)
-    destination = Column(String, nullable=False)
-    city = Column(String, nullable=False)
-    vehicle_type = Column(String, nullable=False)
-    fuel_type = Column(String, nullable=False)
+    origin = Column(String(255), nullable=False)
+    destination = Column(String(255), nullable=False)
+    city = Column(String(255), nullable=False)
+    vehicle_type = Column(String(100), nullable=False)
+    fuel_type = Column(String(100), nullable=False)
     model_year = Column(Integer, nullable=False)
 
     created_at = Column(DateTime, default=datetime.utcnow, nullable=False)
 
     # selected route data
-    route_summary = Column(String, nullable=False)
+    route_summary = Column(String(500), nullable=False)
     distance_km = Column(Float, nullable=False)
     duration_min = Column(Integer, nullable=False)
-    coordinates = Column(JSONB, nullable=False)  # list of [lng, lat]
+    coordinates = Column(JSON, nullable=False)  # list of [lng, lat]
 
     # emissions
     co2 = Column(Float, nullable=False)
@@ -42,4 +39,4 @@ class TripDB(Base):
     n2o = Column(Float, nullable=False)
     co2e = Column(Float, nullable=False)
 
-    color = Column(String, nullable=True)  # green/orange/red
+    color = Column(String(20), nullable=True)  # green/orange/red

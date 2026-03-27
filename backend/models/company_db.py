@@ -7,8 +7,8 @@ class CompanyDB(Base):
     __tablename__ = "companies"
 
     id = Column(Integer, primary_key=True, index=True)
-    name = Column(String, unique=True, index=True, nullable=False)
+    name = Column(String(255), unique=True, index=True, nullable=False)
 
     managers = relationship("ManagerDB", back_populates="company")
     drivers = relationship("DriverDB", back_populates="company")
-    #trips = relationship("TripDB", back_populates="company")
+    trips = relationship("TripDB", back_populates="company")
