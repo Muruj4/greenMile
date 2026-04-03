@@ -40,3 +40,7 @@ class TripDB(Base):
     co2e = Column(Float, nullable=False)
 
     color = Column(String(20), nullable=True)  # green/orange/red
+
+    routes_json = Column(JSON, nullable=True)
+    selected_route_color = Column(String(20), nullable=True)
+    

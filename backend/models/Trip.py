@@ -19,7 +19,7 @@ class Trip:
             "Van": "Light-Duty Trucks",
             "Bus": "Light-Duty Trucks",
             "Pickup Truck": "Light-Duty Trucks",
-            "Truck": "Medium- and Heavy-Duty Vehicles (Trucks)",
+            "Truck": "Medium- and Heavy-Duty Vehicles",
             "Motorcycle": "Motorcycles",
         }.get(vehicle)
 
@@ -29,40 +29,60 @@ class Trip:
             return float(self.ghg["fuel_consumption"][category])
         except Exception:
             raise ValueError(f"Fuel consumption rate missing for category '{category}'")
-
     
     def get_emissions_factors(self, category, fuel, year):
         try:
-            for factor_row in self.ghg["factors"]:
-                matches_vehicle = factor_row["vehicle_type"].lower() == category.lower()
-                matches_fuel = factor_row["fuel_type"].lower() == fuel.lower()
-                matches_year = factor_row["model_year_range"] == str(year)
+            if category is None:
+                raise ValueError(f"Vehicle category mapping failed for '{self.vehicleType}'")
+            if fuel is None:
+                raise ValueError(f"Fuel type is missing for '{self.fuelType}'")
+            if year is None:
+                raise ValueError("Model year is missing")
 
-                if matches_vehicle and matches_fuel and matches_year:
+            category_norm = str(category).strip().lower()
+            fuel_norm = str(fuel).strip().lower()
+            year_norm = str(year).strip()
+
+            for factor_row in self.ghg["factors"]:
+                row_vehicle = str(factor_row.get("vehicle_type", "")).strip().lower()
+                row_fuel = str(factor_row.get("fuel_type", "")).strip().lower()
+                row_year = str(factor_row.get("model_year_range", "")).strip()
+
+                if (
+                    row_vehicle == category_norm
+                    and row_fuel == fuel_norm
+                    and row_year == year_norm
+                ):
                     return factor_row
+
             return None
-        except Exception:
-            raise ValueError("GHG factors data is malformed")
-        
+
+        except Exception as e:
+            raise ValueError(f"Error in get_emissions_factors: {str(e)}")
+
     def get_closest_emissions_factors(self, category, fuel, year):
         try:
-            matching_factor_rows = [
-                factor_row for factor_row in self.ghg["factors"]
-                if factor_row["vehicle_type"].lower() == category.lower()
-                and factor_row["fuel_type"].lower() == fuel.lower()
+            category_norm = str(category).strip().lower()
+            fuel_norm = str(fuel).strip().lower()
+
+            matching = [
+                row for row in self.ghg["factors"]
+                if str(row.get("vehicle_type", "")).strip().lower() == category_norm
+                and str(row.get("fuel_type", "")).strip().lower() == fuel_norm
             ]
 
-            if not matching_factor_rows:
+            if not matching:
                 return None
 
             return min(
-                matching_factor_rows,
-                key=lambda factor_row: abs(int(factor_row["model_year_range"]) - year),
+                matching,
+                key=lambda row: abs(int(row.get("model_year_range", 0)) - int(year))
             )
-        except Exception:
-            raise ValueError("Error selecting closest emission factor")
 
+        except Exception as e:
+            raise ValueError(f"Error selecting closest emission factor: {str(e)}")
 
+    
     def decode_polyline(self, polyline):
         try:
             decoded_points = []
@@ -184,6 +204,8 @@ class Trip:
             for route_entry in google_routes_list:
                 distance_kilometers = route_entry["distanceMeters"] / 1000
                 fuel_used = distance_kilometers * fuel_consumption_rate
+                duration_minutes = int(route_entry["duration"].replace("s", "")) // 60
+
 
                 emission_co2 = fuel_used * co2_factor
                 emission_ch4 = distance_kilometers * ch4_factor
@@ -200,18 +222,23 @@ class Trip:
 
                 processed_routes.append(
                     {
-                        "summary": route_entry.get("description", "Route"),
-                        "distance": f"{round(distance_kilometers, 1)} km",
-                        "duration": f"{int(route_entry['duration'].replace('s', '')) // 60} mins",
-                        "coordinates": coordinate_pairs,
-                        "emissions": {
-                            "co2": emission_co2,
-                            "ch4": emission_ch4,
-                            "n2o": emission_n2o,
-                            "co2e": emission_co2e,
-                        },
-                    }
-                )
+        "summary": route_entry.get("description", "Route"),
+        "distance_km": round(distance_kilometers, 2),
+        "duration_min": duration_minutes,
+        "distance": f"{round(distance_kilometers, 2)} km",
+        "duration": f"{duration_minutes} mins",
+        "coordinates": coordinate_pairs,
+        "fuel_used_liters": round(fuel_used, 3),
+        "emissions": {
+            "co2": round(emission_co2, 5),
+            "ch4": round(emission_ch4, 5),
+            "n2o": round(emission_n2o, 5),
+            "co2e": round(emission_co2e, 5),
+       
+        },
+    }
+        )  
+                    
 
             processed_routes.sort(key=lambda r: r["emissions"]["co2e"])
 

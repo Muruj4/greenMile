@@ -5,11 +5,13 @@ from sqlalchemy.orm import Session
 from dotenv import load_dotenv
 import json
 import os
-
+from db.session import get_db
+from controllers import DashboardController
 from controllers.TripController import TripController
 from controllers.NavigationController import NavigationController
 from controllers.AIController import AIController
 from controllers.AuthController import AuthController
+
 
 
 from utils.auth_dep import get_current_user
@@ -82,7 +84,7 @@ def signin(payload: SignIn, db: Session = Depends(get_db)):
 # =========================
 
 @app.post("/process_trip")
-def process_trip(payload: dict):
+def process_trip(payload: dict, db: Session = Depends(get_db)):
     """
     Receives trip info from TripScreen,
     calculates routes + emissions via Google Directions API + GHG model.
@@ -96,13 +98,18 @@ def process_trip(payload: dict):
         modelYear = payload.get("modelYear")
 
         return trip_controller.process_trip(
-            origin=origin,
-            destination=destination,
-            city=city,
-            vehicleType=vehicleType,
-            fuelType=fuelType,
-            modelYear=modelYear,
-        )
+    origin=origin,
+    destination=destination,
+    city=city,
+    vehicleType=vehicleType,
+    fuelType=fuelType,
+    modelYear=modelYear,
+    db=db,
+    saved_by_role="manager",
+    saved_by_id=1,
+    company_id=1,
+    driver_id=None
+)
     except Exception as e:
         return {
             "error": "Server error inside /process_trip",
@@ -294,3 +301,5 @@ def root():
             "ai_analyze": "/ai/analyze_routes"
         }
     }
+
+app.include_router(DashboardController.router)
