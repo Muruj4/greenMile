@@ -144,7 +144,7 @@ class TestModelStructure:
         """color is optional (green/orange/red — may not be computed yet)."""
         assert TripDB.__table__.c["color"].nullable is True
 
-    # ── Relationship ─────────────────────────────────────────────────────────
+   
     def test_driver_relationship_declared(self):
         assert hasattr(TripDB, "driver")
 

@@ -367,7 +367,7 @@ describe("Sign In – API integration", () => {
 
 // INTEGRATION TESTS – Sign Up
 
-describe("Sign Up – API integration", () => {
+describe("Sign Up API integration", () => {
   const goToSignUp = async () => {
     renderAuth();
     await userEvent.click(screen.getByRole("button", { name: "Sign Up" }));

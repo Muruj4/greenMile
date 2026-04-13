@@ -1,3 +1,6 @@
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;1,9..144,400;1,9..144,600&family=Manrope:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap');
+
+
 :root{
   --gm-bg:#f6faf8;
   --gm-green:#013f2b;
@@ -7,7 +10,8 @@
   --gm-border:rgba(148,163,184,0.45);
 }
 
-.trip-page{
+/* ── Page shell — no padding so Nav sits flush at top ── */
+.trip-page {
   min-height: 100vh;
   background:
     radial-gradient(1200px 600px at 20% 10%, rgba(16,185,129,0.10), transparent 60%),
@@ -15,36 +19,50 @@
     var(--gm-bg);
   position: relative;
   overflow: hidden;
-  padding: 70px 20px;
-  font-family: "Poppins", sans-serif;
+  padding: 0;                /* ← no padding on the page itself */
+  font-family: 'Fraunces', serif;
 }
 
-.trip-orb{
-  position:absolute;
-  border-radius:9999px;
-  opacity:0.45;
-  pointer-events:none;
+/* ── Content area below the nav ── */
+.trip-page__content {
+  display: flex;
+  align-items: center;
+  justify-content: center;    /* ← centers horizontally */
+  padding: 48px 20px;
+  min-height: calc(100vh - 54px);
+  position: relative;
 }
 
-.trip-orb--1{
-  width:520px;
-  height:520px;
-  left:-220px;
-  top:-220px;
+.trip-orb {
+  position: absolute;
+  border-radius: 9999px;
+  opacity: 0.45;
+  pointer-events: none;
+}
+
+.trip-orb--1 {
+  width: 520px;
+  height: 520px;
+  left: -220px;
+  top: -220px;
   background: radial-gradient(circle at 30% 30%, rgba(16,185,129,0.30), rgba(16,185,129,0.02) 70%);
 }
 
-.trip-orb--2{
-  width:620px;
-  height:620px;
-  right:-280px;
-  bottom:-280px;
+.trip-orb--2 {
+  width: 620px;
+  height: 620px;
+  right: -280px;
+  bottom: -280px;
   background: radial-gradient(circle at 30% 30%, rgba(5,150,105,0.26), rgba(5,150,105,0.02) 70%);
 }
 
-.trip-screen{
+/* ── Card ── */
+.trip-screen {
   max-width: 980px;
-  margin: 0 auto;
+  margin-top: 80px;
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
   padding: 48px 56px;
   background: rgba(255,255,255,0.88);
   backdrop-filter: blur(10px);
@@ -55,7 +73,7 @@
   z-index: 2;
 }
 
-.trip-header h2{
+.trip-header h2 {
   font-size: 30px;
   margin: 0;
   color: #1a2e1a;
@@ -63,7 +81,7 @@
   letter-spacing: -0.02em;
 }
 
-.trip-subtitle{
+.trip-subtitle {
   margin-top: 10px;
   margin-bottom: 26px;
   color: var(--gm-muted);
@@ -71,25 +89,25 @@
   font-weight: 500;
 }
 
-.highlight{
+.highlight {
   color: #2e8b57;
   font-weight: 800;
 }
 
-form{
+form {
   display: flex;
   flex-direction: column;
   gap: 16px;
 }
 
-.form-row{
+.form-row {
   display: flex;
   gap: 14px;
 }
 
-.field{
-  display:flex;
-  align-items:center;
+.field {
+  display: flex;
+  align-items: center;
   gap: 10px;
   border: 1px solid var(--gm-border);
   border-radius: 14px;
@@ -97,21 +115,23 @@ form{
   background: #ffffff;
   height: 48px;
   transition: box-shadow 160ms ease, border-color 160ms ease;
+  flex: 1;
 }
 
-.field:focus-within{
+.field:focus-within {
   border-color: rgba(5,150,105,0.55);
   box-shadow: 0 0 0 4px rgba(5,150,105,0.14);
 }
 
-.field-icon{
+.field-icon {
   color: rgba(5,150,105,0.75);
-  display:flex;
-  align-items:center;
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
 }
 
 .field input,
-.field select{
+.field select {
   border: none;
   outline: none;
   width: 100%;
@@ -119,38 +139,40 @@ form{
   background: transparent;
   font-size: 14px;
   color: var(--gm-text);
+  font-family: 'Fraunces', serif;
 }
 
-.field input::placeholder{
-  color:#94a3b8;
+.field input::placeholder {
+  color: #94a3b8;
 }
 
-.fuel-toggle{
-  display:flex;
+.fuel-toggle {
+  display: flex;
   gap: 12px;
 }
 
-.fuel-toggle button{
-  flex:1;
+.fuel-toggle button {
+  flex: 1;
   height: 46px;
   border-radius: 14px;
   border: 1px solid var(--gm-border);
-  background: rgba(152, 214, 181, 0.14);
-  cursor:pointer;
+  background: rgba(152,214,181,0.14);
+  cursor: pointer;
   font-size: 14px;
   font-weight: 700;
   color: #334155;
   transition: 0.2s;
+  font-family: 'Fraunces', serif;
 }
 
-.fuel-toggle button.active{
+.fuel-toggle button.active {
   background: #1e4620;
   border-color: #1e4620;
   color: white;
   box-shadow: 0 14px 30px rgba(30,70,32,0.20);
 }
 
-.trip-submit{
+.trip-submit {
   margin-top: 6px;
   background: linear-gradient(135deg, var(--gm-green), var(--gm-green2));
   border: none;
@@ -160,31 +182,27 @@ form{
   color: white;
   font-size: 15px;
   font-weight: 900;
-  display:flex;
-  align-items:center;
-  justify-content:center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   gap: 10px;
   box-shadow: 0 18px 40px rgba(5,150,105,0.20);
   transition: transform 140ms ease, box-shadow 140ms ease;
+  font-family: 'Fraunces', serif;
 }
 
-.trip-submit:hover{
+.trip-submit:hover {
   transform: translateY(-1px);
   box-shadow: 0 22px 46px rgba(5,150,105,0.24);
 }
 
-.trip-submit:disabled{
+.trip-submit:disabled {
   opacity: 0.7;
   cursor: not-allowed;
   transform: none;
 }
 
-.trip-submitIcon{
-  display:flex;
-  align-items:center;
-}
-
-.error-message{
+.error-message {
   color: #b71c1c;
   padding: 12px;
   background: #ffdada;
@@ -194,11 +212,14 @@ form{
   font-weight: 600;
 }
 
-@media (max-width: 900px){
-  .trip-screen{
+@media (max-width: 900px) {
+  .trip-screen {
     padding: 38px 24px;
   }
-  .form-row{
+  .form-row {
     flex-direction: column;
+  }
+  .trip-page__content {
+    padding: 24px 16px;
   }
 }

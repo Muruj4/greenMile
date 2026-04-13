@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState, useMemo } from "react";
 import { useLocation } from "react-router-dom";
+import Nav from "../Dashboard/Nav";
 import "./MapScreen.css";
 
 const colorMap = {
@@ -15,6 +16,11 @@ export default function MapScreen() {
   const mapRef = useRef(null);
   const mapInstanceRef = useRef(null);
 
+  const companyName =
+    localStorage.getItem("company") ||
+    sessionStorage.getItem("company") ||
+    "Company";
+
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [mapError, setMapError] = useState(null);
   const [saveLoading, setSaveLoading] = useState(false);
@@ -28,55 +34,34 @@ export default function MapScreen() {
     const response = await fetch("http://localhost:8000/ai/analyze_routes", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        routes,
-        trip_metadata: tripMetadata,
-      }),
+      body: JSON.stringify({ routes, trip_metadata: tripMetadata }),
     });
-
     if (!response.ok) {
       const errorData = await response.json();
       throw new Error(errorData.detail || "AI analysis failed");
     }
-
     const data = await response.json();
     return data.analysis;
   };
 
   const routesWithAI = useMemo(() => {
     if (!aiAnalysis || !routes.length) return routes;
-
     return routes.map((route) => {
-      const aiRoute = aiAnalysis.all_routes.find(
-        (ar) => ar.route_name === route.summary
-      );
+      const aiRoute = aiAnalysis.all_routes.find((ar) => ar.route_name === route.summary);
       return { ...route, ai: aiRoute || null };
     });
   }, [routes, aiAnalysis]);
 
   useEffect(() => {
     if (!routes.length) return;
-
     const analyze = async () => {
       setAiLoading(true);
       setAiError(null);
-
       try {
-        // FIX: read city/vehicleType/fuelType from state directly first,
-        // then fall back to state.meta, then fall back to defaults.
         const city = state?.city || meta?.city || "Riyadh";
         const vehicleType = state?.vehicleType || meta?.vehicleType || "Light-Duty Trucks";
         const fuelType = state?.fuelType || meta?.fuelType || "Diesel";
-
-        const tripMetadata = {
-          city,
-          vehicleType,
-          fuelType,
-          temperature: 28,
-          humidity: 40,
-          windSpeed: 10,
-        };
-
+        const tripMetadata = { city, vehicleType, fuelType, temperature: 28, humidity: 40, windSpeed: 10 };
         const result = await getAIRecommendations(routes, tripMetadata);
         setAiAnalysis(result);
       } catch (error) {
@@ -85,30 +70,20 @@ export default function MapScreen() {
         setAiLoading(false);
       }
     };
-
     analyze();
   }, [routes, meta, state]);
 
   useEffect(() => {
     if (!routes.length || mapInstanceRef.current || !window.H) return;
-
     try {
-      const platform = new window.H.service.Platform({
-        apikey: process.env.REACT_APP_HERE_API_KEY,
-      });
-
+      const platform = new window.H.service.Platform({ apikey: process.env.REACT_APP_HERE_API_KEY });
       const layers = platform.createDefaultLayers();
-      const map = new window.H.Map(
-        mapRef.current,
-        layers.vector.normal.map,
-        { center: { lat: 21.543333, lng: 39.172779 }, zoom: 12 }
-      );
-
-      new window.H.mapevents.Behavior(
-        new window.H.mapevents.MapEvents(map)
-      );
+      const map = new window.H.Map(mapRef.current, layers.vector.normal.map, {
+        center: { lat: 21.543333, lng: 39.172779 },
+        zoom: 12,
+      });
+      new window.H.mapevents.Behavior(new window.H.mapevents.MapEvents(map));
       window.H.ui.UI.createDefault(map, layers);
-
       mapInstanceRef.current = map;
     } catch (error) {
       console.error("Map initialization error:", error);
@@ -118,20 +93,13 @@ export default function MapScreen() {
 
   useEffect(() => {
     if (!mapInstanceRef.current || !routes.length || !window.H) return;
-
     const map = mapInstanceRef.current;
     map.removeObjects(map.getObjects());
-
     const group = new window.H.map.Group();
-
     routes.forEach((route, index) => {
       if (!route.coordinates?.length) return;
-
       const line = new window.H.geo.LineString();
-      route.coordinates.forEach(([lng, lat]) =>
-        line.pushLatLngAlt(lat, lng)
-      );
-
+      route.coordinates.forEach(([lng, lat]) => line.pushLatLngAlt(lat, lng));
       const polyline = new window.H.map.Polyline(line, {
         style: {
           strokeColor: colorMap[route.color] || "#27ae60",
@@ -139,50 +107,26 @@ export default function MapScreen() {
           opacity: index === selectedIndex ? 1 : 0.45,
         },
       });
-
       polyline.addEventListener("tap", () => setSelectedIndex(index));
       group.addObject(polyline);
     });
-
     map.addObject(group);
-    map.getViewModel().setLookAtData({
-      bounds: group.getBoundingBox(),
-      padding: 20,
-    });
+    map.getViewModel().setLookAtData({ bounds: group.getBoundingBox(), padding: 20 });
   }, [routes, selectedIndex]);
 
   const handleSaveSelected = async () => {
     setSaveMsg("");
     setSaveError("");
-
-    if (!meta) {
-      setSaveError("Missing trip info. Go back and create the trip again.");
-      return;
-    }
-
-    const token =
-      localStorage.getItem("token") || sessionStorage.getItem("token");
-
-    if (!token) {
-      setSaveError("Session expired. Please log in again.");
-      return;
-    }
-
+    if (!meta) { setSaveError("Missing trip info. Go back and create the trip again."); return; }
+    const token = localStorage.getItem("token") || sessionStorage.getItem("token");
+    if (!token) { setSaveError("Session expired. Please log in again."); return; }
     const selectedRoute = routes[selectedIndex];
-    if (!selectedRoute) {
-      setSaveError("Please select a route first.");
-      return;
-    }
-
+    if (!selectedRoute) { setSaveError("Please select a route first."); return; }
     setSaveLoading(true);
-
     try {
       const res = await fetch("http://127.0.0.1:8000/trips/save_selected", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
         body: JSON.stringify({
           origin: meta.origin,
           destination: meta.destination,
@@ -193,10 +137,8 @@ export default function MapScreen() {
           route: selectedRoute,
         }),
       });
-
       const data = await res.json();
       if (!res.ok) throw new Error(data.detail || "Failed to save");
-
       setSaveMsg("Your Route Is Saved Successfully");
     } catch (err) {
       setSaveError(err.message);
@@ -207,192 +149,132 @@ export default function MapScreen() {
 
   return (
     <div className="map-screen">
+      <Nav companyName={companyName} />
+
       {mapError && <p className="error-message">{mapError}</p>}
 
-      <h2 className="title">Routes</h2>
-      <button
-        onClick={handleSaveSelected}
-        disabled={saveLoading || !routes.length}
-        style={{
-          background: "#27ae60",
-          color: "white",
-          border: "none",
-          padding: "10px 16px",
-          borderRadius: "10px",
-          fontWeight: 700,
-          cursor: "pointer",
-          marginBottom: "15px",
-          opacity: saveLoading ? 0.7 : 1,
-        }}
-      >
-        {saveLoading ? "Saving..." : "Save Selected Route"}
-      </button>
+      <div style={{ padding: "20px 30px 0" }}>
+        <h2 className="title">Routes</h2>
+        <button
+          onClick={handleSaveSelected}
+          disabled={saveLoading || !routes.length}
+          style={{
+            background: "#27ae60", color: "white", border: "none",
+            padding: "10px 16px", borderRadius: "10px", fontWeight: 700,
+            cursor: "pointer", marginBottom: "15px", opacity: saveLoading ? 0.7 : 1,
+          }}
+        >
+          {saveLoading ? "Saving..." : "Save Selected Route"}
+        </button>
 
-      {saveMsg && (
-        <div style={{ background: "#e8f5e9", padding: 10, borderRadius: 10, marginBottom: 10 }}>
-          {saveMsg}
-        </div>
-      )}
+        {saveMsg && (
+          <div style={{ background: "#e8f5e9", padding: 10, borderRadius: 10, marginBottom: 10 }}>
+            {saveMsg}
+          </div>
+        )}
+        {saveError && (
+          <div style={{ background: "#fee", padding: 10, borderRadius: 10, marginBottom: 10, color: "#c33" }}>
+            ❌ {saveError}
+          </div>
+        )}
+      </div>
 
-      {saveError && (
-        <div style={{ background: "#fee", padding: 10, borderRadius: 10, marginBottom: 10, color: "#c33" }}>
-          ❌ {saveError}
-        </div>
-      )}
-
-      {/* MAP CONTAINER */}
       <div
         ref={mapRef}
         id="here-map-container"
         className="map-container"
         style={{ width: "100%", height: "400px", marginBottom: "20px" }}
-      ></div>
+      />
 
-      {aiLoading && (
-        <div className="ai-loading">
-          <p>Analyzing routes with AI...</p>
-        </div>
-      )}
+      <div style={{ padding: "0 30px 30px" }}>
+        {aiLoading && <div className="ai-loading"><p>Analyzing routes with AI...</p></div>}
+        {aiError && <div className="ai-error"><p>AI Error: {aiError}</p></div>}
 
-      {aiError && (
-        <div className="ai-error">
-          <p> AI Error: {aiError}</p>
-        </div>
-      )}
-
-      {aiAnalysis && !aiLoading && (
-        <div className="ai-summary-compact">
-          <div className="ai-summary-header">
-            <h3> Smart Recommendation</h3>
-            <span
-              className={`badge badge-${
-                routes.find((r) => r.summary === aiAnalysis.best_route.route_name)?.color || "green"
-              }`}
-            >
-              Best:{" "}
-              {routes
-                .find((r) => r.summary === aiAnalysis.best_route.route_name)
-                ?.color?.toUpperCase() || "GREEN"}
-            </span>
-          </div>
-
-          <p className="ai-summary-text">
-            Choose <strong>{aiAnalysis.best_route.route_name}</strong> to save{" "}
-            <strong>{aiAnalysis.co2e_saving_kg.toFixed(2)} kg CO₂e</strong>
-            {aiAnalysis.co2e_saving_percent > 0 && (
-              <> ({aiAnalysis.co2e_saving_percent.toFixed(1)}% reduction)</>
-            )}
-          </p>
-
-          {aiAnalysis.fuel_saving_liters > 0 && (
-            <div className="fuel-savings-banner">
-              <span className="fuel-icon"></span>
-              <span className="fuel-savings-text">
-                Save <strong>{aiAnalysis.fuel_saving_liters.toFixed(2)} L</strong> of fuel
-                {aiAnalysis.fuel_saving_percent > 0 && (
-                  <>
-                    {" "}
-                    • <strong>{aiAnalysis.fuel_saving_percent.toFixed(1)}%</strong>
-                  </>
-                )}
+        {aiAnalysis && !aiLoading && (
+          <div className="ai-summary-compact">
+            <div className="ai-summary-header">
+              <h3>Smart Recommendation</h3>
+              <span className={`badge badge-${routes.find((r) => r.summary === aiAnalysis.best_route.route_name)?.color || "green"}`}>
+                Best: {routes.find((r) => r.summary === aiAnalysis.best_route.route_name)?.color?.toUpperCase() || "GREEN"}
               </span>
             </div>
-          )}
-
-          {aiAnalysis.recommendations && aiAnalysis.recommendations.length > 0 && (
-            <div className="ai-all-recommendations">
-              <strong> Smart Suggestions:</strong>
-              <ul>
-                {aiAnalysis.recommendations.map((rec, idx) => (
-                  <li key={idx}>{rec}</li>
-                ))}
-              </ul>
-            </div>
-          )}
-
-          {aiAnalysis.reasons && aiAnalysis.reasons.length > 0 && (
-            <div className="ai-reasons">
-              <strong> Why this route?</strong>
-              <ul>
-                {aiAnalysis.reasons.map((reason, idx) => (
-                  <li key={idx}>{reason}</li>
-                ))}
-              </ul>
-            </div>
-          )}
-        </div>
-      )}
-
-      <div className="routes-list">
-        {routesWithAI.map((route, index) => {
-          const isBest =
-            aiAnalysis && route.summary === aiAnalysis.best_route.route_name;
-
-          return (
-            <div
-              key={index}
-              className={`route-card ${index === selectedIndex ? "selected" : ""} ${
-                isBest ? "ai-best" : ""
-              }`}
-              onClick={() => setSelectedIndex(index)}
-            >
-              {isBest && <div className="best-route-ribbon">⭐ AI Recommended</div>}
-
-              <div className="route-header">
-                <span
-                  className="route-dot"
-                  style={{ backgroundColor: colorMap[route.color] }}
-                />
-                <span className="route-summary">{route.summary}</span>
-                <span className={`ai-category-mini badge-${route.color}`}>
-                  {route.color.toUpperCase()}
+            <p className="ai-summary-text">
+              Choose <strong>{aiAnalysis.best_route.route_name}</strong> to save{" "}
+              <strong>{aiAnalysis.co2e_saving_kg.toFixed(2)} kg CO₂e</strong>
+              {aiAnalysis.co2e_saving_percent > 0 && <> ({aiAnalysis.co2e_saving_percent.toFixed(1)}% reduction)</>}
+            </p>
+            {aiAnalysis.fuel_saving_liters > 0 && (
+              <div className="fuel-savings-banner">
+                <span className="fuel-icon">⛽</span>
+                <span className="fuel-savings-text">
+                  Save <strong>{aiAnalysis.fuel_saving_liters.toFixed(2)} L</strong> of fuel
+                  {aiAnalysis.fuel_saving_percent > 0 && <> • <strong>{aiAnalysis.fuel_saving_percent.toFixed(1)}%</strong></>}
                 </span>
               </div>
-
-              <div className="route-details">
-                <span>{route.distance}</span>
-                <span>{route.duration}</span>
+            )}
+            {aiAnalysis.recommendations?.length > 0 && (
+              <div className="ai-all-recommendations">
+                <strong>Smart Suggestions:</strong>
+                <ul>{aiAnalysis.recommendations.map((rec, idx) => <li key={idx}>{rec}</li>)}</ul>
               </div>
+            )}
+            {aiAnalysis.reasons?.length > 0 && (
+              <div className="ai-reasons">
+                <strong>Why this route?</strong>
+                <ul>{aiAnalysis.reasons.map((reason, idx) => <li key={idx}>{reason}</li>)}</ul>
+              </div>
+            )}
+          </div>
+        )}
 
-              {route.ai && aiAnalysis && (
-                <>
-                  <div className="ai-prediction-line">
-                    <div className="ai-pred-left">
-                      <span className="ai-label">AI:</span>
-                      <span className="ai-value">
-                        {route.ai.predicted_co2e_kg.toFixed(2)} kg CO₂e
-                      </span>
+        <div className="routes-list">
+          {routesWithAI.map((route, index) => {
+            const isBest = aiAnalysis && route.summary === aiAnalysis.best_route.route_name;
+            return (
+              <div
+                key={index}
+                className={`route-card ${index === selectedIndex ? "selected" : ""} ${isBest ? "ai-best" : ""}`}
+                onClick={() => setSelectedIndex(index)}
+              >
+                {isBest && <div className="best-route-ribbon">⭐ AI Recommended</div>}
+                <div className="route-header">
+                  <span className="route-dot" style={{ backgroundColor: colorMap[route.color] }} />
+                  <span className="route-summary">{route.summary}</span>
+                  <span className={`ai-category-mini badge-${route.color}`}>{route.color.toUpperCase()}</span>
+                </div>
+                <div className="route-details">
+                  <span>{route.distance}</span>
+                  <span>{route.duration}</span>
+                </div>
+                {route.ai && aiAnalysis && (
+                  <>
+                    <div className="ai-prediction-line">
+                      <div className="ai-pred-left">
+                        <span className="ai-label">AI:</span>
+                        <span className="ai-value">{route.ai.predicted_co2e_kg.toFixed(2)} kg CO₂e</span>
+                      </div>
+                      <div className="ai-pred-right">
+                        {isBest ? (
+                          <span className="ai-best-tag">✓ Best Choice</span>
+                        ) : (
+                          <span className="ai-extra-emissions">
+                            +{(route.ai.predicted_co2e_kg - aiAnalysis.best_route.predicted_co2e_kg).toFixed(2)} kg
+                          </span>
+                        )}
+                      </div>
                     </div>
-
-                    <div className="ai-pred-right">
-                      {isBest ? (
-                        <span className="ai-best-tag">✓ Best Choice</span>
-                      ) : (
-                        <span className="ai-extra-emissions">
-                          +
-                          {(
-                            route.ai.predicted_co2e_kg -
-                            aiAnalysis.best_route.predicted_co2e_kg
-                          ).toFixed(2)}{" "}
-                          kg
-                        </span>
-                      )}
-                    </div>
-                  </div>
-
-                  {isBest && route.ai.fuel_consumption && (
-                    <div className="fuel-consumption-line">
-                      <span className="fuel-icon-small"></span>
-                      <span className="fuel-amount">
-                        {route.ai.fuel_consumption.fuel_liters.toFixed(2)} L
-                      </span>
-                    </div>
-                  )}
-                </>
-              )}
-            </div>
-          );
-        })}
+                    {isBest && route.ai.fuel_consumption && (
+                      <div className="fuel-consumption-line">
+                        <span className="fuel-icon-small">⛽</span>
+                        <span className="fuel-amount">{route.ai.fuel_consumption.fuel_liters.toFixed(2)} L</span>
+                      </div>
+                    )}
+                  </>
+                )}
+              </div>
+            );
+          })}
+        </div>
       </div>
     </div>
   );

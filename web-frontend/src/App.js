@@ -2,10 +2,10 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-d
 import TripScreen from "./views/TripView/TripScreen";
 import MapScreen from "./views/TripView/MapScreen";
 import AuthPage from "./views/Auth/AuthPage.js";
+import Dashboard from "./views/Dashboard/Dashboard.jsx";
 
 const getToken = () =>
   localStorage.getItem("token") || sessionStorage.getItem("token");
-
 
 function ProtectedRoute({ children }) {
   const token = getToken();
@@ -21,6 +21,15 @@ function App() {
         <Route path="/" element={<AuthPage />} />
 
         {/* Protected pages */}
+        <Route
+          path="/dashboard"
+          element={
+            <ProtectedRoute>
+              <Dashboard />
+            </ProtectedRoute>
+          }
+        />
+
         <Route
           path="/trip"
           element={

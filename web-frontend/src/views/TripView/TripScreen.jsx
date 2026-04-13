@@ -4,14 +4,19 @@ import {
   IoCarSportOutline,
   IoCalendarOutline,
   IoLocationOutline,
-  IoNavigateOutline,
   IoFlagOutline,
   IoMapOutline,
 } from "react-icons/io5";
+import Nav from "../Dashboard/Nav";
 import "./TripScreen.css";
 
 export default function TripScreen() {
   const navigate = useNavigate();
+
+  const companyName =
+    localStorage.getItem("company") ||
+    sessionStorage.getItem("company") ||
+    "Company";
 
   const [vehicleType, setVehicleType] = useState("");
   const [modelYear, setModelYear] = useState("");
@@ -44,21 +49,9 @@ export default function TripScreen() {
       });
 
       const data = await res.json();
+      if (!res.ok || data.error) throw new Error(data.error || "Failed to fetch routes");
 
-      if (!res.ok || data.error) {
-        throw new Error(data.error || "Failed to fetch routes");
-      }
-
-      
-      const meta = {
-        origin,
-        destination,
-        city,
-        vehicleType,
-        fuelType,
-        modelYear,
-      };
-
+      const meta = { origin, destination, city, vehicleType, fuelType, modelYear };
       navigate("/map", { state: { routes: data.routes, meta } });
     } catch (err) {
       setError(err.message);
@@ -69,6 +62,8 @@ export default function TripScreen() {
 
   return (
     <div className="trip-page">
+      <Nav companyName={companyName} />
+
       <div className="trip-orb trip-orb--1" />
       <div className="trip-orb trip-orb--2" />
 
@@ -115,9 +110,7 @@ export default function TripScreen() {
               >
                 <option value="">Model Year</option>
                 {years.map((y) => (
-                  <option key={y} value={y}>
-                    {y}
-                  </option>
+                  <option key={y} value={y}>{y}</option>
                 ))}
               </select>
             </div>
