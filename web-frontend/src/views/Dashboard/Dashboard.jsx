@@ -5,15 +5,43 @@ import "./Dashboard.css";
 
 const API_BASE = "http://127.0.0.1:8000";
 
+
+function decodeJWT(token) {
+  try {
+    const base64 = token.split(".")[1].replace(/-/g, "+").replace(/_/g, "/");
+    const json = decodeURIComponent(
+      atob(base64)
+        .split("")
+        .map((c) => "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2))
+        .join("")
+    );
+    return JSON.parse(json);
+  } catch {
+    return {};
+  }
+}
+
+
 function getCompanyId() {
-  return localStorage.getItem("company_id") || sessionStorage.getItem("company_id") || "1";
+  const token =
+    localStorage.getItem("token") || sessionStorage.getItem("token");
+  if (!token) return null;
+  const payload = decodeJWT(token);
+  return payload.company_id ?? null;
 }
+
 function getCompanyName() {
-  return localStorage.getItem("company") || sessionStorage.getItem("company") || "Company";
+  return (
+    localStorage.getItem("company") ||
+    sessionStorage.getItem("company") ||
+    "Company"
+  );
 }
+
 function getToken() {
   return localStorage.getItem("token") || sessionStorage.getItem("token");
 }
+
 
 function KpiCard({ label, value, unit, sub, subRed, accent }) {
   return (
@@ -31,6 +59,7 @@ function SkeletonCard() {
   return <div className="kpi-card kpi-card--skeleton" />;
 }
 
+
 export default function Dashboard() {
   const [data, setData]       = useState(null);
   const [loading, setLoading] = useState(true);
@@ -44,15 +73,25 @@ export default function Dashboard() {
   const barChart   = useRef(null);
   const ringChart  = useRef(null);
 
-  const companyId   = getCompanyId();
   const companyName = getCompanyName();
 
+ 
   useEffect(() => {
     const fetchDashboard = async () => {
       setLoading(true);
       setError("");
+
+      const companyId = getCompanyId();
+      const token     = getToken();
+
+     
+      if (!companyId) {
+        setError("Unable to identify your company. Please sign in again.");
+        setLoading(false);
+        return;
+      }
+
       try {
-        const token = getToken();
         const res = await fetch(`${API_BASE}/dashboard/${companyId}`, {
           headers: token ? { Authorization: `Bearer ${token}` } : {},
         });
@@ -65,14 +104,16 @@ export default function Dashboard() {
         setLoading(false);
       }
     };
-    fetchDashboard();
-  }, [companyId]);
 
+    fetchDashboard();
+  }, []);
+
+  
   useEffect(() => {
     if (!data) return;
 
     const dist      = data.routeDistribution  || {};
-    const breakdown = data.emissionsBreakdown  || {};
+    const breakdown = data.emissionsBreakdown || {};
     const savings   = data.get_fuel_cost_savings_percentage || 0;
     const green  = dist.green  || 0;
     const orange = dist.orange || 0;
@@ -84,9 +125,20 @@ export default function Dashboard() {
         type: "doughnut",
         data: {
           labels: ["Green", "Orange", "Red"],
-          datasets: [{ data: [green, orange, red], backgroundColor: ["#10b981","#f59e0b","#ef4444"], borderWidth: 3, borderColor: "#fff", hoverOffset: 4 }],
+          datasets: [{
+            data: [green, orange, red],
+            backgroundColor: ["#10b981", "#f59e0b", "#ef4444"],
+            borderWidth: 3,
+            borderColor: "#fff",
+            hoverOffset: 4,
+          }],
         },
-        options: { responsive: true, maintainAspectRatio: false, cutout: "72%", plugins: { legend: { display: false } } },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          cutout: "72%",
+          plugins: { legend: { display: false } },
+        },
       });
     }
 
@@ -96,12 +148,21 @@ export default function Dashboard() {
         type: "bar",
         data: {
           labels: ["CO₂", "CH₄", "N₂O"],
-          datasets: [{ data: [breakdown.co2 || 0, breakdown.ch4 || 0, breakdown.n2o || 0], backgroundColor: ["#10b981","#f59e0b","#ef4444"], borderRadius: 5, borderSkipped: false }],
+          datasets: [{
+            data: [breakdown.co2 || 0, breakdown.ch4 || 0, breakdown.n2o || 0],
+            backgroundColor: ["#10b981", "#f59e0b", "#ef4444"],
+            borderRadius: 5,
+            borderSkipped: false,
+          }],
         },
         options: {
-          responsive: true, maintainAspectRatio: false,
+          responsive: true,
+          maintainAspectRatio: false,
           plugins: { legend: { display: false } },
-          scales: { x: { ticks: { color: "#9aada0", font: { size: 10 } }, grid: { display: false } }, y: { display: false } },
+          scales: {
+            x: { ticks: { color: "#9aada0", font: { size: 10 } }, grid: { display: false } },
+            y: { display: false },
+          },
         },
       });
     }
@@ -110,32 +171,52 @@ export default function Dashboard() {
       ringChart.current?.destroy();
       ringChart.current = new Chart(ringRef.current, {
         type: "doughnut",
-        data: { datasets: [{ data: [savings, Math.max(0, 100 - savings)], backgroundColor: ["#f59e0b","#f0f4f1"], borderWidth: 0 }] },
-        options: { responsive: true, maintainAspectRatio: false, cutout: "75%", plugins: { legend: { display: false }, tooltip: { enabled: false } } },
+        data: {
+          datasets: [{
+            data: [savings, Math.max(0, 100 - savings)],
+            backgroundColor: ["#f59e0b", "#f0f4f1"],
+            borderWidth: 0,
+          }],
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          cutout: "75%",
+          plugins: { legend: { display: false }, tooltip: { enabled: false } },
+        },
       });
     }
 
     if (gaugeRef.current) {
       const canvas = gaugeRef.current;
-      const ctx = canvas.getContext("2d");
+      const ctx    = canvas.getContext("2d");
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       const trips       = data.totalTrips || 1;
       const co2eKg      = data.totalCO2e  || 0;
       const co2ePerTrip = co2eKg / trips;
       const efficiency  = Math.min(15, Math.max(0, 15 - (co2ePerTrip / 5000) * 15));
-      const cx = canvas.width / 2, cy = canvas.height - 4;
+      const cx = canvas.width / 2;
+      const cy = canvas.height - 4;
       const r  = Math.min(cx, cy) - 8;
-      ctx.beginPath(); ctx.arc(cx, cy, r, Math.PI, 2 * Math.PI); ctx.strokeStyle = "#e8ede8"; ctx.lineWidth = 9; ctx.stroke();
-      ctx.beginPath(); ctx.arc(cx, cy, r, Math.PI, Math.PI + (efficiency / 15) * Math.PI); ctx.strokeStyle = "#013f2b"; ctx.lineWidth = 9; ctx.lineCap = "round"; ctx.stroke();
+      ctx.beginPath(); ctx.arc(cx, cy, r, Math.PI, 2 * Math.PI);
+      ctx.strokeStyle = "#e8ede8"; ctx.lineWidth = 9; ctx.stroke();
+      ctx.beginPath(); ctx.arc(cx, cy, r, Math.PI, Math.PI + (efficiency / 15) * Math.PI);
+      ctx.strokeStyle = "#013f2b"; ctx.lineWidth = 9; ctx.lineCap = "round"; ctx.stroke();
     }
   }, [data]);
 
+
   useEffect(() => {
-    return () => { donutChart.current?.destroy(); barChart.current?.destroy(); ringChart.current?.destroy(); };
+    return () => {
+      donutChart.current?.destroy();
+      barChart.current?.destroy();
+      ringChart.current?.destroy();
+    };
   }, []);
 
+
   const dist      = data?.routeDistribution  || {};
-  const breakdown = data?.emissionsBreakdown  || {};
+  const breakdown = data?.emissionsBreakdown || {};
   const savings   = data?.get_fuel_cost_savings_percentage || 0;
   const green  = dist.green  || 0;
   const orange = dist.orange || 0;
@@ -150,14 +231,23 @@ export default function Dashboard() {
     ? `${(co2eKg / 1000).toFixed(2)} t`
     : `${co2eKg.toFixed(2)} kg`;
 
-  const effLabel = co2ePerTrip < 500 ? "Excellent efficiency" : co2ePerTrip < 2000 ? "Good efficiency" : "Needs improvement";
-  const effDisplay = co2ePerTrip.toFixed(1);
-  const estimatedReturn = savings > 0 ? Math.round((data?.totalTrips || 0) * savings * 2.18 * 0.8) : 0;
+  const effLabel = co2ePerTrip < 500
+    ? "Excellent efficiency"
+    : co2ePerTrip < 2000
+    ? "Good efficiency"
+    : "Needs improvement";
 
+  const effDisplay      = co2ePerTrip.toFixed(1);
+  const estimatedReturn = savings > 0
+    ? Math.round((data?.totalTrips || 0) * savings * 2.18 * 0.8)
+    : 0;
+
+  /* ── Render ── */
   return (
     <div className="dashboard-page">
       <Nav companyName={companyName} />
       <main className="dashboard-body">
+
         {error && <div className="dashboard-error">⚠ {error}</div>}
 
         <section className="dashboard-section">
@@ -165,10 +255,10 @@ export default function Dashboard() {
           <div className="kpi-grid">
             {loading ? [0,1,2,3].map(i => <SkeletonCard key={i} />) : (
               <>
-                <KpiCard label="Total Trips"    value={data?.totalTrips?.toLocaleString() ?? "—"} sub="All time"           accent="green" />
-                <KpiCard label="Total Drivers"  value={data?.totalDrivers ?? "—"}                 sub="Linked to company"  accent="blue"  />
-                <KpiCard label="Vehicle Types"  value={data?.totalVehicles ?? "—"}                sub="Distinct types used" accent="amber" />
-                <KpiCard label="Total CO₂e"     value={co2eDisplay}                               sub="This month" subRed  accent="red"   />
+                <KpiCard label="Total Trips"   value={data?.totalTrips?.toLocaleString() ?? "—"} sub="All time"            accent="green" />
+                <KpiCard label="Total Drivers" value={data?.totalDrivers ?? "—"}                 sub="Linked to company"   accent="blue"  />
+                <KpiCard label="Vehicle Types" value={data?.totalVehicles ?? "—"}                sub="Distinct types used"  accent="amber" />
+                <KpiCard label="Total CO₂e"    value={co2eDisplay}                               sub="This month" subRed   accent="red"   />
               </>
             )}
           </div>
@@ -177,6 +267,7 @@ export default function Dashboard() {
         <section className="dashboard-section">
           <div className="section-title">Efficiency &amp; Sustainability</div>
           <div className="mid-grid">
+
             <div className="panel">
               <div className="panel__title">Route Distribution</div>
               {loading ? <div className="panel__skeleton" /> : (
@@ -212,6 +303,7 @@ export default function Dashboard() {
                 </div>
               )}
             </div>
+
           </div>
         </section>
 
@@ -233,6 +325,7 @@ export default function Dashboard() {
             </div>
           </div>
         </section>
+
       </main>
     </div>
   );
