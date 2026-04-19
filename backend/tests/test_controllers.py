@@ -1,14 +1,15 @@
 import pytest
 import numpy as np
-from unittest.mock import Mock, MagicMock,patch
+from unittest.mock import Mock, MagicMock, patch
 from backend.controllers.TripController import TripController
 from backend.controllers.NavigationController import NavigationController
 from controllers.AIController import AIController
 
 
-_AI_ENGINE_CLASS  = "controllers.AIController.GreenMileRecommendationEngine"
-_JOBLIB_LOAD    = "models.ai_models.recommendation_engine.joblib.load"
-#a
+_AI_ENGINE_CLASS = "controllers.AIController.GreenMileRecommendationEngine"
+_JOBLIB_LOAD = "models.ai_models.recommendation_engine.joblib.load"
+
+
 @pytest.fixture
 def mock_ghg_data():
     return {
@@ -28,233 +29,218 @@ def mock_ghg_data():
     }
 
 
+@pytest.fixture
+def mock_db():
+    db = Mock()
+    return db
 
-def test_trip_controller_process_trip_success(mock_ghg_data):
-   
+
+def test_trip_controller_process_trip_success(mock_ghg_data, mock_db):
     controller = TripController(api_key="test_key", ghg_data=mock_ghg_data)
-    
-   # Mock the Trip model's get_routes method
-    with patch('backend.controllers.TripController.Trip') as MockTrip:
+
+    with patch("backend.controllers.TripController.Trip") as MockTrip, \
+         patch("backend.controllers.TripController.TripDB") as MockTripDB:
         mock_trip_instance = Mock()
         mock_trip_instance.get_routes.return_value = {
             "routes": [
                 {
+                    "summary": "Route A",
+                    "distance_km": 10.0,
+                    "duration_min": 15,
                     "distance": "10 km",
                     "duration": "15 mins",
-                    "emissions": {"co2e": 2.5},
+                    "coordinates": [[46.6753, 24.7136], [46.6850, 24.7200]],
+                    "emissions": {
+                        "co2": 1.8,
+                        "ch4": 0.001,
+                        "n2o": 0.001,
+                        "co2e": 2.5
+                    },
                     "color": "green"
                 }
             ]
         }
         MockTrip.return_value = mock_trip_instance
-        
-        # Call controller
+
+        mock_db_trip = Mock()
+        mock_db_trip.id = 123
+        mock_db_trip.selected_route_color = "green"
+        MockTripDB.return_value = mock_db_trip
+
         result = controller.process_trip(
             origin="LocationA",
             destination="LocationB",
             city="Riyadh",
             vehicleType="Car",
             fuelType="Petrol",
-            modelYear=2020
+            modelYear=2020,
+            db=mock_db
         )
-        
-        MockTrip.assert_called_once()  
-        mock_trip_instance.get_routes.assert_called_once()  
-        
-        # Check result is returned correctly
+
+        MockTrip.assert_called_once()
+        mock_trip_instance.get_routes.assert_called_once()
+        mock_db.add.assert_called_once_with(mock_db_trip)
+        mock_db.commit.assert_called_once()
+        mock_db.refresh.assert_called_once_with(mock_db_trip)
+
+        assert result["message"] == "Trip processed and saved successfully"
+        assert result["trip_id"] == 123
+        assert result["selected_route_color"] == "green"
         assert "routes" in result
         assert len(result["routes"]) == 1
 
 
-
-def test_trip_controller_handles_model_exception(mock_ghg_data):
-    
-    # Test TripController handles exceptions from Trip model
- 
+def test_trip_controller_handles_model_exception(mock_ghg_data, mock_db):
     controller = TripController(api_key="test_key", ghg_data=mock_ghg_data)
-    
-    with patch('backend.controllers.TripController.Trip') as MockTrip:
-        mock_trip_instance = Mock()
 
-       # Simulate model raising an error
+    with patch("backend.controllers.TripController.Trip") as MockTrip:
+        mock_trip_instance = Mock()
         mock_trip_instance.get_routes.side_effect = Exception("Model failure")
         MockTrip.return_value = mock_trip_instance
-        
+
         result = controller.process_trip(
-            origin="A", destination="B", city="Riyadh",
-            vehicleType="Car", fuelType="Petrol", modelYear=2020
+            origin="A",
+            destination="B",
+            city="Riyadh",
+            vehicleType="Car",
+            fuelType="Petrol",
+            modelYear=2020,
+            db=mock_db
         )
-        
-        # Error is caught and returned
+
         assert "error" in result
         assert "Trip processing failed" in result["error"]
         assert "Model failure" in result["details"]
 
 
-
-def test_trip_controller_passes_all_parameters(mock_ghg_data):
-   
+def test_trip_controller_passes_all_parameters(mock_ghg_data, mock_db):
     controller = TripController(api_key="secret_key", ghg_data=mock_ghg_data)
-    
-    with patch('backend.controllers.TripController.Trip') as MockTrip:
+
+    with patch("backend.controllers.TripController.Trip") as MockTrip:
         mock_trip_instance = Mock()
-        mock_trip_instance.get_routes.return_value = {"routes": []}
+        mock_trip_instance.get_routes.return_value = {"error": "stop after constructor"}
         MockTrip.return_value = mock_trip_instance
-        
+
         controller.process_trip(
             origin="Point A",
             destination="Point B",
             city="Jeddah",
             vehicleType="SUV",
             fuelType="Diesel",
-            modelYear=2018
-        )
-        
-        MockTrip.assert_called_once_with(
-            "Point A",          
-            "Point B",           
-            "Jeddah",            
-            "SUV",               
-            "Diesel",            
-            2018,                
-            mock_ghg_data,
-            "secret_key"         
+            modelYear=2018,
+            db=mock_db
         )
 
+        MockTrip.assert_called_once_with(
+            "Point A",
+            "Point B",
+            "Jeddah",
+            "SUV",
+            "Diesel",
+            2018,
+            mock_ghg_data,
+            "secret_key"
+        )
 
 
 def test_navigation_controller_init_route():
-   
     controller = NavigationController()
-    
-    with patch.object(controller.nav, 'init_route') as mock_init:
+
+    with patch.object(controller.nav, "init_route") as mock_init:
         mock_init.return_value = {"status": "initialized"}
-        
+
         coords = [
             {"latitude": 24.7136, "longitude": 46.6753},
             {"latitude": 24.7200, "longitude": 46.6850}
         ]
         duration_text = "15 mins"
-        
+
         result = controller.init_route(coords, duration_text)
-        
+
         mock_init.assert_called_once_with(coords, duration_text)
         assert result["status"] == "initialized"
 
 
-
 def test_navigation_controller_location_update():
-   
     controller = NavigationController()
-    
-    with patch.object(controller.nav, 'update_location') as mock_update:
+
+    with patch.object(controller.nav, "update_location") as mock_update:
         mock_update.return_value = {
             "snappedLocation": {"latitude": 24.7136, "longitude": 46.6753},
             "remainingKm": 5.2,
             "etaMinutes": 8
         }
-        
+
         location = {"latitude": 24.7140, "longitude": 46.6755}
         heading = 45.0
         speed_kmh = 60.0
-        
+
         result = controller.location_update(location, heading, speed_kmh)
-        
+
         mock_update.assert_called_once_with(location, heading, speed_kmh)
         assert "snappedLocation" in result
         assert result["remainingKm"] == 5.2
 
 
-
 def test_navigation_controller_init_route_error():
-    
-    # Test error handling when Navigation.init_route fails
-    
     controller = NavigationController()
-    
-    with patch.object(controller.nav, 'init_route') as mock_init:
-        # Simulate model error
-        mock_init.side_effect = Exception("Invalid route data")
-        
-        try:
-            result = controller.init_route([], "10 mins")
-            
-        except Exception as e:
-        
-            assert "Invalid route data" in str(e)
 
+    with patch.object(controller.nav, "init_route") as mock_init:
+        mock_init.side_effect = Exception("Invalid route data")
+
+        with pytest.raises(Exception, match="Invalid route data"):
+            controller.init_route([], "10 mins")
 
 
 def test_navigation_controller_location_update_error():
-    # Test error handling when Navigation.update_location fails
-    
-    
     controller = NavigationController()
-    
-    with patch.object(controller.nav, 'update_location') as mock_update:
+
+    with patch.object(controller.nav, "update_location") as mock_update:
         mock_update.side_effect = Exception("GPS signal lost")
-        
+
         location = {"latitude": 24.7136, "longitude": 46.6753}
-        
-        try:
-            result = controller.location_update(location, 0, 40)
-        except Exception as e:
-            assert "GPS signal lost" in str(e)
+
+        with pytest.raises(Exception, match="GPS signal lost"):
+            controller.location_update(location, 0, 40)
 
 
-#
 def test_trip_controller_initialization(mock_ghg_data):
-    # Test TripController stores API key and GHG data on init
-    
-   
     api_key = "test_api_key_12345"
-    
     controller = TripController(api_key=api_key, ghg_data=mock_ghg_data)
-    
+
     assert controller.api_key == api_key
     assert controller.ghg_data == mock_ghg_data
 
 
 def test_navigation_controller_initialization():
-    
     controller = NavigationController()
-    
+
     assert controller.nav is not None
-    assert hasattr(controller.nav, 'init_route')
-    assert hasattr(controller.nav, 'update_location')
+    assert hasattr(controller.nav, "init_route")
+    assert hasattr(controller.nav, "update_location")
 
 
-# 
-def test_trip_controller_does_not_modify_result(mock_ghg_data):
-    
-   # Test that controller returns model result without modification
-    
-
+def test_trip_controller_returns_error_result_without_db_save(mock_ghg_data, mock_db):
     controller = TripController(api_key="key", ghg_data=mock_ghg_data)
-    
-    with patch('backend.controllers.TripController.Trip') as MockTrip:
-        model_response = {
-            "routes": [{"distance": "10 km"}],
-            "metadata": {"processingTime": 123},
-            "customField": "custom value"
-        }
-        
+
+    with patch("backend.controllers.TripController.Trip") as MockTrip:
+        model_response = {"error": "Trip failed upstream"}
+
         mock_trip_instance = Mock()
         mock_trip_instance.get_routes.return_value = model_response
         MockTrip.return_value = mock_trip_instance
-        
+
         result = controller.process_trip(
-            "A", "B", "Riyadh", "Car", "Petrol", 2020
+            "A", "B", "Riyadh", "Car", "Petrol", 2020, db=mock_db
         )
-        
+
         assert result == model_response
-        assert "routes" in result
-        assert "metadata" in result
-        assert "customField" in result
+        mock_db.add.assert_not_called()
+        mock_db.commit.assert_not_called()
+        mock_db.refresh.assert_not_called()
 
 
 def _mock_engine():
-    """Return a fully-configured mock GreenMileRecommendationEngine."""
     engine = MagicMock()
     engine.predict_single_route.return_value = {
         "route_name": "Test Route",
@@ -272,7 +258,7 @@ def _mock_engine():
     }
     engine.compare_routes.return_value = {
         "all_routes": [],
-        "best_route":  {"route_name": "Route A", "predicted_co2e_kg": 5.0},
+        "best_route": {"route_name": "Route A", "predicted_co2e_kg": 5.0},
         "worst_route": {"route_name": "Route B", "predicted_co2e_kg": 10.0},
         "co2e_saving_kg": 5.0,
         "co2e_saving_percent": 50.0,
@@ -288,7 +274,6 @@ def _mock_engine():
 
 @pytest.fixture
 def ai_controller():
-    """AIController with engine fully mocked — for unit tests."""
     with patch(_AI_ENGINE_CLASS, return_value=_mock_engine()):
         ctrl = AIController()
     return ctrl
@@ -296,7 +281,6 @@ def ai_controller():
 
 @pytest.fixture
 def ai_controller_no_engine():
-    """AIController whose engine failed to load (engine = None)."""
     with patch(_AI_ENGINE_CLASS, side_effect=Exception("model files missing")):
         ctrl = AIController()
     return ctrl
@@ -327,8 +311,6 @@ def sample_trip_metadata():
 
 
 class TestAIControllerInit:
-    """Unit tests for AIController.__init__ and is_ready()"""
-
     @pytest.mark.unit
     def test_is_ready_true_when_engine_loads(self, ai_controller):
         assert ai_controller.is_ready() is True
@@ -351,17 +333,13 @@ class TestAIControllerInit:
             mock_cls.return_value = _mock_engine()
             AIController()
             kw = mock_cls.call_args[1]
-            assert "regression_model.pkl"     in kw["regression_model_path"]
+            assert "regression_model.pkl" in kw["regression_model_path"]
             assert "classification_model.pkl" in kw["classification_model_path"]
-            assert "label_encoders.pkl"       in kw["encoders_path"]
-            assert "category_thresholds.pkl"  in kw["thresholds_path"]
+            assert "label_encoders.pkl" in kw["encoders_path"]
+            assert "category_thresholds.pkl" in kw["thresholds_path"]
 
-
-# parse_duration
 
 class TestAIParseDuration:
-    """Unit tests for AIController._parse_duration()"""
-
     @pytest.mark.unit
     def test_minutes_only(self, ai_controller):
         assert ai_controller._parse_duration("30 mins") == 30.0
@@ -407,11 +385,7 @@ class TestAIParseDuration:
         assert ai_controller._parse_duration("5 hours") == 300.0
 
 
-# determine_road_type
-
 class TestAIDetermineRoadType:
-    """Unit tests for AIController._determine_road_type()"""
-
     @pytest.mark.unit
     def test_highway_keyword(self, ai_controller):
         assert ai_controller._determine_road_type({"summary": "King Fahd Highway"}) == "Highway"
@@ -423,7 +397,6 @@ class TestAIDetermineRoadType:
     @pytest.mark.unit
     def test_rural_keyword(self, ai_controller):
         assert ai_controller._determine_road_type({"summary": "rural road"}) == "Rural"
-
 
     @pytest.mark.unit
     def test_urban_default(self, ai_controller):
@@ -446,11 +419,7 @@ class TestAIDetermineRoadType:
         assert ai_controller._determine_road_type({"summary": "highway rural road"}) == "Highway"
 
 
-# format_route_for_ai
-
 class TestAIFormatRoute:
-    """Unit tests for AIController.format_route_for_ai()"""
-
     @pytest.mark.unit
     def test_returns_dict(self, ai_controller, sample_route_info, sample_trip_metadata):
         result = ai_controller.format_route_for_ai(sample_route_info, sample_trip_metadata)
@@ -658,11 +627,7 @@ class TestAIFormatRoute:
         assert result["IsWeekend"] == 0
 
 
-# predict_single_route 
-
 class TestAIPredictSingleRoute:
-    """Unit tests for AIController.predict_single_route()"""
-
     @pytest.fixture
     def formatted_route(self):
         return {
@@ -697,11 +662,7 @@ class TestAIPredictSingleRoute:
             ai_controller.predict_single_route(formatted_route)
 
 
-#compare_and_recommend 
-
 class TestAICompareAndRecommend:
-    """Unit tests for AIController.compare_and_recommend()"""
-
     @pytest.fixture
     def two_routes(self):
         base = {
@@ -747,8 +708,7 @@ class TestAICompareAndRecommend:
         ai_controller.engine.compare_routes.assert_called_once()
 
 
-
-
+def _make_label_encoder(classes):
     enc = MagicMock()
     enc.transform = lambda vals: [list(classes).index(v) for v in vals]
     return enc
@@ -756,10 +716,6 @@ class TestAICompareAndRecommend:
 
 @pytest.fixture
 def integrated_ai_controller():
-    """
-    AIController backed by a REAL GreenMileRecommendationEngine.
-    Only joblib.load is patched — no .pkl files needed.
-    """
     reg_model = MagicMock()
     reg_model.predict = MagicMock(return_value=np.array([5.0]))
 
@@ -769,11 +725,11 @@ def integrated_ai_controller():
     clf_model.classes_ = np.array(["Green", "Yellow", "Red"])
 
     label_encoders = {
-        "Vehicle Type":       _make_label_encoder(["Truck", "Van", "Car", "Light-Duty Trucks"]),
-        "Fuel Type":          _make_label_encoder(["Diesel", "Gasoline", "CNG", "Electric", "Hybrid"]),
-        "Road Type":          _make_label_encoder(["Highway", "Urban", "Rural"]),
+        "Vehicle Type": _make_label_encoder(["Truck", "Van", "Car", "Light-Duty Trucks"]),
+        "Fuel Type": _make_label_encoder(["Diesel", "Gasoline", "CNG", "Electric", "Hybrid"]),
+        "Road Type": _make_label_encoder(["Highway", "Urban", "Rural"]),
         "Traffic Conditions": _make_label_encoder(["Light", "Moderate", "Heavy", "Severe"]),
-        "City":               _make_label_encoder(["Riyadh", "Jeddah", "Dammam"]),
+        "City": _make_label_encoder(["Riyadh", "Jeddah", "Dammam"]),
     }
     thresholds = {"Green": (0, 5), "Yellow": (5, 10), "Red": (10, 999)}
 
@@ -811,68 +767,53 @@ def int_trip_metadata():
 
 
 class TestAIIntegration:
-    """
-    Integration tests — AIController + real GreenMileRecommendationEngine.
-    Verifies the complete flow from raw route data through to AI output.
-    """
-
     @pytest.mark.integration
-    def test_full_flow_format_then_predict(
-        self, integrated_ai_controller, int_route_info, int_trip_metadata
-    ):
+    def test_full_flow_format_then_predict(self, integrated_ai_controller, int_route_info, int_trip_metadata):
         formatted = integrated_ai_controller.format_route_for_ai(int_route_info, int_trip_metadata)
-        result    = integrated_ai_controller.predict_single_route(formatted)
+        result = integrated_ai_controller.predict_single_route(formatted)
 
         assert "predicted_co2e_kg" in result
         assert "category" in result
         assert result["category"] in ["Green", "Yellow", "Red"]
 
     @pytest.mark.integration
-    def test_full_flow_format_then_compare(
-        self, integrated_ai_controller, int_trip_metadata
-    ):
+    def test_full_flow_format_then_compare(self, integrated_ai_controller, int_trip_metadata):
         fmt_a = integrated_ai_controller.format_route_for_ai(
-            {"summary": "King Fahd Highway", "distance": "20 km",
-             "duration": "20 mins", "trafficConditions": "light"},
+            {"summary": "King Fahd Highway", "distance": "20 km", "duration": "20 mins", "trafficConditions": "light"},
             int_trip_metadata,
         )
         fmt_b = integrated_ai_controller.format_route_for_ai(
-            {"summary": "Olaya Street", "distance": "20 km",
-             "duration": "40 mins", "trafficConditions": "heavy"},
+            {"summary": "Olaya Street", "distance": "20 km", "duration": "40 mins", "trafficConditions": "heavy"},
             int_trip_metadata,
         )
         result = integrated_ai_controller.compare_and_recommend([fmt_a, fmt_b])
 
-        assert "best_route"      in result
-        assert "worst_route"     in result
-        assert "co2e_saving_kg"  in result
+        assert "best_route" in result
+        assert "worst_route" in result
+        assert "co2e_saving_kg" in result
         assert result["co2e_saving_kg"] >= 0
 
     @pytest.mark.integration
-    def test_prediction_co2e_is_non_negative_float(
-        self, integrated_ai_controller, int_route_info, int_trip_metadata
-    ):
+    def test_prediction_co2e_is_non_negative_float(self, integrated_ai_controller, int_route_info, int_trip_metadata):
         formatted = integrated_ai_controller.format_route_for_ai(int_route_info, int_trip_metadata)
-        result    = integrated_ai_controller.predict_single_route(formatted)
+        result = integrated_ai_controller.predict_single_route(formatted)
         assert isinstance(result["predicted_co2e_kg"], float)
         assert result["predicted_co2e_kg"] >= 0
 
     @pytest.mark.integration
-    def test_probabilities_sum_to_one(
-        self, integrated_ai_controller, int_route_info, int_trip_metadata
-    ):
+    def test_probabilities_sum_to_one(self, integrated_ai_controller, int_route_info, int_trip_metadata):
         formatted = integrated_ai_controller.format_route_for_ai(int_route_info, int_trip_metadata)
-        result    = integrated_ai_controller.predict_single_route(formatted)
+        result = integrated_ai_controller.predict_single_route(formatted)
         assert abs(sum(result["probabilities"].values()) - 1.0) < 1e-6
 
     @pytest.mark.integration
-    def test_compare_savings_non_negative(
-        self, integrated_ai_controller, int_trip_metadata
-    ):
+    def test_compare_savings_non_negative(self, integrated_ai_controller, int_trip_metadata):
         call_count = [0]
+
         def vary(features):
             call_count[0] += 1
             return np.array([5.0]) if call_count[0] == 1 else np.array([10.0])
+
         integrated_ai_controller._reg_model.predict = vary
 
         fmt_a = integrated_ai_controller.format_route_for_ai(
@@ -884,15 +825,13 @@ class TestAIIntegration:
             int_trip_metadata,
         )
         result = integrated_ai_controller.compare_and_recommend([fmt_a, fmt_b])
-        assert result["fuel_saving_liters"]  >= 0
+        assert result["fuel_saving_liters"] >= 0
         assert result["co2e_saving_percent"] >= 0
 
     @pytest.mark.integration
-    def test_fuel_consumption_present_in_full_flow(
-        self, integrated_ai_controller, int_route_info, int_trip_metadata
-    ):
+    def test_fuel_consumption_present_in_full_flow(self, integrated_ai_controller, int_route_info, int_trip_metadata):
         formatted = integrated_ai_controller.format_route_for_ai(int_route_info, int_trip_metadata)
-        result    = integrated_ai_controller.predict_single_route(formatted)
+        result = integrated_ai_controller.predict_single_route(formatted)
         assert "fuel_consumption" in result
         assert "fuel_liters" in result["fuel_consumption"]
 
@@ -901,14 +840,11 @@ class TestAIIntegration:
         assert integrated_ai_controller.is_ready() is True
 
     @pytest.mark.integration
-    def test_highway_route_road_type_and_prediction(
-        self, integrated_ai_controller, int_trip_metadata
-    ):
-        route     = {"summary": "King Fahd Highway", "distance": "50 km", "duration": "30 mins"}
+    def test_highway_route_road_type_and_prediction(self, integrated_ai_controller, int_trip_metadata):
+        route = {"summary": "King Fahd Highway", "distance": "50 km", "duration": "30 mins"}
         formatted = integrated_ai_controller.format_route_for_ai(route, int_trip_metadata)
         assert formatted["Road Type"] == "Highway"
 
         result = integrated_ai_controller.predict_single_route(formatted)
         assert "predicted_co2e_kg" in result
         assert result["predicted_co2e_kg"] >= 0
-
