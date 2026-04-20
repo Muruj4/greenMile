@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;1,9..144,400;1,9..144,600&family=Manrope:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap');
+
 :root{
   --gm-green:#013f2b;
   --gm-green2:#10b981;
@@ -19,7 +21,7 @@
     var(--gm-bg);
   position:relative;
   overflow:hidden;
-  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Apple Color Emoji","Segoe UI Emoji";
+  font-family: 'Fraunces', serif;
 }
 
 .gm-orb{
@@ -95,6 +97,7 @@
   box-shadow: 0 18px 55px rgba(2,6,23,0.10);
   padding:18px 18px 16px;
   backdrop-filter: blur(10px);
+  font-family: 'Fraunces', serif;
 }
 
 .gm-tabs{
@@ -112,6 +115,7 @@
   padding:12px 10px;
   border-radius:14px;
   font-weight:800;
+  font-family: 'Fraunces', serif;
   color:#334155;
   cursor:pointer;
   transition: all 160ms ease;
@@ -140,6 +144,7 @@
   font-size:13px;
   font-weight:800;
   color:var(--gm-text);
+  
 }
 
 .gm-inputWrap{
@@ -152,6 +157,7 @@
   background:#ffffff;
   height:48px;
   transition: box-shadow 160ms ease, border-color 160ms ease;
+  font-family: 'Fraunces', serif;
 }
 
 .gm-inputWrap:focus-within{
@@ -177,6 +183,7 @@
   font-size:14px;
   color:var(--gm-text);
   background:transparent;
+  font-family: 'Fraunces', serif;
 }
 
 .gm-input::placeholder{ color:#94a3b8; }
@@ -259,6 +266,7 @@
   background: linear-gradient(135deg, var(--gm-green), var(--gm-green2));
   color:white;
   font-weight:900;
+  font-family: 'Fraunces', serif;
   cursor:pointer;
   display:flex;
   align-items:center;
@@ -276,6 +284,7 @@
 
 .gm-submitText{
   font-size:15px;
+  font-family: 'Fraunces', serif;
   letter-spacing:0.01em;
 }
 
