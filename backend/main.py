@@ -11,6 +11,7 @@ from controllers.TripController import TripController
 from controllers.NavigationController import NavigationController
 from controllers.AIController import AIController
 from controllers.AuthController import AuthController
+from controllers.AIAgentController import router as ai_agent_router
 
 
 
@@ -303,3 +304,7 @@ def root():
     }
 
 app.include_router(DashboardController.router)
+
+# After you create your app (after: app = FastAPI()):
+app.include_router(ai_agent_router)
+

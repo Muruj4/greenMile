@@ -2,8 +2,10 @@ import { useEffect, useState, useRef } from "react";
 import Chart from "chart.js/auto";
 import Nav from "./Nav";
 import "./Dashboard.css";
+import AIAgentButton from '../AIAgent/AIAgentButton';
 
 const API_BASE = "http://127.0.0.1:8000";
+
 
 
 function decodeJWT(token) {
@@ -22,14 +24,13 @@ function decodeJWT(token) {
 }
 
 
+
 function getCompanyId() {
-  const token =
-    localStorage.getItem("token") || sessionStorage.getItem("token");
+  const token = localStorage.getItem("token") || sessionStorage.getItem("token");
   if (!token) return null;
   const payload = decodeJWT(token);
   return payload.company_id ?? null;
 }
-
 function getCompanyName() {
   return (
     localStorage.getItem("company") ||
@@ -74,6 +75,7 @@ export default function Dashboard() {
   const ringChart  = useRef(null);
 
   const companyName = getCompanyName();
+  const companyId = getCompanyId();
 
  
   useEffect(() => {
@@ -323,10 +325,15 @@ export default function Dashboard() {
               </div>
               <div className="chart-wrap chart-wrap--ring"><canvas ref={ringRef}/></div>
             </div>
+            
           </div>
         </section>
 
       </main>
-    </div>
-  );
+
+   <AIAgentButton companyId={companyId} companyName={companyName}   dashboardData={data} />
+
+  </div>
+);
+
 }
