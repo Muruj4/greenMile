@@ -5,6 +5,8 @@ from sqlalchemy.orm import Session
 from dotenv import load_dotenv
 import json
 import os
+import random
+from datetime import datetime, timedelta
 from db.session import get_db
 from controllers import DashboardController
 from controllers.TripController import TripController
@@ -12,6 +14,7 @@ from controllers.NavigationController import NavigationController
 from controllers.AIController import AIController
 from controllers.AuthController import AuthController
 from controllers.AIAgentController import router as ai_agent_router
+from utils.email_sender import send_otp_email
 
 
 
@@ -45,6 +48,8 @@ trip_controller = TripController(API_KEY, GHG_DATA)
 navigation_controller = NavigationController()
 ai_controller = AIController()
 auth_controller = AuthController()
+pending_manager_signups = {}
+pending_driver_signups = {}
 
 # =========================
 # AUTH ENDPOINTS
@@ -75,11 +80,158 @@ def driver_signup(payload: DriverSignUp, db: Session = Depends(get_db)):
 @app.post("/auth/signin")
 def signin(payload: SignIn, db: Session = Depends(get_db)):
     try:
-        token, role = auth_controller.signin(db, payload.email, payload.password)
-        return {"token": token, "role": role}
+        token, role, company_id, company = auth_controller.signin(
+            db, payload.email, payload.password
+        )
+
+        return {
+            "token": token,
+            "role": role,
+            "company_id": company_id,
+            "company": company
+        }
+
     except Exception as e:
         raise HTTPException(status_code=401, detail=str(e))
 
+@app.post("/auth/manager/signup/request-otp")
+def manager_signup_request_otp(payload: ManagerSignUp, db: Session = Depends(get_db)):
+    try:
+        auth_controller.validate_manager_signup_data(
+            db,
+            payload.name,
+            payload.company,
+            payload.email,
+            payload.password
+        )
+
+        email = payload.email.strip().lower()
+        otp = str(random.randint(1000, 9999))
+
+        pending_manager_signups[email] = {
+            "name": payload.name.strip(),
+            "company": payload.company.strip(),
+            "email": email,
+            "password": payload.password,
+            "otp": otp,
+            "expires_at": datetime.utcnow() + timedelta(minutes=5),
+        }
+
+        send_otp_email(email, otp)
+        print(f"OTP for {email}: {otp}")
+
+        return {"message": "OTP sent successfully"}
+
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+
+@app.post("/auth/manager/signup/verify-otp")
+def manager_signup_verify_otp(payload: dict, db: Session = Depends(get_db)):
+    try:
+        email = payload.get("email", "").strip().lower()
+        otp = payload.get("otp", "").strip()
+
+        pending = pending_manager_signups.get(email)
+
+        if not pending:
+            raise ValueError("No pending signup found")
+
+        if datetime.utcnow() > pending["expires_at"]:
+            del pending_manager_signups[email]
+            raise ValueError("OTP expired. Please request a new one")
+
+        if pending["otp"] != otp:
+            raise ValueError("Invalid OTP")
+
+        token = auth_controller.manager_signup(
+            db,
+            pending["name"],
+            pending["company"],
+            pending["email"],
+            pending["password"]
+        )
+
+        del pending_manager_signups[email]
+
+        return {
+            "message": "Account verified successfully",
+            "token": token,
+            "role": "manager"
+        }
+
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    
+@app.post("/auth/driver/signup/request-otp")
+def driver_signup_request_otp(payload: DriverSignUp, db: Session = Depends(get_db)):
+    try:
+        auth_controller.validate_manager_signup_data(
+            db,
+            payload.name,
+            payload.company,
+            payload.email,
+            payload.password
+        )
+
+        email = payload.email.strip().lower()
+        otp = str(random.randint(1000, 9999))
+
+        pending_driver_signups[email] = {
+            "name": payload.name.strip(),
+            "company": payload.company.strip(),
+            "email": email,
+            "password": payload.password,
+            "otp": otp,
+            "expires_at": datetime.utcnow() + timedelta(minutes=5),
+        }
+
+        send_otp_email(email, otp)
+        print(f"DRIVER OTP for {email}: {otp}")
+
+        return {"message": "OTP sent successfully"}
+
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+
+@app.post("/auth/driver/signup/verify-otp")
+def driver_signup_verify_otp(payload: dict, db: Session = Depends(get_db)):
+    try:
+        email = payload.get("email", "").strip().lower()
+        otp = payload.get("otp", "").strip()
+
+        pending = pending_driver_signups.get(email)
+
+        if not pending:
+            raise ValueError("No pending signup found")
+
+        if datetime.utcnow() > pending["expires_at"]:
+            del pending_driver_signups[email]
+            raise ValueError("OTP expired. Please request a new one")
+
+        if pending["otp"] != otp:
+            raise ValueError("Invalid OTP")
+
+        token = auth_controller.driver_signup(
+            db,
+            pending["name"],
+            pending["company"],
+            pending["email"],
+            pending["password"]
+        )
+
+        del pending_driver_signups[email]
+
+        return {
+            "message": "Account verified successfully",
+            "token": token,
+            "role": "driver"
+        }
+
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    
 # =========================
 # TRIP ENDPOINTS
 # =========================

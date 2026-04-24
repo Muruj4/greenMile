@@ -48,6 +48,12 @@
   overflow: hidden;
   animation: slideUpIn 0.25s ease;
 }
+.ai-message {
+  direction: rtl;
+  text-align: right;
+  unicode-bidi: plaintext;
+  white-space: pre-line;
+}
 
 @keyframes slideUpIn {
   from {

@@ -5,7 +5,6 @@ import {
   TextInput,
   TouchableOpacity,
   ScrollView,
-  Alert,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -15,8 +14,9 @@ import { API_BASE_URL } from "../config";
 export default function LoginScreen({ navigation }) {
   const [isSignIn, setIsSignIn] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
-  const [emailError, setEmailError] = useState("");
+  const [errors, setErrors] = useState({});
   const [rememberMe, setRememberMe] = useState(false);
+  const [showCompanyDropdown, setShowCompanyDropdown] = useState(false);
 
   const companies = [
     "Saudi Post (SPL)",
@@ -38,8 +38,6 @@ export default function LoginScreen({ navigation }) {
     "Nana",
   ];
 
-  const [showCompanyDropdown, setShowCompanyDropdown] = useState(false);
-
   const [formData, setFormData] = useState({
     name: "",
     company: "",
@@ -47,47 +45,86 @@ export default function LoginScreen({ navigation }) {
     password: "",
   });
 
+  const passwordRules = {
+    length: formData.password.length === 8,
+    capital: /[A-Z]/.test(formData.password),
+    number: /[0-9]/.test(formData.password),
+    special: /[^A-Za-z0-9]/.test(formData.password),
+  };
+
+  const isPasswordValid =
+    passwordRules.length &&
+    passwordRules.capital &&
+    passwordRules.number &&
+    passwordRules.special;
+
   const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
   const handleInputChange = (field, value) => {
-    setFormData((prev) => ({ ...prev, [field]: value }));
-    if (field === "email" && emailError) setEmailError("");
+    const nextValue = field === "password" ? value.slice(0, 8) : value;
+
+    setFormData((prev) => ({
+      ...prev,
+      [field]: nextValue,
+    }));
+
+    setErrors((prev) => ({
+      ...prev,
+      [field]: "",
+      general: "",
+    }));
   };
 
   const switchToSignIn = () => {
     setIsSignIn(true);
     setShowCompanyDropdown(false);
     setShowPassword(false);
-    setEmailError("");
+    setErrors({});
   };
 
   const switchToSignUp = () => {
     setIsSignIn(false);
     setShowCompanyDropdown(false);
     setShowPassword(false);
-    setEmailError("");
+    setErrors({});
+  };
+
+  const validateForm = () => {
+    const newErrors = {};
+
+    if (!isSignIn && !formData.name.trim()) {
+      newErrors.name = "Please enter your name";
+    }
+
+    if (!isSignIn && !formData.company.trim()) {
+      newErrors.company = "Please select your company";
+    }
+
+    if (!formData.email.trim()) {
+      newErrors.email = "Email is required";
+    } else if (!validateEmail(formData.email.trim())) {
+      newErrors.email = "Please enter a valid email address";
+    }
+
+    if (!formData.password.trim()) {
+      newErrors.password = "Please enter your password";
+    }
+
+    if (!isSignIn && formData.password.trim() && !isPasswordValid) {
+      newErrors.password = "Password must match all requirements";
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
   };
 
   const handleSubmit = async () => {
-    // email validation
-    if (!formData.email.trim()) {
-      setEmailError("Email is required");
-      return;
-    }
-    if (!validateEmail(formData.email.trim())) {
-      setEmailError("Please enter a valid email address");
-      return;
-    }
-    setEmailError("");
+    if (!validateForm()) return;
 
     try {
-      if (isSignIn) {
-        // ---------- SIGN IN ----------
-        if (!formData.password) {
-          Alert.alert("Missing data", "Please enter your password.");
-          return;
-        }
+      setErrors({});
 
+      if (isSignIn) {
         const res = await fetch(`${API_BASE_URL}/auth/signin`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -98,38 +135,31 @@ export default function LoginScreen({ navigation }) {
         });
 
         const data = await res.json();
-        if (!res.ok) throw new Error(data.detail || "Sign in failed");
 
-        // Optional: block manager accounts from mobile
+        if (!res.ok) {
+          throw new Error(data.detail || "Sign in failed");
+        }
+
         if (data.role !== "driver") {
-          throw new Error("This app is for drivers only. Please use the manager web portal.");
+          throw new Error(
+            "This app is for drivers only. Please use the manager web portal."
+          );
         }
 
         await AsyncStorage.setItem("token", data.token);
         await AsyncStorage.setItem("role", data.role);
 
-        if (rememberMe) await AsyncStorage.setItem("rememberMe", "1");
-        else await AsyncStorage.removeItem("rememberMe");
+        if (rememberMe) {
+          await AsyncStorage.setItem("rememberMe", "1");
+        } else {
+          await AsyncStorage.removeItem("rememberMe");
+        }
 
         navigation.navigate("Trip");
         return;
       }
 
-      // ---------- DRIVER SIGN UP ----------
-      if (!formData.name.trim()) {
-        Alert.alert("Missing data", "Please enter your name.");
-        return;
-      }
-      if (!formData.company.trim()) {
-        Alert.alert("Missing data", "Please select your company.");
-        return;
-      }
-      if (!formData.password) {
-        Alert.alert("Missing data", "Please enter a password.");
-        return;
-      }
-
-      const res = await fetch(`${API_BASE_URL}/auth/driver/signup`, {
+      const res = await fetch(`${API_BASE_URL}/auth/driver/signup/request-otp`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -141,21 +171,23 @@ export default function LoginScreen({ navigation }) {
       });
 
       const data = await res.json();
-      if (!res.ok) throw new Error(data.detail || "Sign up failed");
 
-      
-      setIsSignIn(true);
+      if (!res.ok) {
+        throw new Error(data.detail || "Failed to send OTP");
+      }
+
+      navigation.navigate("OTP", {
+        email: formData.email.trim(),
+      });
+
       setShowCompanyDropdown(false);
       setShowPassword(false);
-
-      // Clear fields (recommended)
-      setFormData({ name: "", company: "", email: "", password: "" });
+      setErrors({});
     } catch (err) {
-      Alert.alert("Error", err.message);
+      setErrors({ general: err.message });
     }
   };
 
-  // Whole page wrapper: View for Sign In, ScrollView for Sign Up
   const PageWrapper = isSignIn ? View : ScrollView;
 
   const pageWrapperProps = isSignIn
@@ -175,15 +207,16 @@ export default function LoginScreen({ navigation }) {
       <View style={styles.contentWrapper}>
         <View style={styles.brandSection}>
           <Text style={styles.brandTitle}>
-          <Text style={styles.greenText}>Green</Text>
-          <Text style={styles.mileText}>Mile</Text></Text>
+            <Text style={styles.greenText}>Green</Text>
+            <Text style={styles.mileText}>Mile</Text>
+          </Text>
+
           <Text style={styles.brandTagline}>
             Sustainable Last-Mile Delivery Platform
           </Text>
         </View>
 
         <View style={styles.authCard}>
-          {/* Tabs */}
           <View style={styles.tabContainer}>
             <TouchableOpacity
               style={[styles.tab, isSignIn && styles.tabActive]}
@@ -205,10 +238,8 @@ export default function LoginScreen({ navigation }) {
           </View>
 
           <View style={styles.form}>
-            {/* SIGN UP EXTRA FIELDS */}
             {!isSignIn && (
               <>
-                {/* Full Name */}
                 <View style={styles.formGroup}>
                   <Text style={styles.label}>Full Name</Text>
                   <View style={styles.inputWrapper}>
@@ -217,17 +248,21 @@ export default function LoginScreen({ navigation }) {
                       size={20}
                       style={styles.inputIcon}
                     />
+
                     <TextInput
-                      style={styles.input}
+                      style={[styles.input, errors.name && styles.inputError]}
                       placeholder="Enter your name"
                       placeholderTextColor="#94a3b8"
                       value={formData.name}
                       onChangeText={(v) => handleInputChange("name", v)}
                     />
                   </View>
+
+                  {errors.name ? (
+                    <Text style={styles.errorText}>{errors.name}</Text>
+                  ) : null}
                 </View>
 
-                {/* Company dropdown */}
                 <View style={styles.formGroup}>
                   <Text style={styles.label}>Company Name</Text>
 
@@ -242,7 +277,12 @@ export default function LoginScreen({ navigation }) {
                         style={styles.inputIcon}
                       />
 
-                      <View style={styles.input}>
+                      <View
+                        style={[
+                          styles.input,
+                          errors.company && styles.inputError,
+                        ]}
+                      >
                         <Text
                           style={
                             formData.company
@@ -255,6 +295,10 @@ export default function LoginScreen({ navigation }) {
                       </View>
                     </View>
                   </TouchableOpacity>
+
+                  {errors.company ? (
+                    <Text style={styles.errorText}>{errors.company}</Text>
+                  ) : null}
 
                   {showCompanyDropdown && (
                     <View style={styles.dropdownContainer}>
@@ -279,13 +323,18 @@ export default function LoginScreen({ navigation }) {
               </>
             )}
 
-            {/* Email */}
             <View style={styles.formGroup}>
               <Text style={styles.label}>Email Address</Text>
+
               <View style={styles.inputWrapper}>
-                <Ionicons name="mail-outline" size={20} style={styles.inputIcon} />
+                <Ionicons
+                  name="mail-outline"
+                  size={20}
+                  style={styles.inputIcon}
+                />
+
                 <TextInput
-                  style={[styles.input, emailError && styles.inputError]}
+                  style={[styles.input, errors.email && styles.inputError]}
                   placeholder="you@example.com"
                   placeholderTextColor="#94a3b8"
                   value={formData.email}
@@ -294,26 +343,32 @@ export default function LoginScreen({ navigation }) {
                   autoCapitalize="none"
                 />
               </View>
-              {emailError ? <Text style={styles.errorText}>{emailError}</Text> : null}
+
+              {errors.email ? (
+                <Text style={styles.errorText}>{errors.email}</Text>
+              ) : null}
             </View>
 
-            {/* Password */}
             <View style={styles.formGroup}>
               <Text style={styles.label}>Password</Text>
+
               <View style={styles.inputWrapper}>
                 <Ionicons
                   name="lock-closed-outline"
                   size={20}
                   style={styles.inputIcon}
                 />
+
                 <TextInput
-                  style={styles.input}
+                  style={[styles.input, errors.password && styles.inputError]}
                   placeholder="••••••••"
                   placeholderTextColor="#94a3b8"
                   value={formData.password}
                   onChangeText={(v) => handleInputChange("password", v)}
+                  maxLength={8}
                   secureTextEntry={!showPassword}
                 />
+
                 <TouchableOpacity
                   style={styles.passwordToggle}
                   onPress={() => setShowPassword(!showPassword)}
@@ -325,18 +380,79 @@ export default function LoginScreen({ navigation }) {
                   />
                 </TouchableOpacity>
               </View>
+
+              {errors.password ? (
+                <Text style={styles.errorText}>{errors.password}</Text>
+              ) : null}
+
+              {!isSignIn && (
+                <View style={styles.passwordRulesContainer}>
+                  <Text
+                    style={[
+                      styles.passwordRuleText,
+                      passwordRules.length
+                        ? styles.passwordRuleValid
+                        : styles.passwordRuleInvalid,
+                    ]}
+                  >
+                    {passwordRules.length ? "✓" : "✕"} Exactly 8 characters
+                  </Text>
+
+                  <Text
+                    style={[
+                      styles.passwordRuleText,
+                      passwordRules.capital
+                        ? styles.passwordRuleValid
+                        : styles.passwordRuleInvalid,
+                    ]}
+                  >
+                    {passwordRules.capital ? "✓" : "✕"} At least 1 capital
+                    letter
+                  </Text>
+
+                  <Text
+                    style={[
+                      styles.passwordRuleText,
+                      passwordRules.number
+                        ? styles.passwordRuleValid
+                        : styles.passwordRuleInvalid,
+                    ]}
+                  >
+                    {passwordRules.number ? "✓" : "✕"} At least 1 number
+                  </Text>
+
+                  <Text
+                    style={[
+                      styles.passwordRuleText,
+                      passwordRules.special
+                        ? styles.passwordRuleValid
+                        : styles.passwordRuleInvalid,
+                    ]}
+                  >
+                    {passwordRules.special ? "✓" : "✕"} At least 1 special
+                    character
+                  </Text>
+                </View>
+              )}
             </View>
 
-            {/* Remember me (signin only) */}
             {isSignIn && (
               <View style={styles.rememberForgotRow}>
                 <TouchableOpacity
                   style={styles.checkboxContainer}
                   onPress={() => setRememberMe(!rememberMe)}
                 >
-                  <View style={[styles.checkbox, rememberMe && styles.checkboxChecked]}>
-                    {rememberMe && <Ionicons name="checkmark" size={16} color="white" />}
+                  <View
+                    style={[
+                      styles.checkbox,
+                      rememberMe && styles.checkboxChecked,
+                    ]}
+                  >
+                    {rememberMe && (
+                      <Ionicons name="checkmark" size={16} color="white" />
+                    )}
                   </View>
+
                   <Text style={styles.rememberText}>Remember me</Text>
                 </TouchableOpacity>
 
@@ -346,10 +462,13 @@ export default function LoginScreen({ navigation }) {
               </View>
             )}
 
-            {/* Submit */}
+            {errors.general ? (
+              <Text style={styles.errorText}>{errors.general}</Text>
+            ) : null}
+
             <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
               <Text style={styles.submitButtonText}>
-                {isSignIn ? "Sign In" : "Create Account"}
+                {isSignIn ? "Sign In" : "Send OTP"}
               </Text>
             </TouchableOpacity>
           </View>

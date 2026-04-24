@@ -122,9 +122,10 @@ brandTagline: {
     color: '#334155',
     marginBottom: 8,
   },
-  inputWrapper: {
-    position: 'relative',
-  },
+ inputWrapper: {
+  position: 'relative',
+  justifyContent: 'center',
+},
   inputIcon: {
     position: 'absolute',
     left: 16,
@@ -247,4 +248,43 @@ brandTagline: {
     fontSize: 16,
     color: '#0f172a',
   },
+passwordRulesContainer: {
+  marginTop: 10,
+  gap: 6,
+},
+
+passwordRuleRow: {
+  flexDirection: "row",
+  alignItems: "center",
+},
+
+passwordRuleText: {
+  fontSize: 13,
+  fontWeight: "500",
+},
+
+passwordRuleValid: {
+  color: "#16a34a", // green
+},
+
+passwordRuleInvalid: {
+  color: "#ef4444", // red
+},
+passwordRulesContainer: {
+  marginTop: 8,
+  gap: 5,
+},
+
+passwordRuleText: {
+  fontSize: 13,
+  fontWeight: "500",
+},
+
+passwordRuleValid: {
+  color: "green",
+},
+
+passwordRuleInvalid: {
+  color: "red",
+},
 };

@@ -1,11 +1,59 @@
 import React, { useState, useRef, useEffect } from 'react';
 
+const initialMessage = `مرحبًا! أنا مساعدك الذكي في GreenMile 🌿
+
+أقدر أساعدك في تحليل لوحة التحكم (Dashboard) والإجابة عن أسئلتك المتعلقة بالرحلات، الانبعاثات، والاستدامة.
+
+كيف أقدر أساعدك اليوم؟
+
+---
+
+Hello! I'm your GreenMile AI Assistant 🌿
+
+I can help you analyze your dashboard and answer questions about your trips, emissions, and sustainability.
+
+How can I help you today?`;
+
+const cleanText = (text) => {
+  return text
+    .replace(/##/g, '')
+    .replace(/\*\*/g, '')
+    .replace(/\n/g, '\n'); // keep line breaks
+};
+
+const renderMessageContent = (content) => {
+  if (content.includes('---')) {
+    return content.split('---').map((part, index) => (
+      <div
+        key={index}
+        dir={index === 0 ? 'rtl' : 'ltr'}
+        className="ai-message-part"
+        style={{ marginBottom: '10px', whiteSpace: 'pre-line' }}
+      >
+        {cleanText(part.trim())}
+      </div>
+    ));
+  }
+
+  const hasArabic = /[\u0600-\u06FF]/.test(content);
+
+  return (
+    <div
+      dir={hasArabic ? 'rtl' : 'ltr'}
+      className="ai-message-part"
+      style={{ whiteSpace: 'pre-line' }}
+    >
+      {cleanText(content)}
+    </div>
+  );
+};
+
 const AIAgentChat = ({ companyId, companyName, dashboardData, onClose }) => {
   const [messages, setMessages] = useState([
     {
       role: 'assistant',
-      content: 'مرحباً! I\'m your GreenMile AI Assistant 🌿\n\nI can analyze your dashboard and answer questions about your trips, emissions, and sustainability — in Arabic or English.\n\nHow can I help you today?'
-    }
+      content: initialMessage,
+    },
   ]);
 
   const [inputText, setInputText] = useState('');
@@ -22,7 +70,7 @@ const AIAgentChat = ({ companyId, companyName, dashboardData, onClose }) => {
 
     const userText = inputText.trim();
     setInputText('');
-    setMessages(prev => [...prev, { role: 'user', content: userText }]);
+    setMessages((prev) => [...prev, { role: 'user', content: userText }]);
     setIsLoading(true);
 
     try {
@@ -34,20 +82,29 @@ const AIAgentChat = ({ companyId, companyName, dashboardData, onClose }) => {
           company_name: companyName,
           message: userText,
           conversation_history: conversationHistory,
-          dashboard_snapshot: dashboardData
-        })
+          dashboard_snapshot: dashboardData,
+        }),
       });
 
       if (!response.ok) throw new Error('Server error');
-      const data = await response.json();
-      setMessages(prev => [...prev, { role: 'assistant', content: data.reply }]);
-      setConversationHistory(data.updated_history);
 
+      const data = await response.json();
+
+      setMessages((prev) => [
+        ...prev,
+        { role: 'assistant', content: data.reply },
+      ]);
+
+      setConversationHistory(data.updated_history);
     } catch (error) {
-      setMessages(prev => [...prev, {
-        role: 'assistant',
-        content: '⚠️ Sorry, I could not connect. Please try again.\nعذراً، لم أتمكن من الاتصال. يرجى المحاولة مرة أخرى.'
-      }]);
+      setMessages((prev) => [
+        ...prev,
+        {
+          role: 'assistant',
+          content:
+            'عذراً، لم أتمكن من الاتصال. يرجى المحاولة مرة أخرى.\n\n---\n\n⚠️ Sorry, I could not connect. Please try again.',
+        },
+      ]);
     } finally {
       setIsLoading(false);
     }
@@ -67,17 +124,36 @@ const AIAgentChat = ({ companyId, companyName, dashboardData, onClose }) => {
           <div className="ai-chat-avatar">🌿</div>
           <div>
             <div className="ai-chat-title">GreenMile Assistant</div>
-            <div className="ai-chat-subtitle">Arabic & English • Powered by AI</div>
+            <div className="ai-chat-subtitle">
+              Arabic & English • Powered by AI
+            </div>
           </div>
         </div>
-        <button className="ai-chat-close-btn" onClick={onClose} aria-label="Close chat">✕</button>
+
+        <button
+          className="ai-chat-close-btn"
+          onClick={onClose}
+          aria-label="Close chat"
+        >
+          ✕
+        </button>
       </div>
 
       <div className="ai-chat-messages">
         {messages.map((msg, index) => (
-          <div key={index} className={`ai-chat-message ${msg.role === 'user' ? 'user-message' : 'assistant-message'}`}>
-            {msg.role === 'assistant' && <div className="ai-chat-msg-avatar">🌿</div>}
-            <div className="ai-chat-bubble">{msg.content}</div>
+          <div
+            key={index}
+            className={`ai-chat-message ${
+              msg.role === 'user' ? 'user-message' : 'assistant-message'
+            }`}
+          >
+            {msg.role === 'assistant' && (
+              <div className="ai-chat-msg-avatar">🌿</div>
+            )}
+
+            <div className="ai-chat-bubble">
+              {renderMessageContent(msg.content)}
+            </div>
           </div>
         ))}
 
@@ -91,18 +167,36 @@ const AIAgentChat = ({ companyId, companyName, dashboardData, onClose }) => {
             </div>
           </div>
         )}
+
         <div ref={messagesEndRef} />
       </div>
 
       {messages.length === 1 && (
         <div className="ai-chat-suggestions">
-          <button className="suggestion-chip" onClick={() => setInputText('What are my total CO2 emissions?')}>
+          <button
+            className="suggestion-chip"
+            onClick={() =>
+              setInputText('What are my total CO2 emissions?')
+            }
+          >
             📊 Total emissions
           </button>
-          <button className="suggestion-chip" onClick={() => setInputText('كم عدد رحلاتي الخضراء؟')}>
+
+          <button
+            className="suggestion-chip"
+            onClick={() =>
+              setInputText('كم عدد رحلاتي الخضراء؟')
+            }
+          >
             🟢 الرحلات الخضراء
           </button>
-          <button className="suggestion-chip" onClick={() => setInputText('How can I reduce my carbon footprint?')}>
+
+          <button
+            className="suggestion-chip"
+            onClick={() =>
+              setInputText('How can I reduce my carbon footprint?')
+            }
+          >
             💡 Reduce emissions
           </button>
         </div>
@@ -114,10 +208,11 @@ const AIAgentChat = ({ companyId, companyName, dashboardData, onClose }) => {
           value={inputText}
           onChange={(e) => setInputText(e.target.value)}
           onKeyDown={handleKeyDown}
-          placeholder="Ask anything in Arabic or English... / اسأل أي شيء..."
+          placeholder="Ask me anything / اسألني عن أي شيء"
           rows={2}
           disabled={isLoading}
         />
+
         <button
           className="ai-chat-send-btn"
           onClick={sendMessage}

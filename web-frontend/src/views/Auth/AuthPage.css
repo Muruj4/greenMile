@@ -399,3 +399,132 @@
   }
   .gm-brand__title{ font-size:42px; }
 }
+.gm-passwordRules{
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+  margin-top:6px;
+}
+
+.gm-rule{
+  font-size:12px;
+  font-weight:800;
+  line-height:1.3;
+}
+
+.gm-rule--ok{
+  color:#16a34a;
+}
+
+.gm-rule--bad{
+  color:#ef4444;
+}
+
+.gm-otpForm{
+  gap:16px;
+}
+
+.gm-backBtn{
+  width:max-content;
+  border:0;
+  background:transparent;
+  cursor:pointer;
+  color:var(--gm-muted);
+  font-weight:800;
+  font-family:'Fraunces', serif;
+  display:flex;
+  align-items:center;
+  gap:6px;
+}
+
+.gm-backBtn:hover{
+  color:var(--gm-green);
+}
+
+.gm-otpHeader{
+  text-align:center;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:8px;
+  padding:4px 8px 6px;
+}
+
+.gm-otpIcon{
+  width:64px;
+  height:64px;
+  border-radius:999px;
+  background:rgba(5,150,105,0.10);
+  color:var(--gm-green);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.gm-otpTitle{
+  margin:4px 0 0;
+  color:var(--gm-text);
+  font-size:26px;
+  line-height:1.1;
+}
+
+.gm-otpText{
+  margin:0;
+  color:var(--gm-muted);
+  font-size:14px;
+  font-weight:700;
+  line-height:1.5;
+}
+
+.gm-otpEmail{
+  margin:0;
+  color:var(--gm-green);
+  font-size:14px;
+  font-weight:900;
+  word-break:break-word;
+}
+
+.gm-otpInput{
+  width:100%;
+  height:58px;
+  border-radius:16px;
+  border:1px solid var(--gm-border);
+  background:#ffffff;
+  outline:none;
+  text-align:center;
+  font-size:28px;
+  letter-spacing:14px;
+  font-weight:900;
+  color:var(--gm-text);
+  font-family:'DM Mono', monospace;
+  padding-left:14px;
+}
+
+.gm-otpInput:focus{
+  border-color:rgba(5,150,105,0.55);
+  box-shadow:0 0 0 4px rgba(5,150,105,0.14);
+}
+
+.gm-centerError{
+  text-align:center;
+  margin-top:0;
+}
+
+.gm-resendBtn{
+  border:0;
+  background:transparent;
+  cursor:pointer;
+  color:var(--gm-muted);
+  font-size:13px;
+  font-weight:800;
+  font-family:'Fraunces', serif;
+}
+
+.gm-resendBtn span{
+  color:rgba(5,150,105,0.98);
+  font-weight:900;
+}
+
+.gm-resendBtn:hover span{
+  text-decoration:underline;
+}
