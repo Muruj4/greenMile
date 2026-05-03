@@ -1,135 +1,156 @@
 @import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;1,9..144,400;1,9..144,600&family=Manrope:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap');
 
-
-:root{
-  --gm-bg:#f6faf8;
-  --gm-green:#013f2b;
-  --gm-green2:#10b981;
-  --gm-text:#080b13;
-  --gm-muted:#475569;
-  --gm-border:rgba(148,163,184,0.45);
+:root {
+  --gm-green:  #013f2b;
+  --gm-green2: #10b981;
+  --gm-text:   #0d1f13;
+  --gm-muted:  #64748b;
+  --gm-border: #dde6de;
+  --gm-bg:     #f0f4f1;
 }
 
-/* ── Page shell — no padding so Nav sits flush at top ── */
+/* ── Page — fixed height, no scroll ── */
 .trip-page {
-  min-height: 100vh;
+  height: 100vh;
+  max-height: 100vh;
+  overflow: hidden;
   background:
-    radial-gradient(1200px 600px at 20% 10%, rgba(16,185,129,0.10), transparent 60%),
-    radial-gradient(900px 500px at 80% 85%, rgba(5,150,105,0.10), transparent 55%),
+    radial-gradient(1200px 600px at 20% 10%, rgba(16,185,129,0.08), transparent 60%),
+    radial-gradient(900px 500px at 80% 85%, rgba(5,150,105,0.08), transparent 55%),
     var(--gm-bg);
   position: relative;
-  overflow: hidden;
-  padding: 0;                /* ← no padding on the page itself */
-  font-family: 'Fraunces', serif;
+  font-family: 'Manrope', sans-serif;
 }
 
-/* ── Content area below the nav ── */
+/* ── Content area ── */
 .trip-page__content {
   display: flex;
   align-items: center;
-  justify-content: center;    /* ← centers horizontally */
-  padding: 48px 20px;
-  min-height: calc(100vh - 54px);
+  justify-content: center;
+  height: calc(100vh - 54px - 53px);
   position: relative;
+  padding: 0 20px;
 }
 
+/* ── Orbs ── */
 .trip-orb {
   position: absolute;
   border-radius: 9999px;
-  opacity: 0.45;
+  opacity: 0.35;
   pointer-events: none;
 }
-
 .trip-orb--1 {
-  width: 520px;
-  height: 520px;
-  left: -220px;
-  top: -220px;
-  background: radial-gradient(circle at 30% 30%, rgba(16,185,129,0.30), rgba(16,185,129,0.02) 70%);
+  width: 480px; height: 480px;
+  left: -200px; top: -200px;
+  background: radial-gradient(circle at 30% 30%, rgba(16,185,129,0.25), rgba(16,185,129,0.01) 70%);
 }
-
 .trip-orb--2 {
-  width: 620px;
-  height: 620px;
-  right: -280px;
-  bottom: -280px;
-  background: radial-gradient(circle at 30% 30%, rgba(5,150,105,0.26), rgba(5,150,105,0.02) 70%);
+  width: 560px; height: 560px;
+  right: -250px; bottom: -250px;
+  background: radial-gradient(circle at 30% 30%, rgba(5,150,105,0.20), rgba(5,150,105,0.01) 70%);
 }
 
 /* ── Card ── */
 .trip-screen {
-  max-width: 980px;
-  margin-top: 80px;
-  margin-left: auto;
-  margin-right: auto;
+  max-width: 740px;
   width: 100%;
-  padding: 48px 56px;
-  background: rgba(255,255,255,0.88);
-  backdrop-filter: blur(10px);
-  border-radius: 22px;
-  box-shadow: 0 18px 55px rgba(2,6,23,0.10);
-  border: 1px solid rgba(148,163,184,0.35);
+  padding: 38px 48px;
+  background: #ffffff;
+  border-radius: 20px;
+  box-shadow: 0 10px 40px rgba(1,63,43,0.09);
+  border: 1px solid var(--gm-border);
   position: relative;
   z-index: 2;
+  margin-top: -30px;
 }
 
+.trip-screen::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 20px; bottom: 20px;
+  width: 3px;
+  background: linear-gradient(180deg, #013f2b, #10b981);
+  border-radius: 0 2px 2px 0;
+}
+
+/* ── Header ── */
 .trip-header h2 {
-  font-size: 30px;
+  font-family: 'Fraunces', serif;
+  font-size: 28px;
+  font-weight: 600;
+  color: var(--gm-text);
   margin: 0;
-  color: #1a2e1a;
-  font-weight: 800;
-  letter-spacing: -0.02em;
-}
-
-.trip-subtitle {
-  margin-top: 10px;
-  margin-bottom: 26px;
-  color: var(--gm-muted);
-  font-size: 14px;
-  font-weight: 500;
+  line-height: 1.2;
 }
 
 .highlight {
-  color: #2e8b57;
-  font-weight: 800;
+  font-style: italic;
+  color: var(--gm-green2);
 }
 
+.trip-subtitle {
+  margin-top: 6px;
+  margin-bottom: 22px;
+  color: var(--gm-muted);
+  font-size: 13px;
+  font-weight: 500;
+  font-family: 'Manrope', sans-serif;
+}
+
+/* ── Form ── */
 form {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 11px;
 }
 
 .form-row {
-  display: flex;
-  gap: 14px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
 }
 
+/* ── Field ── */
 .field {
   display: flex;
   align-items: center;
   gap: 10px;
   border: 1px solid var(--gm-border);
-  border-radius: 14px;
-  padding: 10px 14px;
-  background: #ffffff;
+  border-radius: 11px;
+  padding: 0 14px;
+  background: #f8fbf9;
   height: 48px;
   transition: box-shadow 160ms ease, border-color 160ms ease;
-  flex: 1;
+  position: relative;
+}
+
+.field::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 8px; bottom: 8px;
+  width: 3px;
+  background: var(--gm-green2);
+  border-radius: 0 2px 2px 0;
+  opacity: 0;
+  transition: opacity 160ms ease;
 }
 
 .field:focus-within {
-  border-color: rgba(5,150,105,0.55);
-  box-shadow: 0 0 0 4px rgba(5,150,105,0.14);
+  border-color: rgba(16,185,129,0.5);
+  box-shadow: 0 0 0 3px rgba(16,185,129,0.10);
+  background: #ffffff;
 }
 
+.field:focus-within::before { opacity: 1; }
+
 .field-icon {
-  color: rgba(5,150,105,0.75);
+  color: rgba(16,185,129,0.75);
   display: flex;
   align-items: center;
   flex-shrink: 0;
 }
 
+/* ── Input & Select ── */
 .field input,
 .field select {
   border: none;
@@ -137,63 +158,98 @@ form {
   width: 100%;
   height: 100%;
   background: transparent;
-  font-size: 14px;
+  font-size: 13px;
   color: var(--gm-text);
   font-family: 'Fraunces', serif;
+  font-weight: 600;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
 }
 
 .field input::placeholder {
   color: #94a3b8;
+  font-family: 'Fraunces', serif;
+  font-weight: 400;
+  font-style: italic;
 }
 
+/* Custom dropdown arrow */
+.field select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2310b981' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 4px center;
+  padding-right: 28px;
+}
+
+/* Style the dropdown options */
+.field select option {
+  font-family: 'Manrope', sans-serif;
+  font-size: 13px;
+  color: var(--gm-text);
+  background: #ffffff;
+  padding: 8px 12px;
+}
+
+.field select option:checked {
+  background: #e8f5e9;
+  color: #013f2b;
+}
+
+/* ── Fuel toggle ── */
 .fuel-toggle {
   display: flex;
-  gap: 12px;
+  gap: 0;
+  border: 1px solid var(--gm-border);
+  border-radius: 11px;
+  overflow: hidden;
 }
 
 .fuel-toggle button {
   flex: 1;
   height: 46px;
-  border-radius: 14px;
-  border: 1px solid var(--gm-border);
-  background: rgba(152,214,181,0.14);
+  border: none;
+  background: #f8fbf9;
   cursor: pointer;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 700;
-  color: #334155;
-  transition: 0.2s;
+  color: var(--gm-muted);
+  transition: all 0.2s ease;
   font-family: 'Fraunces', serif;
+  border-right: 1px solid var(--gm-border);
 }
+
+.fuel-toggle button:last-child { border-right: none; }
 
 .fuel-toggle button.active {
-  background: #1e4620;
-  border-color: #1e4620;
-  color: white;
-  box-shadow: 0 14px 30px rgba(30,70,32,0.20);
+  background: var(--gm-green);
+  color: #ffffff;
+  border-color: var(--gm-green);
 }
 
+/* ── Submit ── */
 .trip-submit {
-  margin-top: 6px;
+  margin-top: 2px;
   background: linear-gradient(135deg, var(--gm-green), var(--gm-green2));
   border: none;
   height: 50px;
-  border-radius: 16px;
+  border-radius: 12px;
   cursor: pointer;
   color: white;
-  font-size: 15px;
-  font-weight: 900;
+  font-size: 14px;
+  font-weight: 700;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 10px;
-  box-shadow: 0 18px 40px rgba(5,150,105,0.20);
+  box-shadow: 0 8px 24px rgba(16,185,129,0.22);
   transition: transform 140ms ease, box-shadow 140ms ease;
   font-family: 'Fraunces', serif;
+  letter-spacing: 0.01em;
 }
 
 .trip-submit:hover {
   transform: translateY(-1px);
-  box-shadow: 0 22px 46px rgba(5,150,105,0.24);
+  box-shadow: 0 12px 28px rgba(16,185,129,0.28);
 }
 
 .trip-submit:disabled {
@@ -202,24 +258,123 @@ form {
   transform: none;
 }
 
+/* ── Error ── */
 .error-message {
-  color: #b71c1c;
-  padding: 12px;
-  background: #ffdada;
+  color: #b91c1c;
+  padding: 10px 14px;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
   border-radius: 10px;
-  margin-top: 4px;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 600;
+  font-family: 'Manrope', sans-serif;
 }
 
-@media (max-width: 900px) {
-  .trip-screen {
-    padding: 38px 24px;
-  }
-  .form-row {
-    flex-direction: column;
-  }
-  .trip-page__content {
-    padding: 24px 16px;
-  }
+@media (max-width: 680px) {
+  .trip-screen { padding: 28px 20px; max-width: 100%; }
+  .form-row    { grid-template-columns: 1fr; }
+  .trip-screen { margin-top: 0; }
+}
+
+/* ── Custom Dropdown ── */
+.ts-dd-wrap {
+  position: relative;
+  width: 100%;
+}
+
+.ts-dd-btn {
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+  justify-content: flex-start;
+  border: 1px solid var(--gm-border);
+  background: #f8fbf9;
+}
+
+.ts-dd-btn.field--open {
+  border-color: rgba(16,185,129,0.5);
+  box-shadow: 0 0 0 3px rgba(16,185,129,0.10);
+  background: #ffffff;
+}
+
+.ts-dd-text {
+  flex: 1;
+  font-family: 'Fraunces', serif;
+  font-size: 13px;
+  font-weight: 400;
+  font-style: italic;
+  color: #94a3b8;
+}
+
+.ts-dd-text--val {
+  font-style: normal;
+  font-weight: 600;
+  color: var(--gm-text);
+}
+
+.ts-dd-chevron {
+  color: rgba(16,185,129,0.6);
+  display: flex;
+  align-items: center;
+  transition: transform 160ms ease;
+  flex-shrink: 0;
+}
+
+.ts-dd-chevron--up {
+  transform: rotate(180deg);
+}
+
+.ts-dropdown {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: calc(100% + 6px);
+  z-index: 1000;
+  max-height: 220px;
+  overflow-y: auto;
+  border-radius: 14px;
+  border: 1px solid rgba(148,163,184,0.35);
+  background: rgba(255,255,255,0.98);
+  box-shadow: 0 16px 40px rgba(1,63,43,0.12);
+  backdrop-filter: blur(8px);
+}
+
+.ts-dd-item {
+  width: 100%;
+  padding: 11px 16px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  text-align: left;
+  font-family: 'Fraunces', serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--gm-text);
+  transition: background 0.12s ease;
+}
+
+.ts-dd-item:hover {
+  background: rgba(16,185,129,0.08);
+}
+
+.ts-dd-item--selected {
+  background: rgba(16,185,129,0.12);
+  color: #013f2b;
+}
+
+.ts-dropdown::-webkit-scrollbar { width: 6px; }
+.ts-dropdown::-webkit-scrollbar-thumb {
+  background: rgba(148,163,184,0.5);
+  border-radius: 999px;
+  border: 2px solid rgba(255,255,255,0.98);
+}
+
+/* ── Page transition ── */
+.trip-page {
+  animation: slideInFromRight 0.35s ease both;
+}
+
+@keyframes slideInFromRight {
+  from { opacity: 0; transform: translateX(40px); }
+  to   { opacity: 1; transform: translateX(0); }
 }

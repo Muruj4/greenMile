@@ -15,9 +15,7 @@ from controllers.AIController import AIController
 from controllers.AuthController import AuthController
 from controllers.AIAgentController import router as ai_agent_router
 from utils.email_sender import send_otp_email
-
-
-
+from controllers.MyTripsController import router as my_trips_router
 from utils.auth_dep import get_current_user
 from db.session import get_db
 from models.trip_db import TripDB
@@ -459,4 +457,5 @@ app.include_router(DashboardController.router)
 
 # After you create your app (after: app = FastAPI()):
 app.include_router(ai_agent_router)
+app.include_router(my_trips_router)
 
