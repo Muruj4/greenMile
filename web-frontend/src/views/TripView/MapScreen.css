@@ -15,7 +15,7 @@
   border-bottom: 1px solid #fecaca;
   color: #b91c1c;
   padding: 10px 16px;
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 600;
   flex-shrink: 0;
 }
@@ -23,7 +23,7 @@
 /* ── Main layout ── */
 .map-layout {
   display: grid;
-  grid-template-columns: 1fr 380px;
+  grid-template-columns: 1fr 420px;
   flex: 1;
   height: calc(100vh - 54px - 53px);
   overflow: hidden;
@@ -49,7 +49,7 @@
   border: 1px solid #dde6de;
   border-radius: 20px;
   padding: 7px 14px;
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 700;
   color: #64748b;
   display: flex;
@@ -83,7 +83,7 @@
   display: flex;
   flex-direction: column;
   height: 100%;
-  overflow: hidden;
+  overflow-y: auto;
 }
 
 .map-panel__header {
@@ -100,7 +100,7 @@
 }
 
 .map-panel__sub {
-  font-size: 12px;
+  font-size: 14px;
   color: #94a3b8;
   margin-top: 3px;
   font-family: 'Manrope', sans-serif;
@@ -112,19 +112,19 @@
   background: #fef2f2;
   border: 1px solid #fecaca;
   border-radius: 10px;
-  font-size: 12px;
+  font-size: 14px;
   color: #b91c1c;
   font-weight: 600;
 }
 
 /* ── Cards list ── */
 .map-panel__cards {
-  flex: 1;
   overflow-y: auto;
   padding: 14px 16px;
   display: flex;
   flex-direction: column;
   gap: 10px;
+  flex-shrink: 0;
 }
 
 .map-panel__cards::-webkit-scrollbar { width: 5px; }
@@ -135,6 +135,7 @@
 
 /* ── Route card ── */
 .route-card {
+  min-height: 90px;
   background: #f8fbf9;
   border: 1.5px solid #dde6de;
   border-radius: 14px;
@@ -170,7 +171,7 @@
   right: 12px;
   background: #10b981;
   color: #ffffff;
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 700;
   padding: 4px 10px;
   border-radius: 0 0 8px 8px;
@@ -193,7 +194,7 @@
 }
 
 .route-card__name {
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 700;
   color: #0d1f13;
   flex: 1;
@@ -202,7 +203,7 @@
 }
 
 .route-card__badge {
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 700;
   padding: 3px 9px;
   border-radius: 20px;
@@ -219,13 +220,13 @@
   display: flex;
   gap: 14px;
   font-family: 'DM Mono', monospace;
-  font-size: 12px;
+  font-size: 14px;
   color: #64748b;
   margin-bottom: 8px;
 }
 
 .route-card__co2 {
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 700;
   padding: 5px 10px;
   border-radius: 8px;
@@ -267,7 +268,7 @@
 /* ── Responsive ── */
 @media (max-width: 900px) {
   .map-layout {
-    grid-template-columns: 1fr 300px;
+    grid-template-columns: 1fr 380px;
   }
 }
 
@@ -290,4 +291,189 @@
 @keyframes slideInFromRight {
   from { opacity: 0; transform: translateX(40px); }
   to   { opacity: 1; transform: translateX(0); }
+}
+
+/* ── Smart Recommendation Section ── */
+.map-ai-section {
+  margin: 0 12px 12px;
+  border: 1px solid #dde6de;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #f8fbf9;
+}
+
+.map-ai-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px 8px;
+  border-bottom: 1px solid #dde6de;
+}
+
+.map-ai-title {
+  font-size: 15px !important;
+  font-family: 'Fraunces', serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: #0d1f13;
+}
+
+.map-ai-best-badge {
+  font-size: 12px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 20px;
+  letter-spacing: 0.03em;
+}
+
+.map-ai-best-badge--green  { background: #e8f5e9; color: #013f2b; }
+.map-ai-best-badge--orange { background: #fff3e0; color: #b45309; }
+.map-ai-best-badge--red    { background: #fce4ec; color: #c62828; }
+
+.map-ai-summary {
+  padding: 8px 14px;
+  font-size: 12px;
+  color: #475569;
+  line-height: 1.5;
+  font-family: 'Manrope', sans-serif;
+}
+
+.map-ai-summary strong { color: #013f2b; }
+
+.map-ai-percent {
+  color: #10b981;
+  font-weight: 700;
+}
+
+.map-ai-fuel-banner {
+  margin: 0 14px 8px;
+  background: #013f2b;
+  color: #ffffff;
+  border-radius: 8px;
+  padding: 7px 12px;
+  font-size: 12px;
+  font-weight: 600;
+  font-family: 'Manrope', sans-serif;
+}
+
+.map-ai-fuel-banner strong { color: #10b981; }
+
+.map-ai-block {
+  padding: 6px 14px 10px;
+}
+
+.map-ai-block__title {
+  font-size: 12px;
+  font-weight: 700;
+  color: #0d1f13;
+  margin-bottom: 5px;
+  font-family: 'Manrope', sans-serif;
+}
+
+.map-ai-block__item {
+  font-size: 12px;
+  color: #475569;
+  line-height: 1.5;
+  font-family: 'Manrope', sans-serif;
+  padding-left: 4px;
+}
+
+/* ── Page transition ── */
+.map-page {
+  animation: slideInFromRight 0.35s ease both;
+}
+
+@keyframes slideInFromRight {
+  from { opacity: 0; transform: translateX(40px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+/* ── Overrides for bigger cards and text ── */
+.route-card {
+  padding: 18px 16px !important;
+}
+
+.route-card__name {
+  font-size: 14px !important;
+}
+
+.route-card__meta {
+  font-size: 13px !important;
+  margin-bottom: 8px !important;
+}
+
+.route-card__co2 {
+  font-size: 13px !important;
+  padding: 6px 12px !important;
+}
+
+.map-ai-title {
+  font-size: 15px !important;
+}
+
+.map-ai-summary {
+  font-size: 13px !important;
+  line-height: 1.6 !important;
+}
+
+.map-ai-block__title {
+  font-size: 13px !important;
+}
+
+.map-ai-block__item {
+  font-size: 12px !important;
+  line-height: 1.6 !important;
+}
+
+.map-ai-fuel-banner {
+  font-size: 13px !important;
+  padding: 9px 14px !important;
+}
+
+.map-panel__title {
+  font-size: 22px !important;
+}
+
+.map-panel__sub {
+  font-size: 13px !important;
+}
+
+/* ── Scrollable area (Smart Rec + Cards) ── */
+.map-panel__scroll {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.map-panel__scroll::-webkit-scrollbar { width: 5px; }
+.map-panel__scroll::-webkit-scrollbar-thumb {
+  background: #dde6de;
+  border-radius: 3px;
+}
+
+/* Cards inside scroll — no extra overflow */
+.map-panel__cards {
+  overflow-y: visible !important;
+  flex-shrink: 0;
+}
+
+/* ── Limit Smart Recommendation height ── */
+.map-ai-section {
+  max-height: 260px;
+  overflow-y: auto;
+  flex-shrink: 0;
+}
+
+.map-ai-section::-webkit-scrollbar { width: 4px; }
+.map-ai-section::-webkit-scrollbar-thumb {
+  background: #dde6de;
+  border-radius: 2px;
+}
+
+/* ── Remove max-height limit from Smart Recommendation ── */
+.map-ai-section {
+  max-height: none !important;
+  overflow-y: visible !important;
+  flex-shrink: 0;
 }

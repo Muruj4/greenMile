@@ -1,7 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { MemoryRouter } from "react-router-dom";
-import Navbar from "../Nav";
+import Navbar from "../Dashboard/Nav";
 
 function renderNavbar(route = "/dashboard", companyName = "Green Mile Logistics") {
   return render(
@@ -63,11 +63,9 @@ describe("Navbar — Unit Tests", () => {
   test("clicking buttons does not crash", async () => {
     const user = userEvent.setup();
     renderNavbar();
-
     await user.click(screen.getByRole("button", { name: /dashboard/i }));
     await user.click(screen.getByRole("button", { name: /create a trip/i }));
     await user.click(screen.getByRole("button", { name: /my trips/i }));
-
     expect(screen.getByText("GreenMile")).toBeInTheDocument();
   });
 

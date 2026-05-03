@@ -127,7 +127,7 @@ export default function MapScreen() {
           {aiLoading && (
             <div className="map-ai-badge">
               <span className="map-ai-dot" />
-              Analyzing routes...
+              Analyzing routes with AI
             </div>
           )}
           {aiAnalysis && !aiLoading && (
@@ -148,45 +148,109 @@ export default function MapScreen() {
           </div>
 
           {aiError && (
-            <div className="map-panel__ai-error">⚠ AI unavailable</div>
+            <div className="map-panel__ai-error">⚠ AI Error: {aiError}</div>
           )}
 
-          <div className="map-panel__cards">
-            {routesWithAI.map((route, index) => {
-              const isBest     = aiAnalysis && route.summary === aiAnalysis.best_route?.route_name;
-              const isSelected = index === selectedIndex;
-              return (
-                <div
-                  key={index}
-                  className={`route-card ${isSelected ? "route-card--selected" : ""} ${isBest ? "route-card--best" : ""}`}
-                  onClick={() => setSelectedIndex(index)}
-                >
-                  {isBest && <div className="route-card__ribbon">⭐ AI Pick</div>}
+          {/* ── Scrollable content: Smart Recommendation + Route Cards ── */}
+          <div className="map-panel__scroll">
 
-                  <div className="route-card__header">
-                    <span className="route-card__dot" style={{ background: colorMap[route.color] }} />
-                    <span className="route-card__name">{route.summary}</span>
-                    <span className={`route-card__badge route-card__badge--${route.color}`}>
-                      {route.color.toUpperCase()}
-                    </span>
-                  </div>
+            {/* Smart Recommendation — shown first */}
+            {aiAnalysis && !aiLoading && (
+              <div className="map-ai-section">
+                <div className="map-ai-header">
+                  <span className="map-ai-title">Smart Recommendation</span>
+                  <span className={`map-ai-best-badge map-ai-best-badge--${routesWithAI.find(r => r.summary === aiAnalysis.best_route?.route_name)?.color || "green"}`}>
+                    Best: {(routesWithAI.find(r => r.summary === aiAnalysis.best_route?.route_name)?.color || "green").toUpperCase()}
+                  </span>
+                </div>
 
-                  <div className="route-card__meta">
-                    <span>{route.distance}</span>
-                    <span>{route.duration}</span>
-                  </div>
-
-                  {route.ai && aiAnalysis && (
-                    <div className={`route-card__co2 route-card__co2--${route.color}`}>
-                      {route.ai.predicted_co2e_kg.toFixed(2)} kg CO₂e
-                      {isBest ? " · Best choice" : ` · +${(route.ai.predicted_co2e_kg - aiAnalysis.best_route.predicted_co2e_kg).toFixed(2)} kg`}
-                    </div>
+                <div className="map-ai-summary">
+                  Choose '{aiAnalysis.best_route?.route_name}' to save{" "}
+                  <strong>{aiAnalysis.co2e_saving_kg?.toFixed(2)} kg CO₂e</strong>
+                  {aiAnalysis.co2e_saving_percent > 0 && (
+                    <span className="map-ai-percent"> ({aiAnalysis.co2e_saving_percent?.toFixed(1)}% reduction)</span>
                   )}
                 </div>
-              );
-            })}
+
+                {aiAnalysis.fuel_saving_liters > 0 && (
+                  <div className="map-ai-fuel-banner">
+                    Save <strong>{aiAnalysis.fuel_saving_liters?.toFixed(2)} L</strong> of fuel
+                    {aiAnalysis.fuel_saving_percent > 0 && (
+                      <span> · {aiAnalysis.fuel_saving_percent?.toFixed(1)}%</span>
+                    )}
+                  </div>
+                )}
+
+                {aiAnalysis.recommendations?.length > 0 && (
+                  <div className="map-ai-block">
+                    <div className="map-ai-block__title">Smart Suggestions:</div>
+                    {aiAnalysis.recommendations.map((rec, i) => (
+                      <div key={i} className="map-ai-block__item">✓ {rec}</div>
+                    ))}
+                  </div>
+                )}
+
+                {aiAnalysis.reasons?.length > 0 && (
+                  <div className="map-ai-block">
+                    <div className="map-ai-block__title">Why this route?</div>
+                    {aiAnalysis.reasons.map((reason, i) => (
+                      <div key={i} className="map-ai-block__item">✓ {reason}</div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* Route Cards — after Smart Recommendation */}
+            <div className="map-panel__cards">
+              {routesWithAI.map((route, index) => {
+                const isBest     = aiAnalysis && route.summary === aiAnalysis.best_route?.route_name;
+                const isSelected = index === selectedIndex;
+                return (
+                  <div
+                    key={index}
+                    className={`route-card ${isSelected ? "route-card--selected" : ""} ${isBest ? "route-card--best" : ""}`}
+                    onClick={() => setSelectedIndex(index)}
+                  >
+                    {isBest && <div className="route-card__ribbon">⭐ AI Pick</div>}
+
+                    <div className="route-card__header">
+                      <span className="route-card__dot" style={{ background: colorMap[route.color] }} />
+                      <span className="route-card__name">{route.summary}</span>
+                      <span className={`route-card__badge route-card__badge--${route.color}`}>
+                        {route.color.toUpperCase()}
+                      </span>
+                    </div>
+
+                    <div className="route-card__meta">
+                      <span>{route.distance}</span>
+                      <span>{route.duration}</span>
+                    </div>
+
+                    {route.emissions?.co2e && (
+                      <div className={`route-card__co2 route-card__co2--${route.color}`}>
+                        {Number(route.emissions.co2e).toFixed(2)} kg CO₂e
+                        {isBest ? " · Best Choice" : ""}
+                      </div>
+                    )}
+                    {route.ai && aiAnalysis && !isBest && (
+                      <div className={`route-card__co2 route-card__co2--${route.color}`}>
+                        +{(route.ai.predicted_co2e_kg - aiAnalysis.best_route.predicted_co2e_kg).toFixed(2)} kg
+                      </div>
+                    )}
+                    {isBest && route.ai?.fuel_consumption && (
+                      <div className="route-card__fuel">
+                        {route.ai.fuel_consumption.fuel_liters.toFixed(2)} L
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+
           </div>
 
+          {/* ── Fixed footer button ── */}
           <div className="map-panel__footer">
             <button className="map-panel__next" onClick={handleNext}>
               Next: Review →

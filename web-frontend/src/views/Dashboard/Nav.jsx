@@ -11,33 +11,35 @@ export default function Navbar({ companyName = "Company" }) {
     year: "numeric",
   });
 
+  // Generate initials from company name (max 2 letters)
+  const initials = companyName
+    .split(" ")
+    .map((w) => w[0])
+    .slice(0, 2)
+    .join("")
+    .toUpperCase();
+
   return (
     <header className="navbar">
       <div className="navbar__logo">GreenMile</div>
 
       <nav className="navbar__links">
         <button
-          className={`navbar__btn ${
-            pathname === "/dashboard" ? "navbar__btn--on" : ""
-          }`}
+          className={`navbar__btn ${pathname === "/dashboard" ? "navbar__btn--on" : ""}`}
           onClick={() => navigate("/dashboard")}
         >
           Dashboard
         </button>
 
         <button
-          className={`navbar__btn ${
-            pathname === "/trip" ? "navbar__btn--on" : ""
-          }`}
+          className={`navbar__btn ${pathname === "/trip" ? "navbar__btn--on" : ""}`}
           onClick={() => navigate("/trip")}
         >
           Create a Trip
         </button>
 
         <button
-          className={`navbar__btn ${
-            pathname === "/trips" ? "navbar__btn--on" : ""
-          }`}
+          className={`navbar__btn ${pathname === "/trips" ? "navbar__btn--on" : ""}`}
           onClick={() => navigate("/trips")}
         >
           My Trips
@@ -47,12 +49,7 @@ export default function Navbar({ companyName = "Company" }) {
       <div className="navbar__right">
         <span className="navbar__chip">{monthLabel}</span>
         <span className="navbar__company">{companyName}</span>
-
-        <img
-          src="/favicon.ico"
-          alt="Profile"
-          className="navbar__avatarImg"
-        />
+        <div className="navbar__avatar">{initials}</div>
       </div>
     </header>
   );
