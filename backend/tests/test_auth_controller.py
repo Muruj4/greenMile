@@ -1,4 +1,3 @@
-
 import pytest
 from unittest.mock import MagicMock, patch
 from controllers.AuthController import AuthController
@@ -7,7 +6,11 @@ from models.manager_db import ManagerDB
 from models.driver_db import DriverDB
 
 
-# Helpers
+# ── Helpers ───────────────────────────────────────────────────────────────────
+
+# Valid password: exactly 8 chars, 1 capital, 1 number, 1 special
+VALID_PASSWORD = "Pass1@3x"
+
 
 def make_db():
     db = MagicMock()
@@ -16,14 +19,14 @@ def make_db():
 
 
 def make_company(id=1, name="GreenMile"):
-    c = MagicMock(spec=CompanyDB)
+    c      = MagicMock(spec=CompanyDB)
     c.id   = id
     c.name = name
     return c
 
 
 def make_manager(id=10, email="manager@test.com", company_id=1, password_hash="hashed"):
-    m = MagicMock(spec=ManagerDB)
+    m               = MagicMock(spec=ManagerDB)
     m.id            = id
     m.email         = email
     m.company_id    = company_id
@@ -32,7 +35,7 @@ def make_manager(id=10, email="manager@test.com", company_id=1, password_hash="h
 
 
 def make_driver(id=20, email="driver@test.com", company_id=1, password_hash="hashed"):
-    d = MagicMock(spec=DriverDB)
+    d               = MagicMock(spec=DriverDB)
     d.id            = id
     d.email         = email
     d.company_id    = company_id
@@ -40,12 +43,21 @@ def make_driver(id=20, email="driver@test.com", company_id=1, password_hash="has
     return d
 
 
+def make_filter_chain(first_result):
+    """Return a mock filter chain whose .first() returns first_result."""
+    chain = MagicMock()
+    chain.first.return_value = first_result
+    return chain
+
+
 @pytest.fixture
 def controller():
     return AuthController()
 
 
-# create company or get 
+# ─────────────────────────────────────────────────────────────────────────────
+# _get_or_create_company
+# ─────────────────────────────────────────────────────────────────────────────
 
 class TestGetOrCreateCompany:
 
@@ -105,7 +117,35 @@ class TestGetOrCreateCompany:
         assert isinstance(result, CompanyDB)
 
 
+# ─────────────────────────────────────────────────────────────────────────────
+# _validate_password
+# ─────────────────────────────────────────────────────────────────────────────
+
+class TestValidatePassword:
+
+    def test_valid_password_passes(self, controller):
+        controller._validate_password(VALID_PASSWORD)  # should not raise
+
+    def test_raises_if_not_8_chars(self, controller):
+        with pytest.raises(ValueError, match="exactly 8 characters"):
+            controller._validate_password("Sh0rt!")
+
+    def test_raises_if_no_capital(self, controller):
+        with pytest.raises(ValueError, match="capital letter"):
+            controller._validate_password("pass1@3x")
+
+    def test_raises_if_no_number(self, controller):
+        with pytest.raises(ValueError, match="one number"):
+            controller._validate_password("Pass@xxx")
+
+    def test_raises_if_no_special_char(self, controller):
+        with pytest.raises(ValueError, match="special character"):
+            controller._validate_password("Pass1234")
+
+
+# ─────────────────────────────────────────────────────────────────────────────
 # manager_signup
+# ─────────────────────────────────────────────────────────────────────────────
 
 class TestManagerSignup:
 
@@ -116,7 +156,7 @@ class TestManagerSignup:
         db.refresh.side_effect = lambda obj: setattr(obj, "id", 1)
 
         with patch.object(controller, "_get_or_create_company", return_value=make_company()):
-            token = controller.manager_signup(db, "Alice", "GreenMile", "alice@test.com", "pass123")
+            token = controller.manager_signup(db, "Alice", "GreenMile", "alice@test.com", VALID_PASSWORD)
 
         assert token == "mock_token"
 
@@ -127,7 +167,7 @@ class TestManagerSignup:
         db.refresh.side_effect = lambda obj: setattr(obj, "id", 1)
 
         with patch.object(controller, "_get_or_create_company", return_value=make_company()):
-            controller.manager_signup(db, "Alice", "GreenMile", "alice@test.com", "pass")
+            controller.manager_signup(db, "Alice", "GreenMile", "alice@test.com", VALID_PASSWORD)
 
         payload = mock_token.call_args[0][0]
         assert payload["role"] == "manager"
@@ -139,7 +179,7 @@ class TestManagerSignup:
         db.refresh.side_effect = lambda obj: setattr(obj, "id", 42)
 
         with patch.object(controller, "_get_or_create_company", return_value=make_company(id=1)):
-            controller.manager_signup(db, "Alice", "GreenMile", "alice@test.com", "pass")
+            controller.manager_signup(db, "Alice", "GreenMile", "alice@test.com", VALID_PASSWORD)
 
         payload = mock_token.call_args[0][0]
         assert payload["sub"] == "42"
@@ -154,7 +194,7 @@ class TestManagerSignup:
         db.add.side_effect = lambda obj: added.append(obj)
 
         with patch.object(controller, "_get_or_create_company", return_value=make_company()):
-            controller.manager_signup(db, "Alice", "GreenMile", "  ALICE@TEST.COM  ", "pass")
+            controller.manager_signup(db, "Alice", "GreenMile", "  ALICE@TEST.COM  ", VALID_PASSWORD)
 
         manager_obj = next(o for o in added if isinstance(o, ManagerDB))
         assert manager_obj.email == "alice@test.com"
@@ -169,7 +209,7 @@ class TestManagerSignup:
         db.add.side_effect = lambda obj: added.append(obj)
 
         with patch.object(controller, "_get_or_create_company", return_value=make_company()):
-            controller.manager_signup(db, "  Alice  ", "GreenMile", "a@test.com", "pass")
+            controller.manager_signup(db, "  Alice  ", "GreenMile", "a@test.com", VALID_PASSWORD)
 
         manager_obj = next(o for o in added if isinstance(o, ManagerDB))
         assert manager_obj.full_name == "Alice"
@@ -184,18 +224,18 @@ class TestManagerSignup:
         db.add.side_effect = lambda obj: added.append(obj)
 
         with patch.object(controller, "_get_or_create_company", return_value=make_company()):
-            controller.manager_signup(db, "Alice", "GreenMile", "a@test.com", "plainpass")
+            controller.manager_signup(db, "Alice", "GreenMile", "a@test.com", VALID_PASSWORD)
 
         manager_obj = next(o for o in added if isinstance(o, ManagerDB))
         assert manager_obj.password_hash == "h"
-        mock_hash.assert_called_once_with("plainpass")
+        mock_hash.assert_called_once_with(VALID_PASSWORD)
 
     def test_raises_if_email_already_registered(self, controller):
         db = make_db()
         db.query.return_value.filter.return_value.first.return_value = make_manager()
 
         with pytest.raises(ValueError, match="Email already registered"):
-            controller.manager_signup(db, "Alice", "GreenMile", "alice@test.com", "pass")
+            controller.manager_signup(db, "Alice", "GreenMile", "alice@test.com", VALID_PASSWORD)
 
     def test_duplicate_check_is_case_insensitive(self, controller):
         db       = make_db()
@@ -203,20 +243,32 @@ class TestManagerSignup:
         db.query.return_value.filter.return_value.first.return_value = existing
 
         with pytest.raises(ValueError, match="Email already registered"):
-            controller.manager_signup(db, "Alice", "GreenMile", "ALICE@TEST.COM", "pass")
+            controller.manager_signup(db, "Alice", "GreenMile", "ALICE@TEST.COM", VALID_PASSWORD)
 
     def test_no_db_write_on_duplicate_email(self, controller):
         db = make_db()
         db.query.return_value.filter.return_value.first.return_value = make_manager()
 
         with pytest.raises(ValueError):
-            controller.manager_signup(db, "Alice", "GreenMile", "alice@test.com", "pass")
+            controller.manager_signup(db, "Alice", "GreenMile", "alice@test.com", VALID_PASSWORD)
 
         db.add.assert_not_called()
         db.commit.assert_not_called()
 
+    def test_raises_if_name_is_empty(self, controller):
+        db = make_db()
+        with pytest.raises(ValueError, match="Name is required"):
+            controller.manager_signup(db, "   ", "GreenMile", "alice@test.com", VALID_PASSWORD)
 
+    def test_raises_if_company_is_empty(self, controller):
+        db = make_db()
+        with pytest.raises(ValueError, match="Company is required"):
+            controller.manager_signup(db, "Alice", "   ", "alice@test.com", VALID_PASSWORD)
+
+
+# ─────────────────────────────────────────────────────────────────────────────
 # driver_signup
+# ─────────────────────────────────────────────────────────────────────────────
 
 class TestDriverSignup:
 
@@ -227,7 +279,7 @@ class TestDriverSignup:
         db.refresh.side_effect = lambda obj: setattr(obj, "id", 2)
 
         with patch.object(controller, "_get_or_create_company", return_value=make_company()):
-            token = controller.driver_signup(db, "Bob", "GreenMile", "bob@test.com", "pass")
+            token = controller.driver_signup(db, "Bob", "GreenMile", "bob@test.com", VALID_PASSWORD)
 
         assert token == "driver_token"
 
@@ -238,7 +290,7 @@ class TestDriverSignup:
         db.refresh.side_effect = lambda obj: setattr(obj, "id", 2)
 
         with patch.object(controller, "_get_or_create_company", return_value=make_company()):
-            controller.driver_signup(db, "Bob", "GreenMile", "bob@test.com", "pass")
+            controller.driver_signup(db, "Bob", "GreenMile", "bob@test.com", VALID_PASSWORD)
 
         payload = mock_token.call_args[0][0]
         assert payload["role"] == "driver"
@@ -253,7 +305,7 @@ class TestDriverSignup:
         db.add.side_effect = lambda obj: added.append(obj)
 
         with patch.object(controller, "_get_or_create_company", return_value=make_company()):
-            controller.driver_signup(db, "Bob", "GreenMile", "  BOB@TEST.COM  ", "pass")
+            controller.driver_signup(db, "Bob", "GreenMile", "  BOB@TEST.COM  ", VALID_PASSWORD)
 
         driver_obj = next(o for o in added if isinstance(o, DriverDB))
         assert driver_obj.email == "bob@test.com"
@@ -263,14 +315,14 @@ class TestDriverSignup:
         db.query.return_value.filter.return_value.first.return_value = make_driver()
 
         with pytest.raises(ValueError, match="Email already registered"):
-            controller.driver_signup(db, "Bob", "GreenMile", "bob@test.com", "pass")
+            controller.driver_signup(db, "Bob", "GreenMile", "bob@test.com", VALID_PASSWORD)
 
     def test_no_db_write_on_duplicate_email(self, controller):
         db = make_db()
         db.query.return_value.filter.return_value.first.return_value = make_driver()
 
         with pytest.raises(ValueError):
-            controller.driver_signup(db, "Bob", "GreenMile", "bob@test.com", "pass")
+            controller.driver_signup(db, "Bob", "GreenMile", "bob@test.com", VALID_PASSWORD)
 
         db.add.assert_not_called()
 
@@ -284,14 +336,17 @@ class TestDriverSignup:
         db.add.side_effect = lambda obj: added.append(obj)
 
         with patch.object(controller, "_get_or_create_company", return_value=make_company()):
-            controller.driver_signup(db, "Bob", "GreenMile", "bob@test.com", "secret")
+            controller.driver_signup(db, "Bob", "GreenMile", "bob@test.com", VALID_PASSWORD)
 
         driver_obj = next(o for o in added if isinstance(o, DriverDB))
         assert driver_obj.password_hash == "h"
-        mock_hash.assert_called_once_with("secret")
+        mock_hash.assert_called_once_with(VALID_PASSWORD)
 
 
+# ─────────────────────────────────────────────────────────────────────────────
 # signin
+# signin returns: (token, role, company_id, company_name)
+# ─────────────────────────────────────────────────────────────────────────────
 
 class TestSignin:
 
@@ -300,9 +355,15 @@ class TestSignin:
     def test_manager_signin_returns_token_and_role(self, mock_verify, mock_token, controller):
         db      = make_db()
         manager = make_manager(email="m@test.com", company_id=1)
-        db.query.return_value.filter.return_value.first.return_value = manager
+        company = make_company(id=1, name="GreenMile")
 
-        token, role = controller.signin(db, "m@test.com", "pass")
+        # first call → manager found, second call → company found
+        db.query.return_value.filter.side_effect = [
+            make_filter_chain(manager),
+            make_filter_chain(company),
+        ]
+
+        token, role, company_id, company_name = controller.signin(db, "m@test.com", "pass")
 
         assert token == "manager_tok"
         assert role  == "manager"
@@ -312,7 +373,12 @@ class TestSignin:
     def test_manager_token_payload(self, mock_verify, mock_token, controller):
         db      = make_db()
         manager = make_manager(id=5, email="m@test.com", company_id=3)
-        db.query.return_value.filter.return_value.first.return_value = manager
+        company = make_company(id=3, name="GreenMile")
+
+        db.query.return_value.filter.side_effect = [
+            make_filter_chain(manager),
+            make_filter_chain(company),
+        ]
 
         controller.signin(db, "m@test.com", "pass")
 
@@ -326,9 +392,14 @@ class TestSignin:
     def test_signin_email_is_normalized(self, mock_verify, mock_token, controller):
         db      = make_db()
         manager = make_manager(email="m@test.com")
-        db.query.return_value.filter.return_value.first.return_value = manager
+        company = make_company(name="GreenMile")
 
-        token, role = controller.signin(db, "  M@TEST.COM  ", "pass")
+        db.query.return_value.filter.side_effect = [
+            make_filter_chain(manager),
+            make_filter_chain(company),
+        ]
+
+        token, role, company_id, company_name = controller.signin(db, "  M@TEST.COM  ", "pass")
         assert role == "manager"
 
     @patch("controllers.AuthController.create_access_token", return_value="driver_tok")
@@ -336,12 +407,16 @@ class TestSignin:
     def test_driver_signin_returns_token_and_role(self, mock_verify, mock_token, controller):
         db     = make_db()
         driver = make_driver(email="d@test.com", company_id=1)
+        company = make_company(id=1, name="GreenMile")
 
-        first_call  = MagicMock(); first_call.first.return_value  = None
-        second_call = MagicMock(); second_call.first.return_value = driver
-        db.query.return_value.filter.side_effect = [first_call, second_call]
+        # manager not found → driver found → company found
+        db.query.return_value.filter.side_effect = [
+            make_filter_chain(None),    # manager query
+            make_filter_chain(driver),  # driver query
+            make_filter_chain(company), # company query
+        ]
 
-        token, role = controller.signin(db, "d@test.com", "pass")
+        token, role, company_id, company_name = controller.signin(db, "d@test.com", "pass")
 
         assert token == "driver_tok"
         assert role  == "driver"
@@ -349,12 +424,15 @@ class TestSignin:
     @patch("controllers.AuthController.create_access_token", return_value="tok")
     @patch("controllers.AuthController.verify_password",     return_value=True)
     def test_driver_token_payload(self, mock_verify, mock_token, controller):
-        db     = make_db()
-        driver = make_driver(id=7, email="d@test.com", company_id=2)
+        db      = make_db()
+        driver  = make_driver(id=7, email="d@test.com", company_id=2)
+        company = make_company(id=2, name="GreenMile")
 
-        first_call  = MagicMock(); first_call.first.return_value  = None
-        second_call = MagicMock(); second_call.first.return_value = driver
-        db.query.return_value.filter.side_effect = [first_call, second_call]
+        db.query.return_value.filter.side_effect = [
+            make_filter_chain(None),
+            make_filter_chain(driver),
+            make_filter_chain(company),
+        ]
 
         controller.signin(db, "d@test.com", "pass")
 
@@ -368,9 +446,10 @@ class TestSignin:
         db      = make_db()
         manager = make_manager(email="m@test.com")
 
-        first_call  = MagicMock(); first_call.first.return_value  = manager
-        second_call = MagicMock(); second_call.first.return_value = None
-        db.query.return_value.filter.side_effect = [first_call, second_call]
+        db.query.return_value.filter.side_effect = [
+            make_filter_chain(manager),
+            make_filter_chain(None),
+        ]
 
         with pytest.raises(ValueError, match="Invalid email or password"):
             controller.signin(db, "m@test.com", "wrong")
@@ -380,9 +459,10 @@ class TestSignin:
         db     = make_db()
         driver = make_driver(email="d@test.com")
 
-        first_call  = MagicMock(); first_call.first.return_value  = None
-        second_call = MagicMock(); second_call.first.return_value = driver
-        db.query.return_value.filter.side_effect = [first_call, second_call]
+        db.query.return_value.filter.side_effect = [
+            make_filter_chain(None),
+            make_filter_chain(driver),
+        ]
 
         with pytest.raises(ValueError, match="Invalid email or password"):
             controller.signin(db, "d@test.com", "wrong")
@@ -401,14 +481,15 @@ class TestSignin:
 
         assert str(exc_info.value) == "Invalid email or password"
 
-    def test_manager_found_but_verify_returns_false_then_driver_not_found_raises(self, controller):
+    def test_manager_found_but_verify_false_then_driver_not_found_raises(self, controller):
         db      = make_db()
         manager = make_manager()
 
         with patch("controllers.AuthController.verify_password", return_value=False):
-            first_call  = MagicMock(); first_call.first.return_value  = manager
-            second_call = MagicMock(); second_call.first.return_value = None
-            db.query.return_value.filter.side_effect = [first_call, second_call]
+            db.query.return_value.filter.side_effect = [
+                make_filter_chain(manager),
+                make_filter_chain(None),
+            ]
 
             with pytest.raises(ValueError, match="Invalid email or password"):
                 controller.signin(db, "m@test.com", "bad")
@@ -418,7 +499,42 @@ class TestSignin:
     def test_signin_prefers_manager_over_driver_when_both_exist(self, mock_verify, mock_token, controller):
         db      = make_db()
         manager = make_manager(email="shared@test.com")
-        db.query.return_value.filter.return_value.first.return_value = manager
+        company = make_company(name="GreenMile")
 
-        _, role = controller.signin(db, "shared@test.com", "pass")
+        db.query.return_value.filter.side_effect = [
+            make_filter_chain(manager),
+            make_filter_chain(company),
+        ]
+
+        _, role, _, _ = controller.signin(db, "shared@test.com", "pass")
         assert role == "manager"
+
+    @patch("controllers.AuthController.create_access_token", return_value="tok")
+    @patch("controllers.AuthController.verify_password",     return_value=True)
+    def test_signin_returns_company_name(self, mock_verify, mock_token, controller):
+        db      = make_db()
+        manager = make_manager(email="m@test.com", company_id=1)
+        company = make_company(id=1, name="GreenMile")
+
+        db.query.return_value.filter.side_effect = [
+            make_filter_chain(manager),
+            make_filter_chain(company),
+        ]
+
+        _, _, _, company_name = controller.signin(db, "m@test.com", "pass")
+        assert company_name == "GreenMile"
+
+    @patch("controllers.AuthController.create_access_token", return_value="tok")
+    @patch("controllers.AuthController.verify_password",     return_value=True)
+    def test_signin_returns_company_id(self, mock_verify, mock_token, controller):
+        db      = make_db()
+        manager = make_manager(email="m@test.com", company_id=5)
+        company = make_company(id=5, name="GreenMile")
+
+        db.query.return_value.filter.side_effect = [
+            make_filter_chain(manager),
+            make_filter_chain(company),
+        ]
+
+        _, _, company_id, _ = controller.signin(db, "m@test.com", "pass")
+        assert company_id == 5

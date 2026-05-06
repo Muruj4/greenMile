@@ -351,7 +351,7 @@ def test_signin_driver_success(client):
     """Sign in returns token and role for a valid driver."""
     from backend.main import app, get_db, auth_controller
     orig = auth_controller.signin
-    auth_controller.signin = Mock(return_value=("mock-jwt-token", "driver"))
+    auth_controller.signin = Mock(return_value=("mock-jwt-token", "driver", 1, "GreenMile"))
     app.dependency_overrides[get_db] = _mock_db_session
     try:
         response = client.post("/auth/signin", json={
@@ -369,7 +369,7 @@ def test_signin_manager_success(client):
     """Sign in returns token and role=manager for a valid manager."""
     from backend.main import app, get_db, auth_controller
     orig = auth_controller.signin
-    auth_controller.signin = Mock(return_value=("mock-manager-jwt", "manager"))
+    auth_controller.signin = Mock(return_value=("mock-manager-jwt", "manager", 1, "GreenMile"))
     app.dependency_overrides[get_db] = _mock_db_session
     try:
         response = client.post("/auth/signin", json={
