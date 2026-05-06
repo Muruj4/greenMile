@@ -18,6 +18,7 @@ export const otpStyles = {
   backText: {
     color: "#475569",
     fontSize: 14,
+    fontFamily: "Fraunces_700Bold",
     fontWeight: "700",
   },
 
@@ -47,6 +48,7 @@ export const otpStyles = {
 
   title: {
     fontSize: 26,
+    fontFamily: "Fraunces_700Bold",
     fontWeight: "bold",
     color: "#080b13",
     marginBottom: 10,
@@ -55,6 +57,7 @@ export const otpStyles = {
 
   description: {
     fontSize: 14,
+    fontFamily: "Fraunces_600SemiBold",
     color: "#475569",
     textAlign: "center",
     lineHeight: 21,
@@ -65,6 +68,7 @@ export const otpStyles = {
     marginTop: 6,
     marginBottom: 22,
     fontSize: 14,
+    fontFamily: "Fraunces_400Regular",
     color: "#013f2b",
     fontWeight: "900",
     textAlign: "center",
@@ -79,6 +83,7 @@ export const otpStyles = {
     backgroundColor: "#ffffff",
     textAlign: "center",
     fontSize: 28,
+    fontFamily: "Fraunces_400Regular",
     letterSpacing: 14,
     fontWeight: "900",
     color: "#080b13",
@@ -92,6 +97,7 @@ export const otpStyles = {
   errorText: {
     color: "#ef4444",
     fontSize: 13,
+    fontFamily: "Fraunces_600SemiBold",
     marginTop: 10,
     textAlign: "center",
     fontWeight: "600",
@@ -110,6 +116,7 @@ export const otpStyles = {
   buttonText: {
     color: "#ffffff",
     fontSize: 15,
+    fontFamily: "Fraunces_400Regular",
     fontWeight: "900",
   },
 };

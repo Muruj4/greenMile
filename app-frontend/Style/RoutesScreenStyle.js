@@ -7,6 +7,7 @@ export const styles = StyleSheet.create({
   },
   title: {
     fontSize: 24,
+    fontFamily: "Fraunces_700Bold",
     fontWeight: "bold",
     color: "#00542A",
     marginBottom: 16,
@@ -21,6 +22,7 @@ export const styles = StyleSheet.create({
   },
   metaText: {
     fontSize: 14,
+    fontFamily: "Fraunces_400Regular",
     color: "#555",
     marginBottom: 4,
   },
@@ -37,6 +39,7 @@ export const styles = StyleSheet.create({
   },
   aiLoadingText: {
     fontSize: 14,
+    fontFamily: "Fraunces_600SemiBold",
     color: "#0066cc",
     fontWeight: "500",
   },
@@ -52,6 +55,7 @@ export const styles = StyleSheet.create({
   },
   aiErrorText: {
     fontSize: 14,
+    fontFamily: "Fraunces_400Regular",
     color: "#c33",
   },
 
@@ -70,11 +74,13 @@ export const styles = StyleSheet.create({
   },
   aiSummaryTitle: {
     fontSize: 16,
+    fontFamily: "Fraunces_700Bold",
     fontWeight: "bold",
     color: "#fff",
   },
   aiSummaryText: {
     fontSize: 14,
+    fontFamily: "Fraunces_700Bold",
     color: "#fff",
     lineHeight: 20,
     marginBottom: 12,
@@ -90,6 +96,7 @@ export const styles = StyleSheet.create({
   },
   aiTipText: {
     fontSize: 13,
+    fontFamily: "Fraunces_400Regular",
     color: "#fff",
     lineHeight: 18,
   },
@@ -127,6 +134,7 @@ export const styles = StyleSheet.create({
   bestBadgeText: {
     color: "#fff",
     fontSize: 11,
+    fontFamily: "Fraunces_700Bold",
     fontWeight: "bold",
   },
   cardHeader: {
@@ -139,6 +147,7 @@ export const styles = StyleSheet.create({
   },
   cardTitle: {
     fontSize: 16,
+    fontFamily: "Fraunces_600SemiBold",
     fontWeight: "600",
     color: "#333",
     flex: 1,
@@ -160,16 +169,19 @@ export const styles = StyleSheet.create({
   badgeText: {
     color: "#fff",
     fontSize: 11,
+    fontFamily: "Fraunces_700Bold",
     fontWeight: "bold",
   },
   cardText: {
     fontSize: 14,
+    fontFamily: "Fraunces_700Bold",
     color: "#666",
     marginBottom: 4,
   },
   selectedText: {
     marginTop: 8,
     fontSize: 13,
+    fontFamily: "Fraunces_600SemiBold",
     color: "#00542A",
     fontWeight: "600",
   },
@@ -188,11 +200,13 @@ export const styles = StyleSheet.create({
   },
   aiPredictionLabel: {
     fontSize: 13,
+    fontFamily: "Fraunces_600SemiBold",
     fontWeight: "600",
     color: "#667eea",
   },
   aiPredictionValue: {
     fontSize: 13,
+    fontFamily: "Fraunces_600SemiBold",
     fontWeight: "600",
     color: "#2c3e50",
   },
@@ -205,10 +219,12 @@ export const styles = StyleSheet.create({
   aiBestTagText: {
     color: "#fff",
     fontSize: 11,
+    fontFamily: "Fraunces_700Bold",
     fontWeight: "bold",
   },
   aiExtraText: {
     fontSize: 12,
+    fontFamily: "Fraunces_700Bold",
     color: "#e67e22",
     fontWeight: "600",
   },
@@ -230,6 +246,7 @@ export const styles = StyleSheet.create({
   previewButtonText: {
     color: "#fff",
     fontSize: 16,
+    fontFamily: "Fraunces_700Bold",
     fontWeight: "bold",
   },
 });

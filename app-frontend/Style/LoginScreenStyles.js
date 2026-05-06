@@ -49,10 +49,10 @@ export const styles = {
 
 brandTitle: {
   fontSize: 36,
+  fontFamily: "Fraunces_700Bold",
   fontWeight: 'bold',
   color: '#0f172a',
   marginBottom: 4,
-  fontFamily: 'System',
 },
 
 greenText: {
@@ -65,6 +65,7 @@ mileText: {
 
 brandTagline: {
   fontSize: 16,
+  fontFamily: "Fraunces_400Regular",
   color: '#475569',
   letterSpacing: 0.5,
 },
@@ -104,6 +105,7 @@ brandTagline: {
   },
   tabText: {
     fontSize: 16,
+    fontFamily: "Fraunces_600SemiBold",
     fontWeight: '600',
     color: '#475569',
   },
@@ -118,6 +120,7 @@ brandTagline: {
   },
   label: {
     fontSize: 14,
+    fontFamily: "Fraunces_600SemiBold",
     fontWeight: '500',
     color: '#334155',
     marginBottom: 8,
@@ -142,6 +145,7 @@ brandTagline: {
     paddingLeft: 48,
     paddingRight: 16,
     fontSize: 16,
+    fontFamily: "Fraunces_400Regular",
     color: '#0f172a',
   },
   inputError: {
@@ -150,6 +154,7 @@ brandTagline: {
   errorText: {
     color: '#ef4444',
     fontSize: 13,
+    fontFamily: "Fraunces_400Regular",
     marginTop: 4,
   },
   passwordToggle: {
@@ -183,10 +188,12 @@ brandTagline: {
   },
   rememberText: {
     fontSize: 14,
+    fontFamily: "Fraunces_400Regular",
     color: '#475569',
   },
   forgotLink: {
     fontSize: 14,
+    fontFamily: "Fraunces_600SemiBold",
     color: '#00542A',
     fontWeight: '500',
   },
@@ -209,6 +216,7 @@ brandTagline: {
   submitButtonText: {
     color: 'white',
     fontSize: 16,
+    fontFamily: "Fraunces_700Bold",
     fontWeight: 'bold',
   },
   footerText: {
@@ -216,6 +224,7 @@ brandTagline: {
     marginTop: 24,
     color: '#94a3b8',
     fontSize: 14,
+    fontFamily: "Fraunces_400Regular",
   },
 
 
@@ -238,14 +247,17 @@ brandTagline: {
   },
   dropdownItemText: {
     fontSize: 16,
+    fontFamily: "Fraunces_400Regular",
     color: '#0f172a',
   },
   dropdownPlaceholderText: {
     fontSize: 16,
+    fontFamily: "Fraunces_400Regular",
     color: '#94a3b8',
   },
   dropdownValueText: {
     fontSize: 16,
+    fontFamily: "Fraunces_400Regular",
     color: '#0f172a',
   },
 passwordRulesContainer: {
@@ -260,6 +272,7 @@ passwordRuleRow: {
 
 passwordRuleText: {
   fontSize: 13,
+  fontFamily: "Fraunces_600SemiBold",
   fontWeight: "500",
 },
 
@@ -277,6 +290,7 @@ passwordRulesContainer: {
 
 passwordRuleText: {
   fontSize: 13,
+  fontFamily: "Fraunces_600SemiBold",
   fontWeight: "500",
 },
 

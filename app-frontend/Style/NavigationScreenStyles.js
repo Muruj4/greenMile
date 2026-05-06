@@ -27,11 +27,13 @@ export const styles = StyleSheet.create({
 
   headerTitle: {
     fontSize: 20,
+    fontFamily: "Fraunces_700Bold",
     fontWeight: "700",
   },
 
   headerSub: {
     fontSize: 14,
+    fontFamily: "Fraunces_700Bold",
     color: "#555",
   },
 
@@ -49,16 +51,19 @@ export const styles = StyleSheet.create({
 
   infoLabel: {
     fontSize: 12,
+    fontFamily: "Fraunces_400Regular",
     color: "#666",
   },
 
   infoText: {
     fontSize: 14,
+    fontFamily: "Fraunces_600SemiBold",
     fontWeight: "600",
   },
 
   infoSubText: {
     fontSize: 12,
+    fontFamily: "Fraunces_600SemiBold",
     color: PRIMARY,
   },
 
@@ -70,6 +75,7 @@ export const styles = StyleSheet.create({
 
   speedText: {
     fontSize: 20,
+    fontFamily: "Fraunces_700Bold",
     fontWeight: "700",
     color: PRIMARY,
   },
@@ -83,6 +89,7 @@ export const styles = StyleSheet.create({
   startButtonText: {
     color: "#fff",
     fontSize: 18,
+    fontFamily: "Fraunces_700Bold",
     fontWeight: "700",
   },
 
@@ -95,6 +102,7 @@ export const styles = StyleSheet.create({
   exitButtonText: {
     color: "#fff",
     fontSize: 18,
+    fontFamily: "Fraunces_700Bold",
     fontWeight: "700",
   },
 });

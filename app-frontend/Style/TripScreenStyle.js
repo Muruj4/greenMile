@@ -7,11 +7,13 @@ export const styles = StyleSheet.create({
   safeArea: { flex: 1, backgroundColor: "#F5F5F5" },
   container: { padding: 20 },
   title: { fontSize: 28, fontWeight: "700", marginBottom: 24 },
+  fontFamily: "Fraunces_700Bold",
   highlight: { color: PRIMARY },
   row: { flexDirection: "row", gap: 12 },
 
   block: { flex: 1, marginBottom: 20 },
   label: { fontSize: 13, color: "#6B7280", marginBottom: 6 },
+  fontFamily: "Fraunces_700Bold",
 
   selectBox: {
     backgroundColor: "#E5ECE7",
@@ -24,6 +26,7 @@ export const styles = StyleSheet.create({
   placeholderText: { flex: 1, color: "#9CA3AF" },
   valueText: { flex: 1, color: "#111827" },
   arrow: { color: "#6B7280", fontSize: 16 },
+  fontFamily: "Fraunces_400Regular",
 
   dropdown: {
     marginTop: 4,
@@ -35,6 +38,7 @@ export const styles = StyleSheet.create({
   },
   dropdownItem: { padding: 10 },
   dropdownItemText: { fontSize: 14 },
+  fontFamily: "Fraunces_400Regular",
 
   fuelBox: {
     flexDirection: "row",
@@ -62,8 +66,10 @@ export const styles = StyleSheet.create({
     flex: 1,
     paddingVertical: 10,
     fontSize: 14,
+    fontFamily: "Fraunces_400Regular",
   },
   icon: { marginLeft: 8, fontSize: 16 },
+  fontFamily: "Fraunces_400Regular",
 
   button: {
     backgroundColor: PRIMARY,
@@ -73,4 +79,5 @@ export const styles = StyleSheet.create({
     marginTop: 10,
   },
   buttonText: { color: "#FFF", fontWeight: "600", fontSize: 16 },
+  fontFamily: "Fraunces_600SemiBold",
 });
